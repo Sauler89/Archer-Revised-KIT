@@ -1,0 +1,49 @@
+BACKUP ~weidu_external/backup/ArcherRevised~
+SUPPORT ~https://github.com/Sauler89/Archer-Revised-KIT/issues~
+VERSION ~v0.1.0-dev~
+
+ASK_EVERY_COMPONENT
+
+ALWAYS
+  OUTER_TEXT_SPRINT MOD_FOLDER ~ArcherRevised~
+  OUTER_TEXT_SPRINT WORK_FOLDER ~weidu_external~
+
+  INCLUDE ~%MOD_FOLDER%/lib/functions.tph~
+
+  OUTER_SET IS_BGEE = GAME_IS ~bgee bg2ee eet~
+  OUTER_SET IS_IWDEE = 0
+  OUTER_SET IS_EE = IS_BGEE
+  OUTER_SET IS_EE_V2 = IS_EE && FILE_EXISTS_IN_GAME ~achievem.2da~
+  OUTER_TEXT_SPRINT CLAB_DIR ~bg~
+
+  LOAD_TRA ~%MOD_FOLDER%/languages/english/kit.tra~
+  LOAD_TRA ~%MOD_FOLDER%/languages/english/kit-ee.tra~
+  LOAD_TRA ~%MOD_FOLDER%/languages/%LANGUAGE%/kit.tra~
+  LOAD_TRA ~%MOD_FOLDER%/languages/%LANGUAGE%/kit-ee.tra~
+  LOAD_TRA ~%MOD_FOLDER%/languages/%LANGUAGE%/revised.tra~
+END
+
+LANGUAGE ~English~
+         ~english~
+         ~ArcherRevised/languages/english/setup.tra~
+
+LANGUAGE ~Italiano by Sauler~
+         ~italian~
+         ~ArcherRevised/languages/italian/setup.tra~
+
+BEGIN @1
+  DESIGNATED 0
+  LABEL ~ARCHER-REVISED~
+
+  REQUIRE_PREDICATE GAME_IS ~bgee bg2ee eet~ @100
+
+  ACTION_IF MOD_IS_INSTALLED ~setup-A7#ImprovedArcher.tp2~ ~0~ BEGIN
+    FAIL @101
+  END
+
+  ACTION_IF MOD_IS_INSTALLED ~Setup-ArtisansKitpack.tp2~ ~2010~ BEGIN
+    FAIL @102
+  END
+
+  INCLUDE ~%MOD_FOLDER%/lib/kit_archer.tph~
+  INCLUDE ~%MOD_FOLDER%/lib/revised_rules.tph~
