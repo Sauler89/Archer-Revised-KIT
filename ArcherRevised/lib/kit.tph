@@ -110,7 +110,6 @@ ACTION_IF (IS_EE) BEGIN
         1000 => ~A7#IN01D~
         1001 => ~A7#IN02D~
         1002 => ~A7#IN03D~
-        1017 => ~A7#IN0AD~
       END
       READ_2DA_ENTRIES_NOW ~tbl_items~ numCols
       FOR (row = 0; row < tbl_items; ++row) BEGIN
@@ -257,24 +256,6 @@ COPY ~%MOD_FOLDER%/kit/a7#ins3.spl~ ~override~
   SAY UNIDENTIFIED_DESC @2045   // Activate Shot Ability...
 
 
-// Ability: Sure Shot
-COPY ~%MOD_FOLDER%/kit/a7#in0a.spl~ ~override~
-  SAY NAME1 @1017   // Sure Shot
-  SAY UNIDENTIFIED_DESC @1111   // Sure Shot...
-  PATCH_IF (IS_EE && VARIABLE_IS_SET $icon_indices(~A7#IN0AD~)) BEGIN
-    SET idx = $icon_indices(~A7#IN0AD~)
-    LPF ALTER_EFFECT
-    INT_VAR
-      check_globals     = 0
-      check_headers     = 1
-      match_opcode      = 142   // Display portrait icon
-      match_parameter2  = 82    // Called Shot icon
-      parameter2        = idx
-    END
-  END
+// Legacy A7 Sure Shot and Missile Trap are intentionally not installed.
+// Archer Revised provides ARSURE and ARGCALS through lib/hla.tph.
 
-
-// Ability: Missile Trap
-COPY ~%MOD_FOLDER%/kit/a7#in0b.spl~ ~override~
-  SAY NAME1 @1018   // Missile Trap
-  SAY UNIDENTIFIED_DESC @1112   // Set Missile Trap...
