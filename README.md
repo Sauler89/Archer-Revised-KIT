@@ -41,7 +41,7 @@ The previous Improved Archer -1 Constitution penalty is intentionally not part o
 
 ## Current implementation status
 
-The current v0.1-dev core includes the A7-derived shot effects / Elemental Ammunition foundation, a unified Special Shot pool, d8 Hit Die, revised proficiencies, the -3 melee THAC0 drawback, and a native Rapid Shot toggle. Called Shot currently uses the base-game effect while its final Revised mechanics are still being rebuilt. Manyshot, Sniper, and native revised HLAs are still under development.
+The current v0.1-dev core includes the A7-derived Rooting/Power/Explosive Shot and Elemental Ammunition foundation, a unified Special Shot pool, a native Revised Called Shot, d8 Hit Die, revised proficiencies, the -3 melee THAC0 drawback, and a native Rapid Shot toggle. Manyshot, Sniper, and native revised HLAs are still under development.
 
 ## Compatibility target
 

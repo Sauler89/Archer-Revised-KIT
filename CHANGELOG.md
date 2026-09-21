@@ -18,3 +18,4 @@
 - Added the Revised level-1 ranged hit/damage bonus; further bonuses continue every 4 levels.
 - Replaced separate shot progression with a shared Special Shot pool: Called Shot/Rooting at level 4; Power/Explosive unlock at level 8; +1 shared use every 4 levels.
 - Added native Archer Revised selector resources (ARIN4/ARINS1/ARINSX); Called Shot currently invokes the base-game SPCL121 effect pending its final Revised reimplementation.
+- Reimplemented Called Shot natively: 10-second ranged on-hit window; non-cumulative DEX/movement/APR debuffs with +2 missile damage at level 16.

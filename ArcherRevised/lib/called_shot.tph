@@ -1,0 +1,86 @@
+// Archer Revised - native Called Shot.
+//
+// The activation applies an opcode 249 ranged on-hit effect for 10 seconds.
+// The external EFF instant-casts ARCALFX on every successfully hit target.
+// ARCALFX removes its previous application before applying the current tier,
+// making the debuffs refreshable but non-cumulative.
+
+COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override/ARCALLD.SPL~
+  SAY NAME1 @3200
+  SAY UNIDENTIFIED_DESC @3201
+  LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = (0 - 1) END
+  LPF ADD_SPELL_EFFECT
+    INT_VAR
+      opcode         = 249
+      target         = 2
+      timing         = 0
+      duration       = 10
+      resist_dispel  = 2
+    STR_VAR
+      resource       = ~ARCALHIT~
+  END
+BUT_ONLY
+
+// External effect called by opcode 249.
+// Start from an existing CC BY-SA EFF shell and fully define the fields used.
+COPY ~%MOD_FOLDER%/kit/a7#in11a.eff~ ~override/ARCALHIT.EFF~
+  WRITE_LONG  0x10 146      // Cast spell at creature
+  WRITE_LONG  0x14 2        // Projectile target
+  WRITE_LONG  0x18 0        // Power
+  WRITE_LONG  0x1c 0        // Caster level = current caster
+  WRITE_LONG  0x20 1        // Cast instantly at caster level
+  WRITE_SHORT 0x24 1        // Instant/Permanent
+  WRITE_SHORT 0x26 0
+  WRITE_LONG  0x28 0
+  WRITE_SHORT 0x2c 100
+  WRITE_SHORT 0x2e 0
+  WRITE_ASCII 0x30 ~ARCALFX~ #8
+  WRITE_LONG  0x38 0
+  WRITE_LONG  0x3c 0
+  WRITE_LONG  0x40 0
+  WRITE_LONG  0x44 0
+  WRITE_LONG  0x48 0
+  WRITE_LONG  0x4c 0
+  WRITE_LONG  0x5c 2        // Cannot be dispelled / ignores resistance
+  WRITE_LONG  0x60 0
+  WRITE_LONG  0x64 0
+BUT_ONLY
+
+// Four caster-level tiers: 4+, 8+, 12+, 16+.
+// A7#IN01 is used only as a legal four-header SPL shell.
+COPY ~%MOD_FOLDER%/kit/a7#in01.spl~ ~override/ARCALFX.SPL~
+  SAY NAME1 @3200
+  LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = (0 - 1) END
+
+  READ_LONG 0x64 ar_hdr
+  WRITE_BYTE  (ar_hdr + (0 * 0x28) + 0x0c) 1
+  WRITE_BYTE  (ar_hdr + (1 * 0x28) + 0x0c) 1
+  WRITE_BYTE  (ar_hdr + (2 * 0x28) + 0x0c) 1
+  WRITE_BYTE  (ar_hdr + (3 * 0x28) + 0x0c) 1
+  WRITE_SHORT (ar_hdr + (0 * 0x28) + 0x10) 4
+  WRITE_SHORT (ar_hdr + (1 * 0x28) + 0x10) 8
+  WRITE_SHORT (ar_hdr + (2 * 0x28) + 0x10) 12
+  WRITE_SHORT (ar_hdr + (3 * 0x28) + 0x10) 16
+
+  // Level 4+: halve Dexterity for 1 turn.
+  LPF ADD_SPELL_EFFECT INT_VAR header = 0 opcode = 321 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~ARCALFX~ END
+  LPF ADD_SPELL_EFFECT INT_VAR header = 0 opcode = 15  target = 2 parameter1 = 50 parameter2 = 2 timing = 0 duration = 60 resist_dispel = 2 END
+
+  // Level 8+: also reduce movement to 25%.
+  LPF ADD_SPELL_EFFECT INT_VAR header = 1 opcode = 321 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~ARCALFX~ END
+  LPF ADD_SPELL_EFFECT INT_VAR header = 1 opcode = 15  target = 2 parameter1 = 50 parameter2 = 2 timing = 0 duration = 60 resist_dispel = 2 END
+  LPF ADD_SPELL_EFFECT INT_VAR header = 1 opcode = 176 target = 2 parameter1 = 25 parameter2 = 5 timing = 0 duration = 60 resist_dispel = 2 END
+
+  // Level 12+: also reduce attacks per round by 1.
+  LPF ADD_SPELL_EFFECT INT_VAR header = 2 opcode = 321 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~ARCALFX~ END
+  LPF ADD_SPELL_EFFECT INT_VAR header = 2 opcode = 15  target = 2 parameter1 = 50 parameter2 = 2 timing = 0 duration = 60 resist_dispel = 2 END
+  LPF ADD_SPELL_EFFECT INT_VAR header = 2 opcode = 176 target = 2 parameter1 = 25 parameter2 = 5 timing = 0 duration = 60 resist_dispel = 2 END
+  LPF ADD_SPELL_EFFECT INT_VAR header = 2 opcode = 1   target = 2 parameter1 = -1 parameter2 = 0 timing = 0 duration = 60 resist_dispel = 2 END
+
+  // Level 16+: also deal +2 missile damage on every successful hit.
+  LPF ADD_SPELL_EFFECT INT_VAR header = 3 opcode = 321 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~ARCALFX~ END
+  LPF ADD_SPELL_EFFECT INT_VAR header = 3 opcode = 15  target = 2 parameter1 = 50 parameter2 = 2 timing = 0 duration = 60 resist_dispel = 2 END
+  LPF ADD_SPELL_EFFECT INT_VAR header = 3 opcode = 176 target = 2 parameter1 = 25 parameter2 = 5 timing = 0 duration = 60 resist_dispel = 2 END
+  LPF ADD_SPELL_EFFECT INT_VAR header = 3 opcode = 1   target = 2 parameter1 = -1 parameter2 = 0 timing = 0 duration = 60 resist_dispel = 2 END
+  LPF ADD_SPELL_EFFECT INT_VAR header = 3 opcode = 12  target = 2 parameter1 = 2 parameter2 = 0x00800000 timing = 1 resist_dispel = 2 END
+BUT_ONLY

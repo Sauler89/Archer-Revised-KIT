@@ -46,6 +46,7 @@ BEGIN @1
   END
 
   INCLUDE ~%MOD_FOLDER%/lib/kit_archer.tph~
+  INCLUDE ~%MOD_FOLDER%/lib/called_shot.tph~
   INCLUDE ~%MOD_FOLDER%/lib/special_shots.tph~
   INCLUDE ~%MOD_FOLDER%/lib/rapid_shot.tph~
   INCLUDE ~%MOD_FOLDER%/lib/revised_rules.tph~

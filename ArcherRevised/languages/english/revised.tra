@@ -34,3 +34,12 @@ The Archer enters an improved rapid-firing stance, gaining +1 attack per round w
 Select one shot technique. At this level the available techniques are Called Shot and Rooting Shot. All Special Shot techniques consume the same pool of daily uses.~
 @3102 = ~Special Shot
 Select one shot technique. Available techniques are Called Shot, Rooting Shot, Power Shot and Explosive Shot. All Special Shot techniques consume the same pool of daily uses.~
+
+@3200 = ~Called Shot~
+@3201 = ~Called Shot
+For the next 10 seconds, every successful ranged attack applies the following non-cumulative effects to the target for 1 turn, according to the Archer's level:
+4th level: Dexterity is reduced to 50%.
+8th level: Movement rate is also reduced to 25%.
+12th level: The target also loses 1 attack per round.
+16th level: Every successful hit also deals +2 missile damage.
+Repeated hits refresh these effects rather than stacking them.~

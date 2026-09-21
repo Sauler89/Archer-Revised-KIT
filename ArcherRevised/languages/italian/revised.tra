@@ -34,3 +34,12 @@ L'Arciere assume una postura di tiro rapido migliorata, ottenendo +1 attacco per
 Seleziona una tecnica di tiro. A questo livello sono disponibili Colpo Mirato e Colpo della Radice. Tutte le tecniche di Colpo Speciale consumano la stessa riserva di utilizzi giornalieri.~
 @3102 = ~Colpo Speciale
 Seleziona una tecnica di tiro. Sono disponibili Colpo Mirato, Colpo della Radice, Colpo Potente e Colpo Esplosivo. Tutte le tecniche di Colpo Speciale consumano la stessa riserva di utilizzi giornalieri.~
+
+@3200 = ~Colpo Mirato~
+@3201 = ~Colpo Mirato
+Per i successivi 10 secondi, ogni attacco a distanza andato a segno applica al bersaglio i seguenti effetti non cumulativi per 1 turno, in base al livello dell'Arciere:
+4° livello: La Destrezza viene ridotta al 50%.
+8° livello: Anche la velocità di movimento viene ridotta al 25%.
+12° livello: Il bersaglio perde inoltre 1 attacco per round.
+16° livello: Ogni colpo andato a segno infligge inoltre +2 danni da proiettile.
+I colpi successivi rinnovano la durata degli effetti anziché accumularli.~
