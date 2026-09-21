@@ -52,4 +52,5 @@ BEGIN @1
   INCLUDE ~%MOD_FOLDER%/lib/manyshot.tph~
   INCLUDE ~%MOD_FOLDER%/lib/passives.tph~
   INCLUDE ~%MOD_FOLDER%/lib/sniper.tph~
+  INCLUDE ~%MOD_FOLDER%/lib/hla.tph~
   INCLUDE ~%MOD_FOLDER%/lib/revised_rules.tph~
