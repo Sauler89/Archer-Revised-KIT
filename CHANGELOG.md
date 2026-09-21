@@ -5,7 +5,7 @@
 - Initialized the standalone Archer Revised project for BGEE/BG2EE/EET.
 - Imported only the EET-relevant Improved Archer technical resources under CC BY-SA 4.0.
 - Added explicit conflict checks for A7 Improved Archer and Artisan's Archer Overhaul.
-- English-only localization for the current development phase.
+- English-only localization.
 - Removed the Improved Archer -1 Constitution penalty.
 - Restored vanilla Archer minimum requirements: DEX 13 / CON 14.
 - Added d8 Archer Hit Die progression.
@@ -22,14 +22,21 @@
 - Made normal Special Shots mutually exclusive and blocked their selectors while another Special Shot is active, preventing stacking and wasted shared uses.
 - Added native Rapid Shot: +1 APR with bows/crossbows; -4 to ranged attack rolls, improving to -2 at level 12.
 - Corrected THAC0 modifier signs after auditing EE opcode 167/284 behavior.
+- Corrected Called Shot SPL header indexing so the level 4/8/12/16 debuff tiers are assigned to the intended ability headers.
+- Verified the Called Shot on-hit EFF preserves the Archer's caster level when selecting the level-appropriate debuff header.
 - Rejected the initial APR-based Manyshot implementation because of the normal 5-APR cap.
 - Reimplemented Manyshot as launcher-gated missile-damage scaling: +25% at level 7, +40% total at level 13, and +60% total at level 20.
+- Restricted Sure Shot's +1 APR to bows and crossbows so switching to a melee weapon cannot retain the firing-rate bonus.
 - Added native Sniper at level 16: guaranteed critical hits on ranged attacks while invisible or improved invisible.
 - Retained the normal Ranger HLA table, including Hardiness.
+- Corrected an HLA audit error that had mistaken SPCL907 for Set Spike Trap; SPCL907 is Hardiness and is no longer removed.
 - Replaced the legacy A7 custom HLA additions with two Archer Revised HLAs:
   - Greater Called Shot: maximized base weapon damage for 10 seconds; successful ranged hits apply the full Called Shot package and stun for 3 seconds.
   - Sure Shot Revised: 2 rounds of bow/crossbow-only +1 APR, +4 ranged attack bonus, guaranteed ranged critical hits, and zero movement.
 - Made Sure Shot mutually exclusive with Rapid Shot, normal Special Shots, and Greater Called Shot.
 - Removed unused legacy A7 Sure Shot / Missile Trap resources from installation.
+- Removed a redundant WEAPPROF patch with an unsafe hard-coded fallback column.
+- Fixed the EE custom-status-icon count after removing the legacy A7 Sure Shot icon.
+- Normalized kit-symbol handling so relevant rule patches recognize both FERALAN and ARCHER where applicable.
 - Audited imported A7 resources by Git SHA: all unmodified imported gameplay resources remain byte-identical to the source.
 - Artisan-inspired mechanics are independently implemented; no Artisan binary resources are redistributed.
