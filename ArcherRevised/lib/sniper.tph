@@ -1,28 +1,14 @@
 // Archer Revised - native Sniper passive.
 //
 // At level 16 the Archer gains guaranteed critical hits on ranged attacks
-// while invisible or improved invisible. Two Cast Spell on Condition effects
-// keep the critical-hit modifier synchronized with STATE_NOT_VISIBLE.
+// while invisible or improved invisible. The short-duration modifier is
+// refreshed once per round only while STATE_NOT_VISIBLE is true.
 
 // Controller installed by the CLAB.
 COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override/ARSNIP.SPL~
   LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = (0 - 1) END
 
-  // Always-true cleanup pass, checked once per round.
-  LPF ADD_SPELL_EFFECT
-    INT_VAR
-      opcode         = 232
-      target         = 2
-      parameter1     = 0
-      parameter2     = 20
-      timing         = 9
-      special        = 102
-      resist_dispel  = 2
-    STR_VAR
-      resource       = ~ARSNCLR~
-  END
-
-  // Reapply Sniper only while Invisible or Improved Invisible.
+  // StateCheck(Myself, STATE_NOT_VISIBLE), checked once per round.
   LPF ADD_SPELL_EFFECT
     INT_VAR
       opcode         = 232
@@ -37,8 +23,9 @@ COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override/ARSNIP.SPL~
   END
 BUT_ONLY
 
-// Removes the previous round's Sniper critical modifier.
-COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override/ARSNCLR.SPL~
+// Guaranteed ranged critical hits.
+// Remove the previous refresh before applying the new 7-second instance.
+COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override/ARSNON.SPL~
   LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = (0 - 1) END
   LPF ADD_SPELL_EFFECT
     INT_VAR
@@ -49,13 +36,6 @@ COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override/ARSNCLR.SPL~
     STR_VAR
       resource       = ~ARSNON~
   END
-BUT_ONLY
-
-// Guaranteed ranged critical hits. Opcode 301 Special=2 limits the effect
-// to ranged attacks, so switching to a melee weapon cannot exploit Sniper.
-// Seven seconds covers one engine round and is refreshed while hidden.
-COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override/ARSNON.SPL~
-  LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = (0 - 1) END
   LPF ADD_SPELL_EFFECT
     INT_VAR
       opcode         = 301
