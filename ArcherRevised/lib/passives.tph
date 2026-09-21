@@ -1,3 +1,18 @@
+// Level 1 ranged accuracy bonus imported from the Artisan design.
+// Opcode 167 with -1 is +1 to hit for ranged attacks only.
+COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override/ARHIT01.SPL~
+  LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = (0 - 1) END
+  LPF ADD_SPELL_EFFECT
+    INT_VAR
+      opcode         = 167
+      target         = 2
+      parameter1     = -1
+      parameter2     = 0
+      timing         = 9
+      resist_dispel  = 2
+  END
+BUT_ONLY
+
 // Archer Revised - native passive rules derived from the combined design.
 
 // Level 1 passive: Artisan-inspired melee trade-off plus Farsighted.
