@@ -1,0 +1,70 @@
+// Archer Revised - native Sniper passive.
+//
+// At level 16 the Archer gains guaranteed critical hits on ranged attacks
+// while invisible or improved invisible. Two Cast Spell on Condition effects
+// keep the critical-hit modifier synchronized with STATE_NOT_VISIBLE.
+
+// Controller installed by the CLAB.
+COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override/ARSNIP.SPL~
+  LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = (0 - 1) END
+
+  // Always-true cleanup pass, checked once per round.
+  LPF ADD_SPELL_EFFECT
+    INT_VAR
+      opcode         = 232
+      target         = 2
+      parameter1     = 0
+      parameter2     = 20
+      timing         = 9
+      special        = 102
+      resist_dispel  = 2
+    STR_VAR
+      resource       = ~ARSNCLR~
+  END
+
+  // Reapply Sniper only while Invisible or Improved Invisible.
+  LPF ADD_SPELL_EFFECT
+    INT_VAR
+      opcode         = 232
+      target         = 2
+      parameter1     = 0
+      parameter2     = 15
+      timing         = 9
+      special        = 0x00400010
+      resist_dispel  = 2
+    STR_VAR
+      resource       = ~ARSNON~
+  END
+BUT_ONLY
+
+// Removes the previous round's Sniper critical modifier.
+COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override/ARSNCLR.SPL~
+  LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = (0 - 1) END
+  LPF ADD_SPELL_EFFECT
+    INT_VAR
+      opcode         = 321
+      target         = 2
+      timing         = 1
+      resist_dispel  = 2
+    STR_VAR
+      resource       = ~ARSNON~
+  END
+BUT_ONLY
+
+// Guaranteed ranged critical hits. Opcode 301 Special=2 limits the effect
+// to ranged attacks, so switching to a melee weapon cannot exploit Sniper.
+// Seven seconds covers one engine round and is refreshed while hidden.
+COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override/ARSNON.SPL~
+  LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = (0 - 1) END
+  LPF ADD_SPELL_EFFECT
+    INT_VAR
+      opcode         = 301
+      target         = 2
+      parameter1     = 20
+      parameter2     = 0
+      timing         = 0
+      duration       = 7
+      special        = 2
+      resist_dispel  = 2
+  END
+BUT_ONLY
