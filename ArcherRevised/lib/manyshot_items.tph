@@ -1,0 +1,119 @@
+// Archer Revised - item patcher for Manyshot.
+//
+// The core component runs this once for every bow/crossbow already present.
+// Component 10 can run the exact same patch again near the end of an install
+// order so bows/crossbows added by later mods receive the same effects.
+//
+// Effects are deliberately idempotent: Archer Revised effects are removed
+// before being re-added.
+//
+// AR_KIT_NOT uses SPLPROT to make creatures whose KIT is not FERALAN immune
+// to the ARMSHxx EFF resources. The opcode 177 effects are additionally
+// limited to the Ranger class.
+
+APPEND ~splprot.2da~ ~AR_KIT_NOT 152 -1 5~ UNLESS ~AR_KIT_NOT~
+
+OUTER_SET AR_KIT_NOT = 0
+COPY_EXISTING ~splprot.2da~ ~override~
+  COUNT_2DA_COLS cols
+  READ_2DA_ENTRIES_NOW rows cols
+  FOR (row = 1; row < rows; ++row) BEGIN
+    READ_2DA_ENTRY_FORMER rows row 0 stat
+    PATCH_IF (~%stat%~ STRING_EQUAL_CASE ~AR_KIT_NOT~) BEGIN
+      SET AR_KIT_NOT = row
+      SET row = rows
+    END
+  END
+BUT_ONLY
+
+OUTER_SET archer_kit = IDS_OF_SYMBOL (~KIT~ ~FERALAN~)
+OUTER_SET ranger_class = IDS_OF_SYMBOL (~CLASS~ ~RANGER~)
+
+COPY_EXISTING_REGEXP GLOB ~.*\.itm~ ~override~
+  PATCH_IF (SOURCE_SIZE > 0x71) BEGIN
+    READ_SHORT 0x1c item_type
+
+    PATCH_IF (item_type = 15 OR item_type = 27) BEGIN
+      // Remove only effects owned by Archer Revised so rerunning the late
+      // patch component cannot duplicate bonuses.
+      LPF DELETE_EFFECT INT_VAR match_opcode = 177 STR_VAR match_resource = ~ARMSH07~ END
+      LPF DELETE_EFFECT INT_VAR match_opcode = 177 STR_VAR match_resource = ~ARMSH13~ END
+      LPF DELETE_EFFECT INT_VAR match_opcode = 177 STR_VAR match_resource = ~ARMSH20~ END
+      LPF DELETE_EFFECT INT_VAR match_opcode = 318 STR_VAR match_resource = ~ARMSH07~ END
+      LPF DELETE_EFFECT INT_VAR match_opcode = 318 STR_VAR match_resource = ~ARMSH13~ END
+      LPF DELETE_EFFECT INT_VAR match_opcode = 318 STR_VAR match_resource = ~ARMSH20~ END
+
+      // Protect every non-Archer Ranger from the three Manyshot resources.
+      // SPLPROT AR_KIT_NOT compares STAT(KIT) != parameter1.
+      LPF ADD_ITEM_EQEFFECT
+        INT_VAR
+          silent         = 1
+          opcode         = 318
+          target         = 1
+          parameter1     = archer_kit
+          parameter2     = AR_KIT_NOT
+          timing         = 2
+        STR_VAR
+          resource       = ~ARMSH07~
+      END
+      LPF ADD_ITEM_EQEFFECT
+        INT_VAR
+          silent         = 1
+          opcode         = 318
+          target         = 1
+          parameter1     = archer_kit
+          parameter2     = AR_KIT_NOT
+          timing         = 2
+        STR_VAR
+          resource       = ~ARMSH13~
+      END
+      LPF ADD_ITEM_EQEFFECT
+        INT_VAR
+          silent         = 1
+          opcode         = 318
+          target         = 1
+          parameter1     = archer_kit
+          parameter2     = AR_KIT_NOT
+          timing         = 2
+        STR_VAR
+          resource       = ~ARMSH20~
+      END
+
+      // Apply each EFF while equipped. The EFF itself contains the minimum
+      // affected level (7 / 13 / 20), so the bonuses phase in automatically.
+      LPF ADD_ITEM_EQEFFECT
+        INT_VAR
+          silent         = 1
+          opcode         = 177
+          target         = 1
+          parameter1     = ranger_class
+          parameter2     = 5
+          timing         = 2
+        STR_VAR
+          resource       = ~ARMSH07~
+      END
+      LPF ADD_ITEM_EQEFFECT
+        INT_VAR
+          silent         = 1
+          opcode         = 177
+          target         = 1
+          parameter1     = ranger_class
+          parameter2     = 5
+          timing         = 2
+        STR_VAR
+          resource       = ~ARMSH13~
+      END
+      LPF ADD_ITEM_EQEFFECT
+        INT_VAR
+          silent         = 1
+          opcode         = 177
+          target         = 1
+          parameter1     = ranger_class
+          parameter2     = 5
+          timing         = 2
+        STR_VAR
+          resource       = ~ARMSH20~
+      END
+    END
+  END
+BUT_ONLY_IF_IT_CHANGES
