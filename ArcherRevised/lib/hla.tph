@@ -9,6 +9,20 @@ COPY ~%MOD_FOLDER%/kit/a7#in0a.spl~ ~override/ARGCALS.SPL~
   SAY UNIDENTIFIED_DESC @3301
   LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = (0 - 1) END
 
+  // Greater Called Shot supersedes any normal Special Shot already active.
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 321 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~ARCALLD~ END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 321 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~A7#IN02~ END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 321 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~A7#IN01~ END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 321 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~A7#IN03~ END
+
+  // Prevent normal Special Shots (and their selectors) for the HLA window.
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 timing = 0 duration = 10 resist_dispel = 2 STR_VAR resource = ~ARIN4~ END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 timing = 0 duration = 10 resist_dispel = 2 STR_VAR resource = ~ARINS1~ END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 timing = 0 duration = 10 resist_dispel = 2 STR_VAR resource = ~ARCALLD~ END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 timing = 0 duration = 10 resist_dispel = 2 STR_VAR resource = ~A7#IN02~ END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 timing = 0 duration = 10 resist_dispel = 2 STR_VAR resource = ~A7#IN01~ END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 timing = 0 duration = 10 resist_dispel = 2 STR_VAR resource = ~A7#IN03~ END
+
   // Stun every creature successfully hit by a ranged attack.
   LPF ADD_SPELL_EFFECT
     INT_VAR
