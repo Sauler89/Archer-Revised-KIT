@@ -1,7 +1,7 @@
 @1100 = ~ARCIERE: L'Arciere rappresenta l'apice dell'abilità con le armi a distanza: un tiratore esperto capace di mettere a segno tiri difficili, sacrificando robustezza, protezione e versatilità nel combattimento in mischia.
 
 Vantaggi:
-- Bonus pari a +1 ai tiri per colpire e al danno con le armi a distanza al 1° livello e ogni 4 livelli successivi.
+- Bonus pari a +1 ai tiri per colpire e al danno con le armi a distanza al 1° livello e nuovamente al 4°, 8°, 12°, 16°, 20° livello e ogni 4 livelli successivi.
 - Bonus pari a +1 alla Classe Armatura contro le armi a distanza ogni 6 livelli.
 - Ottiene il 5% di possibilità di infliggere un colpo critico al 13° e al 18° livello.
 - Può raggiungere la Gran Maestria (5 punti) con arco lungo, arco corto e balestra.
@@ -20,6 +20,7 @@ Svantaggi:
 - Può diventare soltanto Competente (un punto) con le armi da mischia.
 - Non può acquisire competenza nello stile Combattere con Due Armi.
 - Non può utilizzare l'abilità Ammalia Animali.
+- Non può Piazzare Trappole, compresa l'abilità di alto livello Piazzare Trappola Acuminata del Ranger.
 ~
 
 @3000 = ~Tiro Rapido~
