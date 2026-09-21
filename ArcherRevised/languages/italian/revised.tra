@@ -5,10 +5,13 @@ Vantaggi:
 - Bonus pari a +1 alla Classe Armatura contro le armi a distanza ogni 6 livelli.
 - Ottiene il 5% di possibilità di infliggere un colpo critico al 13° e al 18° livello.
 - Può raggiungere la Gran Maestria (5 punti) con arco lungo, arco corto e balestra.
-- Vista Acuta: +2 alla portata visiva.
+- Vista Acuta: +2 alla portata visiva, che aumenta a +4 quando è nascosto o invisibile.
 - Può attivare Tiro Rapido mentre impugna un arco o una balestra: ottiene +1 attacco per round ma subisce una penalità di -4 al THAC0 a distanza. Dal 12° livello la penalità si riduce a -2.
 - Ottiene una riserva condivisa di Colpi Speciali al 4° livello, con +1 utilizzo ogni 4 livelli successivi. Al 4° livello può scegliere Colpo Mirato o Colpo della Radice; all'8° livello si aggiungono Colpo Potente e Colpo Esplosivo, utilizzando la stessa riserva.
+- Tiro Multiplo: ottiene +1/2 attacco per round con archi e balestre al 7°, 13° e 20° livello, per un totale di +1,5 attacchi per round al 20° livello.
+- Cecchino (16° livello): gli attacchi a distanza effettuati mentre è invisibile o sotto Invisibilità Migliorata infliggono sempre colpi critici.
 - Può utilizzare Evoca Munizioni Elementali una volta al giorno ogni 8 livelli, a partire dal 4° livello.
+- Abilità di alto livello: Colpo Mirato Superiore e Tiro Sicuro.
 
 Svantaggi:
 - Dado Vita: d8.
@@ -17,8 +20,7 @@ Svantaggi:
 - Può diventare soltanto Competente (un punto) con le armi da mischia.
 - Non può acquisire competenza nello stile Combattere con Due Armi.
 - Non può utilizzare l'abilità Ammalia Animali.
-
-Arciere Rivisitato v0.1-dev costituisce il nucleo standalone per EET. Tiro Multiplo, Cecchino e le abilità di alto livello rivisitate vengono implementate con risorse native di Archer Revised anziché essere copiate da un altro mod.~
+~
 
 @3000 = ~Tiro Rapido~
 @3001 = ~Tiro Rapido
@@ -44,3 +46,14 @@ Per i successivi 10 secondi, ogni attacco a distanza andato a segno applica al b
 12° livello: Il bersaglio perde inoltre 1 attacco per round.
 16° livello: Ogni colpo andato a segno infligge inoltre +2 danni da proiettile.
 I colpi successivi rinnovano la durata degli effetti anziché accumularli.~
+
+
+@3300 = ~Colpo Mirato Superiore~
+@3301 = ~Colpo Mirato Superiore
+Per i successivi 10 secondi, ogni attacco a distanza andato a segno applica contemporaneamente tutti gli effetti di Colpo Mirato: la Destrezza viene ridotta al 50%, la velocità di movimento al 25% e il bersaglio perde 1 attacco per round per 1 turno. Ogni colpo infligge inoltre +4 danni da proiettile e stordisce il bersaglio per 1 secondo. I colpi successivi rinnovano la durata degli effetti persistenti anziché accumularli.~
+
+@3310 = ~Tiro Sicuro~
+@3311 = ~Tiro Sicuro
+Per 2 round, l'Arciere ottiene +1 attacco per round, un bonus di +4 ai tiri per colpire con le armi a distanza e ogni attacco a distanza infligge un colpo critico. La concentrazione necessaria immobilizza l'Arciere per tutta la durata. Colpo Mirato, Colpo della Radice, Colpo Potente e Colpo Esplosivo non possono essere utilizzati mentre Tiro Sicuro è attivo.
+
+Richiede: Colpo Critico.~
