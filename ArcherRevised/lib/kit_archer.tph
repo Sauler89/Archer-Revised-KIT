@@ -52,15 +52,15 @@ COPY_EXISTING ~weapprof.2da~ ~override~
   END
 BUT_ONLY
 
-// Modifying DEX and CON requirements
+// Archer Revised keeps the vanilla Archer requirements: DEX 13 / CON 14.
 COPY_EXISTING ~abclasrq.2da~ ~override~
   COUNT_2DA_COLS numCols
   COUNT_2DA_ROWS numCols numRows
   FOR (row = 0; row < numRows; row += 1) BEGIN
     READ_2DA_ENTRY row 0 numCols value
-    PATCH_IF (~%value%~ STRING_EQUAL_CASE ~FERALAN~) BEGIN
-      SET_2DA_ENTRY row 2 numCols ~14~
-      SET_2DA_ENTRY row 3 numCols ~13~
+    PATCH_IF (~%value%~ STRING_EQUAL_CASE ~FERALAN~ || ~%value%~ STRING_EQUAL_CASE ~ARCHER~) BEGIN
+      SET_2DA_ENTRY row 2 numCols ~13~
+      SET_2DA_ENTRY row 3 numCols ~14~
       SET row = numRows
     END
   END
