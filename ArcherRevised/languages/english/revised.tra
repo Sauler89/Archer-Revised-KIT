@@ -5,7 +5,8 @@ Advantages:
 - +1 bonus to Armor Class vs. missile weapons every 6 levels.
 - +5% chance to score a critical hit at levels 13 and 18.
 - May achieve Grand Mastery (5 slots) in longbows, shortbows and crossbows.
-- May toggle Rapid Shot: gains +1 attack per round while suffering a -4 penalty to hit with ranged attacks. From level 12 onward the ranged penalty is reduced to -2. Using a melee weapon while the stance is active incurs an additional -6 melee THAC0 penalty.
+- Farsighted: +2 visual range.
+- May toggle Rapid Shot while a bow or crossbow is equipped: gains +1 attack per round while suffering a -4 penalty to hit with ranged attacks. From level 12 onward the penalty is reduced to -2.
 - Gains a shared Special Shot pool at level 4, with +1 use every 4 levels thereafter. At level 4 the Archer may choose Called Shot or Rooting Shot; at level 8 Power Shot and Explosive Shot are added to the same pool.
 - May use Conjure Elemental Ammunition once per day every 8 levels, starting at level 4.
 
@@ -21,13 +22,13 @@ Archer Revised v0.1-dev establishes the standalone EET core. Manyshot, Sniper an
 
 @3000 = ~Rapid Shot~
 @3001 = ~Rapid Shot
-The Archer enters a rapid-firing stance, gaining +1 attack per round while suffering a -4 penalty to hit with ranged attacks. Melee attacks suffer an additional -6 THAC0 penalty while the stance is active. Rapid Shot remains active until manually deactivated.~
-@3002 = ~Deactivate Rapid Shot~
-@3003 = ~Deactivate Rapid Shot
-Ends the Rapid Shot stance and removes its attack-rate and accuracy modifiers.~
-@3004 = ~Rapid Shot
-The Archer enters an improved rapid-firing stance, gaining +1 attack per round while suffering a -2 penalty to hit with ranged attacks. Melee attacks suffer an additional -6 THAC0 penalty while the stance is active. Rapid Shot remains active until manually deactivated.~
-@3005 = ~Improved Rapid Shot~
+Choose whether to activate or deactivate Rapid Shot. While active, the stance grants +1 attack per round only while a bow or crossbow is equipped, but imposes a -4 penalty to ranged THAC0. From level 12 onward the penalty is reduced to -2.~
+@3002 = ~Activate Rapid Shot~
+@3003 = ~Activate Rapid Shot
+Enters the Rapid Shot stance. The stance remains active until manually deactivated.~
+@3004 = ~Deactivate Rapid Shot~
+@3005 = ~Deactivate Rapid Shot
+Ends the Rapid Shot stance and removes its attack-rate and ranged accuracy modifiers.~
 
 @3100 = ~Special Shot~
 @3101 = ~Special Shot
