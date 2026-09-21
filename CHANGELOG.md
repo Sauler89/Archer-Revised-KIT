@@ -6,6 +6,7 @@
 - Imported only the EET-relevant Improved Archer technical resources under CC BY-SA 4.0.
 - Added explicit conflict checks for A7 Improved Archer and Artisan's Archer Overhaul.
 - Removed the Improved Archer -1 Constitution penalty.
+- Restored vanilla Archer minimum requirements (DEX 13 / CON 14).
 - Added d8 Archer Hit Die progression.
 - Enabled Grand Mastery with longbows, shortbows, and crossbows.
 - Removed Two-Weapon Style proficiency.
@@ -22,5 +23,6 @@
   - Greater Called Shot.
   - Sure Shot Revised.
 - Removed Missile Trap from the Archer-specific HLA additions.
+- Removed the inherited Ranger Set Spike Trap HLA.
 - Added English and Italian installer strings and complete Revised kit/HLA descriptions.
 - Artisan-inspired mechanics are independently implemented; no Artisan binary resources are redistributed.
