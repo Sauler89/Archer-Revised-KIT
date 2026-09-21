@@ -18,18 +18,12 @@ ALWAYS
 
   LOAD_TRA ~%MOD_FOLDER%/languages/english/kit.tra~
   LOAD_TRA ~%MOD_FOLDER%/languages/english/kit-ee.tra~
-  LOAD_TRA ~%MOD_FOLDER%/languages/%LANGUAGE%/kit.tra~
-  LOAD_TRA ~%MOD_FOLDER%/languages/%LANGUAGE%/kit-ee.tra~
-  LOAD_TRA ~%MOD_FOLDER%/languages/%LANGUAGE%/revised.tra~
+  LOAD_TRA ~%MOD_FOLDER%/languages/english/revised.tra~
 END
 
 LANGUAGE ~English~
          ~english~
          ~ArcherRevised/languages/english/setup.tra~
-
-LANGUAGE ~Italiano by Sauler~
-         ~italian~
-         ~ArcherRevised/languages/italian/setup.tra~
 
 BEGIN @1
   DESIGNATED 0
