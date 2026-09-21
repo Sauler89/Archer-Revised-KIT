@@ -1,0 +1,280 @@
+// Common base for all installed kits
+
+// Engine-specific kit folder
+ACTION_IF (IS_EE) BEGIN
+  OUTER_TEXT_SPRINT KIT_FOLDER ~%MOD_FOLDER%/kit/ee~
+END ELSE BEGIN
+  OUTER_TEXT_SPRINT KIT_FOLDER ~%MOD_FOLDER%/kit~
+END
+
+// Work-around for a buggy implementation of opcode 122 (Create inventory item) in the Enhanced Editions patch 1.x
+ACTION_IF (IS_IWDEE && NOT IS_EE_V2) BEGIN
+  OUTER_TEXT_SPRINT KIT_FOLDER2 ~%MOD_FOLDER%/kit/ee~
+END ELSE BEGIN
+  OUTER_TEXT_SPRINT KIT_FOLDER2 ~%MOD_FOLDER%/kit~
+END
+
+ACTION_IF (IS_EE) BEGIN
+  OUTER_SET AMMO_STACK = 80 // max. # items in stack (crafted ammo only)
+END ELSE BEGIN
+  OUTER_SET AMMO_STACK = 40 // max. # items in stack (crafted ammo only)
+  COPY ~%MOD_FOLDER%/kit/a7#in06a.eff~ ~override~
+       ~%MOD_FOLDER%/kit/a7#in06b.eff~ ~override~
+END
+
+COPY ~%KIT_FOLDER%/a7#in01b.bam~ ~override~
+     ~%KIT_FOLDER%/a7#in02b.bam~ ~override~
+     ~%KIT_FOLDER%/a7#in03b.bam~ ~override~
+     ~%KIT_FOLDER%/a7#in04b.bam~ ~override~
+     ~%KIT_FOLDER%/a7#in4ab.bam~ ~override~
+     ~%KIT_FOLDER%/a7#in4bb.bam~ ~override~
+     ~%KIT_FOLDER%/a7#in4cb.bam~ ~override~
+     ~%KIT_FOLDER%/a7#in0ab.bam~ ~override~
+     ~%KIT_FOLDER%/a7#insb.bam~  ~override~
+     ~%KIT_FOLDER%/a7#in0bb.spl~ ~override~
+     ~%KIT_FOLDER%/a7#in06.spl~  ~override~
+     ~%KIT_FOLDER%/a7#in07.spl~  ~override~
+     ~%MOD_FOLDER%/kit/a7#in11a.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in11b.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in11c.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in12a.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in12b.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in12c.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in13a.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in13b.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in13c.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in14a.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in14b.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in14c.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in21a.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in21b.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in21c.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in21d.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in21e.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in21f.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in22a.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in22b.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in22c.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in22d.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in22e.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in22f.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in23a.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in23b.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in23c.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in23d.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in23e.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in23f.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in24a.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in24b.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in24c.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in24d.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in24e.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in24f.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in25a.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in25b.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in25c.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in25d.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in25e.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in25f.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in31a.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in32a.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in33a.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in34a.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in41a.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in41b.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in42a.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in42b.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in43a.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in43b.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in44a.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in44b.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in45a.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in45b.eff~ ~override~
+     ~%MOD_FOLDER%/kit/a7#in03.pro~  ~override~
+     ~%MOD_FOLDER%/kit/a7#in05.spl~  ~override~
+     ~%MOD_FOLDER%/kit/a7#entg.bam~  ~override~
+     ~%MOD_FOLDER%/kit/a7#entg1.vvc~ ~override~
+     ~%MOD_FOLDER%/kit/a7#ins1.2da~  ~override~
+     ~%MOD_FOLDER%/kit/a7#ins2.2da~  ~override~
+     ~%MOD_FOLDER%/kit/a7#ins3.2da~  ~override~
+     ~%MOD_FOLDER%/kit/a7#insx.spl~  ~override~
+
+// Initializing user-defined status icons for shot abilities (EE-only)
+ACTION_IF (IS_EE) BEGIN
+  COPY_EXISTING ~statdesc.2da~ ~override~
+    SET icon_index = 82
+    SET icon_indices = 0
+    COUNT_2DA_COLS numCols
+    PATCH_IF (numCols > 2) BEGIN
+      DEFINE_ASSOCIATIVE_ARRAY icon_defs BEGIN 
+        1000 => ~A7#IN01D~
+        1001 => ~A7#IN02D~
+        1002 => ~A7#IN03D~
+        1017 => ~A7#IN0AD~
+      END
+      READ_2DA_ENTRIES_NOW ~tbl_items~ numCols
+      FOR (row = 0; row < tbl_items; ++row) BEGIN
+        READ_2DA_ENTRY_FORMER ~tbl_items~ row 0 cur_idx
+        PATCH_IF (IS_AN_INT ~cur_idx~) BEGIN
+          READ_2DA_ENTRY_FORMER ~tbl_items~ row 2 cur_resref
+          SET match = 0
+          PHP_EACH icon_defs AS ref => icn_name BEGIN
+            PATCH_IF (NOT match && ~%cur_resref%~ STR_EQ ~%icn_name%~) BEGIN
+              SET $icon_indices(~%icn_name%~) = cur_idx
+              SET icon_indices += 1
+              SET match = 1
+            END
+          END
+          PATCH_IF (cur_idx > icon_index) BEGIN
+            SET icon_index = cur_idx
+          END
+        END
+      END
+    END
+
+  ACTION_IF (icon_index > 82 && icon_indices < 4) BEGIN
+    ACTION_PHP_EACH icon_defs AS ref => icn_name BEGIN
+      ACTION_IF (NOT VARIABLE_IS_SET $icon_indices(~%icn_name%~)) BEGIN
+        OUTER_SET icon_index += 1
+        OUTER_SET cur_strref = RESOLVE_STR_REF((AT ref))
+        OUTER_TEXT_SPRINT icon_row ~%icon_index% %cur_strref% %icn_name%~
+        APPEND ~statdesc.2da~ ~%icon_row%~
+        OUTER_SET $icon_indices(~%icn_name%~) = icon_index
+        OUTER_SET icon_indices += 1
+      END
+    END
+    COPY_EXISTING ~statdesc.2da~ ~override~
+      PRETTY_PRINT_2DA
+    BUT_ONLY
+  END
+
+  COPY ~%MOD_FOLDER%/kit/ee/a7#in01d.bam~ ~override~
+  COPY ~%MOD_FOLDER%/kit/ee/a7#in02d.bam~ ~override~
+  COPY ~%MOD_FOLDER%/kit/ee/a7#in03d.bam~ ~override~
+  COPY ~%MOD_FOLDER%/kit/ee/a7#in0ad.bam~ ~override~
+END ELSE BEGIN
+  OUTER_SET icon_index = 82
+END
+
+
+// Ability: Power Shot
+COPY ~%MOD_FOLDER%/kit/a7#in01.spl~ ~override~
+  SAY NAME1 @1000   // Power Shot
+  SAY UNIDENTIFIED_DESC @2001   // Power Shot...
+  PATCH_IF (IS_EE) BEGIN
+    PATCH_IF (VARIABLE_IS_SET $icon_indices(~A7#IN01D~)) BEGIN
+      SET idx = $icon_indices(~A7#IN01D~)
+      LPF ALTER_EFFECT
+      INT_VAR
+        check_globals     = 0
+        check_headers     = 1
+        match_opcode      = 142   // Display portrait icon
+        match_parameter2  = 82    // Called Shot icon
+        parameter2        = idx
+      END
+    END
+  END
+
+
+// Ability: Rooting Shot
+COPY ~%MOD_FOLDER%/kit/a7#in02.spl~ ~override~
+  SAY NAME1 @1001   // Rooting Shot
+  SAY UNIDENTIFIED_DESC @2002   // Rooting Shot...
+  PATCH_IF (IS_EE) BEGIN
+    PATCH_IF (VARIABLE_IS_SET $icon_indices(~A7#IN02D~)) BEGIN
+      SET idx = $icon_indices(~A7#IN02D~)
+      LPF ALTER_EFFECT
+      INT_VAR
+        check_globals     = 0
+        check_headers     = 1
+        match_opcode      = 142   // Display portrait icon
+        match_parameter2  = 82    // Called Shot icon
+        parameter2        = idx
+      END
+    END
+  END
+
+
+// Ability: Explosive Shot
+OUTER_SET ~A7#IN03~ = IDS_OF_SYMBOL(~projectl~ ~A7#IN03~) + 1
+ACTION_IF (~A7#IN03~ = 0) BEGIN
+  ADD_PROJECTILE ~%MOD_FOLDER%/kit/a7#in03.pro~
+END
+COPY ~%MOD_FOLDER%/kit/a7#in03.spl~ ~override~
+  SAY NAME1 @1002   // Explosive Shot
+  SAY UNIDENTIFIED_DESC @2003   // Explosive Shot...
+  PATCH_IF (IS_EE) BEGIN
+    PATCH_IF (VARIABLE_IS_SET $icon_indices(~A7#IN03D~)) BEGIN
+      SET idx = $icon_indices(~A7#IN03D~)
+      LPF ALTER_EFFECT
+      INT_VAR
+        check_globals     = 0
+        check_headers     = 1
+        match_opcode      = 142   // Display portrait icon
+        match_parameter2  = 82    // Called Shot icon
+        parameter2        = idx
+      END
+    END
+  END
+COPY ~%MOD_FOLDER%/kit/a7#in31a.spl~  ~override~
+     ~%MOD_FOLDER%/kit/a7#in32a.spl~  ~override~
+     ~%MOD_FOLDER%/kit/a7#in33a.spl~  ~override~
+     ~%MOD_FOLDER%/kit/a7#in34a.spl~  ~override~
+  SAY NAME1 @1002   // Explosive Shot
+  READ_LONG 0x64 "ability_ofs"
+  READ_SHORT 0x68 "ability_num"
+  FOR (ability = 0; ability < ability_num; ability += 1) BEGIN
+    WRITE_SHORT (ability_ofs + ability*0x28 + 0x26) %A7#IN03%
+  END
+
+
+// Setting common shot ability properties
+COPY_EXISTING ~a7#in01.spl~ ~override~
+              ~a7#in02.spl~ ~override~
+              ~a7#in03.spl~ ~override~
+  READ_LONG 0x6a "effects_ofs"
+  WHILE (effects_ofs < SOURCE_SIZE) BEGIN
+    READ_SHORT effects_ofs "fx_type"
+    PATCH_IF (fx_type == 206) BEGIN   // Protection from spell (206)
+      SAY (effects_ofs + 4) @1016   // You can't use another shot ability while the current effect is active.
+    END
+    effects_ofs += 0x30
+  END
+  BUT_ONLY
+
+
+// Installing shot selection ability
+COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override~
+  SAY NAME1 @1079   // Activate Shot Ability
+  SAY UNIDENTIFIED_DESC @2043   // Activate Shot Ability...
+
+COPY ~%MOD_FOLDER%/kit/a7#ins2.spl~ ~override~
+  SAY NAME1 @1079   // Activate Shot Ability
+  SAY UNIDENTIFIED_DESC @2044  // Activate Shot Ability...
+
+COPY ~%MOD_FOLDER%/kit/a7#ins3.spl~ ~override~
+  SAY NAME1 @1079   // Activate Shot Ability
+  SAY UNIDENTIFIED_DESC @2045   // Activate Shot Ability...
+
+
+// Ability: Sure Shot
+COPY ~%MOD_FOLDER%/kit/a7#in0a.spl~ ~override~
+  SAY NAME1 @1017   // Sure Shot
+  SAY UNIDENTIFIED_DESC @1111   // Sure Shot...
+  PATCH_IF (IS_EE && VARIABLE_IS_SET $icon_indices(~A7#IN0AD~)) BEGIN
+    SET idx = $icon_indices(~A7#IN0AD~)
+    LPF ALTER_EFFECT
+    INT_VAR
+      check_globals     = 0
+      check_headers     = 1
+      match_opcode      = 142   // Display portrait icon
+      match_parameter2  = 82    // Called Shot icon
+      parameter2        = idx
+    END
+  END
+
+
+// Ability: Missile Trap
+COPY ~%MOD_FOLDER%/kit/a7#in0b.spl~ ~override~
+  SAY NAME1 @1018   // Missile Trap
+  SAY UNIDENTIFIED_DESC @1112   // Set Missile Trap...
