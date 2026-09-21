@@ -1,0 +1,94 @@
+// Archer Revised - native high-level abilities.
+
+// GREATER CALLED SHOT
+// For 10 seconds every successful ranged hit applies the complete Called Shot
+// package at once, plus +4 missile damage and a 1-second stun.
+// Repeated hits refresh the debuffs; they do not stack indefinitely.
+COPY ~%MOD_FOLDER%/kit/a7#in0a.spl~ ~override/ARGCALS.SPL~
+  SAY NAME1 @3300
+  SAY UNIDENTIFIED_DESC @3301
+  LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = (0 - 1) END
+  LPF ADD_SPELL_EFFECT
+    INT_VAR
+      opcode         = 249
+      target         = 2
+      timing         = 0
+      duration       = 10
+      resist_dispel  = 2
+    STR_VAR
+      resource       = ~ARGCHIT~
+  END
+BUT_ONLY
+
+COPY ~%MOD_FOLDER%/kit/a7#in11a.eff~ ~override/ARGCHIT.EFF~
+  WRITE_LONG  0x10 146
+  WRITE_LONG  0x14 2
+  WRITE_LONG  0x18 0
+  WRITE_LONG  0x1c 0
+  WRITE_LONG  0x20 1
+  WRITE_SHORT 0x24 1
+  WRITE_SHORT 0x26 0
+  WRITE_LONG  0x28 0
+  WRITE_SHORT 0x2c 100
+  WRITE_SHORT 0x2e 0
+  WRITE_ASCII 0x30 ~ARGCFX~ #8
+  WRITE_LONG  0x38 0
+  WRITE_LONG  0x3c 0
+  WRITE_LONG  0x40 0
+  WRITE_LONG  0x44 0
+  WRITE_LONG  0x48 0
+  WRITE_LONG  0x4c 0
+  WRITE_LONG  0x5c 2
+  WRITE_LONG  0x60 0
+  WRITE_LONG  0x64 0
+BUT_ONLY
+
+COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override/ARGCFX.SPL~
+  SAY NAME1 @3300
+  LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = (0 - 1) END
+
+  // Refresh, rather than stack, the persistent debuffs from previous hits.
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 321 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~ARGCFX~ END
+
+  // Complete normal Called Shot package.
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 15  target = 2 parameter1 = 50 parameter2 = 2 timing = 0 duration = 60 resist_dispel = 2 END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 176 target = 2 parameter1 = 25 parameter2 = 5 timing = 0 duration = 60 resist_dispel = 2 END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 1   target = 2 parameter1 = -1 parameter2 = 0 timing = 0 duration = 60 resist_dispel = 2 END
+
+  // HLA rider: stronger unmitigated missile damage and a brief stagger.
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 12 target = 2 parameter1 = 4 parameter2 = 0x00800000 timing = 1 resist_dispel = 2 END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 45 target = 2 timing = 0 duration = 1 resist_dispel = 2 END
+BUT_ONLY
+
+
+// SURE SHOT REVISED
+// Strong two-round firing stance without the original A7 10-APR spike.
+COPY ~%MOD_FOLDER%/kit/a7#in0a.spl~ ~override/ARSURE.SPL~
+  SAY NAME1 @3310
+  SAY UNIDENTIFIED_DESC @3311
+  LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = (0 - 1) END
+
+  // End any currently active Special Shot effects before entering the stance.
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 321 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~ARCALLD~ END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 321 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~A7#IN02~ END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 321 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~A7#IN01~ END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 321 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~A7#IN03~ END
+
+  // Block the four Special Shot resources while Sure Shot is active.
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 timing = 0 duration = 12 resist_dispel = 2 STR_VAR resource = ~ARCALLD~ END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 timing = 0 duration = 12 resist_dispel = 2 STR_VAR resource = ~A7#IN02~ END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 timing = 0 duration = 12 resist_dispel = 2 STR_VAR resource = ~A7#IN01~ END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 timing = 0 duration = 12 resist_dispel = 2 STR_VAR resource = ~A7#IN03~ END
+
+  // +1 APR.
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 1 target = 2 parameter1 = 1 parameter2 = 0 timing = 0 duration = 12 resist_dispel = 2 END
+
+  // +4 to hit with missile weapons means -4 THAC0.
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 167 target = 2 parameter1 = -4 parameter2 = 0 timing = 0 duration = 12 resist_dispel = 2 END
+
+  // Every ranged attack is a critical hit.
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 301 target = 2 parameter1 = 20 parameter2 = 0 timing = 0 duration = 12 special = 2 resist_dispel = 2 END
+
+  // Root the Archer in place for the full two rounds.
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 176 target = 2 parameter1 = 0 parameter2 = 1 timing = 0 duration = 12 resist_dispel = 2 END
+BUT_ONLY
