@@ -5,18 +5,20 @@
 // ARCALFX removes its previous application before applying the current tier,
 // making the debuffs refreshable but non-cumulative.
 
-COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override/ARCALLD.SPL~
+// A7#IN01 already contains four legal innate SPL headers, so it is used as
+// a structural shell. This keeps the implementation self-contained.
+COPY ~%MOD_FOLDER%/kit/a7#in01.spl~ ~override/ARCALLD.SPL~
   SAY NAME1 @3200
   SAY UNIDENTIFIED_DESC @3201
   LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = (0 - 1) END
 
-  // Four activation headers let the level-16 damage bonus apply to the
-  // Archer at activation time rather than as a separate damage tick on hit.
-  LPF CLONE_HEADER INT_VAR header = 0 level = 8 END
-  LPF CLONE_HEADER INT_VAR header = 0 level = 12 END
-  LPF CLONE_HEADER INT_VAR header = 0 level = 16 END
-
   READ_LONG 0x64 ar_hdr
+
+  // Self-targeting activation headers at levels 4 / 8 / 12 / 16.
+  WRITE_BYTE  (ar_hdr + (0 * 0x28) + 0x0c) 1
+  WRITE_BYTE  (ar_hdr + (1 * 0x28) + 0x0c) 1
+  WRITE_BYTE  (ar_hdr + (2 * 0x28) + 0x0c) 1
+  WRITE_BYTE  (ar_hdr + (3 * 0x28) + 0x0c) 1
   WRITE_SHORT (ar_hdr + (0 * 0x28) + 0x10) 4
   WRITE_SHORT (ar_hdr + (1 * 0x28) + 0x10) 8
   WRITE_SHORT (ar_hdr + (2 * 0x28) + 0x10) 12
