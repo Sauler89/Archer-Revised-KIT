@@ -1,17 +1,41 @@
-// Archer Revised - native Manyshot progression.
+// Archer Revised - compatibility-first Manyshot progression.
 //
-// Artisan's implementation relies on custom combat-round animations and patches
-// every bow/crossbow. Archer Revised deliberately uses a compatibility-first
-// mechanical equivalent: +1/2 APR at levels 7, 13 and 20 while a bow or
-// crossbow is equipped. The three independent resources stack to +1.5 APR.
+// True Manyshot in Artisan uses custom combat-round animation resources to
+// create extra independently-rolled projectiles. A simple APR implementation
+// is not viable here because BG2EE/EET normally caps base APR at 5, which would
+// make high-level Manyshot and Rapid Shot overwrite/waste each other's benefit.
+//
+// Archer Revised instead models the extra projectile throughput as additive
+// missile-damage scaling while a bow or crossbow is equipped:
+//   level 7  : +25% total missile damage
+//   level 13 : +40% total (+15% additional)
+//   level 20 : +60% total (+20% additional)
+// This keeps Rapid Shot useful and approximates 1/2/3 extra projectiles when
+// Rapid Shot is active, without patching every bow/crossbow in the game.
+
+// Opcode 332: Specific Damage Modifier, type 10 = Missile.
+COPY ~%MOD_FOLDER%/spells/AR#APR1.EFF~ ~override/ARMSH07.EFF~
+  WRITE_LONG 0x10 332
+  WRITE_LONG 0x1c 25
+  WRITE_LONG 0x20 10
+  WRITE_ASCII 0x94 ~ARMSH07~ #8
+BUT_ONLY
+
+COPY ~%MOD_FOLDER%/spells/AR#APR1.EFF~ ~override/ARMSH13.EFF~
+  WRITE_LONG 0x10 332
+  WRITE_LONG 0x1c 15
+  WRITE_LONG 0x20 10
+  WRITE_ASCII 0x94 ~ARMSH13~ #8
+BUT_ONLY
+
+COPY ~%MOD_FOLDER%/spells/AR#APR1.EFF~ ~override/ARMSH20.EFF~
+  WRITE_LONG 0x10 332
+  WRITE_LONG 0x1c 20
+  WRITE_LONG 0x20 10
+  WRITE_ASCII 0x94 ~ARMSH20~ #8
+BUT_ONLY
 
 ACTION_FOR_EACH ms_level IN 07 13 20 BEGIN
-  COPY ~%MOD_FOLDER%/spells/AR#APR1.EFF~ ~override/ARMSH%ms_level%.EFF~
-    // Opcode 1 key 6 = +0.5 APR.
-    WRITE_LONG 0x1c 6
-    WRITE_ASCII 0x94 ~ARMSH%ms_level%~ #8
-  BUT_ONLY
-
   COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override/ARMSH%ms_level%.SPL~
     LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = (0 - 1) END
 
