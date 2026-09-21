@@ -6,3 +6,4 @@
 
 @103 = ~The late-install Manyshot item patch requires the Archer Revised core component.~
 @104 = ~Artisan's Kitpack Manyshot item tweak (component 20101) is specific to Artisan's Archer implementation and is not compatible with Archer Revised. Use Archer Revised component 10 instead.~
+@105 = ~Archer Revised could not locate the Archer proficiency column in WEAPPROF.2DA. Installation has been aborted rather than risk modifying another kit.~
