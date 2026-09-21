@@ -29,9 +29,7 @@ COPY ~%KIT_FOLDER%/a7#in01b.bam~ ~override~
      ~%KIT_FOLDER%/a7#in4ab.bam~ ~override~
      ~%KIT_FOLDER%/a7#in4bb.bam~ ~override~
      ~%KIT_FOLDER%/a7#in4cb.bam~ ~override~
-     ~%KIT_FOLDER%/a7#in0ab.bam~ ~override~
      ~%KIT_FOLDER%/a7#insb.bam~  ~override~
-     ~%KIT_FOLDER%/a7#in0bb.spl~ ~override~
      ~%KIT_FOLDER%/a7#in06.spl~  ~override~
      ~%KIT_FOLDER%/a7#in07.spl~  ~override~
      ~%MOD_FOLDER%/kit/a7#in11a.eff~ ~override~
@@ -92,8 +90,6 @@ COPY ~%KIT_FOLDER%/a7#in01b.bam~ ~override~
      ~%MOD_FOLDER%/kit/a7#in45b.eff~ ~override~
      ~%MOD_FOLDER%/kit/a7#in03.pro~  ~override~
      ~%MOD_FOLDER%/kit/a7#in05.spl~  ~override~
-     ~%MOD_FOLDER%/kit/a7#entg.bam~  ~override~
-     ~%MOD_FOLDER%/kit/a7#entg1.vvc~ ~override~
      ~%MOD_FOLDER%/kit/a7#ins1.2da~  ~override~
      ~%MOD_FOLDER%/kit/a7#ins2.2da~  ~override~
      ~%MOD_FOLDER%/kit/a7#ins3.2da~  ~override~
