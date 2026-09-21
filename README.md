@@ -27,12 +27,12 @@ The result is intended to remain recognizably an Archer while staying useful thr
 - **Farsighted:** +2 visual range, increasing to +4 while hidden or invisible.
 - **Rapid Shot:** toggleable stance. While a bow or crossbow is equipped, grants +1 APR and imposes a -4 penalty to ranged attack rolls; from level 12 onward the penalty improves to -2.
 - **Shared Special Shot pool:** 1 use at level 4 and +1 use every 4 levels. Called Shot and Rooting Shot unlock at level 4; Power Shot and Explosive Shot join the same pool at level 8. Normal Special Shots are mutually exclusive, and their selector is locked while a shot is active so uses cannot be wasted.
-- **Called Shot:** for 10 seconds, successful ranged attacks apply level-dependent debuffs for 1 turn. Dexterity is reduced to 50% at level 4, movement to 25% at level 8, and APR by 1 at level 12; level 16 also adds +2 missile damage per hit. Repeated hits refresh rather than stack the persistent debuffs.
+- **Called Shot:** for 10 seconds, successful ranged attacks apply level-dependent debuffs for 1 turn. Dexterity is reduced to 50% at level 4, movement to 25% at level 8, and APR by 1 at level 12. From level 16 onward, activating Called Shot also grants +2 missile weapon damage for the 10-second window; because this modifies ranged weapon damage directly, it benefits from critical-hit multipliers. Repeated hits refresh rather than stack the persistent debuffs.
 - **Conjure Elemental Ammunition:** retained from the Improved Archer foundation.
-- **Manyshot — compatibility-first implementation:** while using a bow or crossbow, missile damage dealt is increased by 25% at level 7, 40% total at level 13, and 60% total at level 20.
+- **Manyshot — compatibility-first implementation:** patched bows and crossbows grant +25% missile damage at level 7, +40% total at level 13, and +60% total at level 20. The core patches all launchers present at install time; optional component 10 can be installed near the end of a mod order to refresh bows/crossbows added later.
 - **Sniper (level 16):** ranged attacks made while invisible or improved invisible are guaranteed critical hits.
 - Retains the normal Ranger HLA selection, including **Hardiness**, and adds two Archer-specific HLAs:
-  - **Greater Called Shot:** for 10 seconds, maximizes base weapon damage; every successful ranged hit applies the complete Called Shot package and stuns the target for 3 seconds.
+  - **Greater Called Shot:** for 10 seconds, maximizes base weapon damage, grants +2 missile weapon damage, and makes every successful ranged hit apply the complete Called Shot debuff package and stun the target for 3 seconds.
   - **Sure Shot Revised:** for 2 rounds, grants +1 APR while a bow or crossbow is equipped, +4 to hit with missile weapons, guaranteed ranged critical hits, and prevents movement. Rapid Shot, normal Special Shots, and Greater Called Shot are mutually exclusive with Sure Shot.
 
 ### Disadvantages
@@ -52,9 +52,17 @@ The Artisan implementation creates additional independently rolled projectiles t
 
 A simple +APR replacement was rejected during audit because BG2EE/EET normally caps base APR at 5, causing high-level Manyshot to overlap with or waste Rapid Shot. Archer Revised therefore models Manyshot as launcher-gated missile-damage scaling: **+25% at level 7, +40% total at level 13, and +60% total at level 20**.
 
-This keeps Rapid Shot useful, requires no EEex dependency, and works with mod-added bows and crossbows without globally patching every launcher.
+Unlike the earlier CLAB/opcode-183 prototype, the current implementation patches bow and crossbow items directly. The Archer Revised core patches every launcher present when component 0 is installed. **Component 10 — Patch mod-added bows and crossbows for Manyshot** can then be installed or reinstalled near the end of the install order, after item/content mods, to process launchers added later. The patch is idempotent and removes only Archer Revised's own effects before reapplying them.
 
 This compatibility-first Manyshot does **not** create extra attack rolls, consume extra ammunition, or duplicate non-missile riders exactly as Artisan's true multi-projectile implementation does.
+
+### Install-order note
+
+For large EET installations, install **Archer Revised core (component 0)** with the other kit/class overhauls. After every mod that adds bows or crossbows, run **component 10** to refresh Manyshot support on those late-added items.
+
+Do **not** install Artisan's Kitpack tweak component **20101 (Archer - Apply Manyshot to mod-added items)** with Archer Revised. That component injects Artisan-specific `C0ARCPxx/C0MSHOxx` resources and is explicitly blocked. Archer Revised component 10 is its native replacement.
+
+ZSTweaks component **2232 (Make Called Shot directly increase ranged weapon damage)** is also unnecessary with Archer Revised: the same design is integrated natively from level 16 onward through opcode 286.
 
 ## Compatibility target
 
