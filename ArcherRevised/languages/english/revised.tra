@@ -5,10 +5,13 @@ Advantages:
 - +1 bonus to Armor Class vs. missile weapons every 6 levels.
 - +5% chance to score a critical hit at levels 13 and 18.
 - May achieve Grand Mastery (5 slots) in longbows, shortbows and crossbows.
-- Farsighted: +2 visual range.
+- Farsighted: +2 visual range, increasing to +4 while hidden or invisible.
 - May toggle Rapid Shot while a bow or crossbow is equipped: gains +1 attack per round while suffering a -4 penalty to hit with ranged attacks. From level 12 onward the penalty is reduced to -2.
 - Gains a shared Special Shot pool at level 4, with +1 use every 4 levels thereafter. At level 4 the Archer may choose Called Shot or Rooting Shot; at level 8 Power Shot and Explosive Shot are added to the same pool.
+- Manyshot: gains +1/2 attack per round with bows and crossbows at levels 7, 13 and 20, for a total of +1.5 attacks per round at level 20.
+- Sniper (level 16): ranged attacks made while invisible or improved invisible are guaranteed critical hits.
 - May use Conjure Elemental Ammunition once per day every 8 levels, starting at level 4.
+- High-level abilities: Greater Called Shot and Sure Shot Revised.
 
 Disadvantages:
 - Hit Die: d8.
@@ -17,8 +20,7 @@ Disadvantages:
 - May only become Proficient (one slot) with melee weapons.
 - May not gain proficiency in Two-Weapon Style.
 - May not use Charm Animal.
-
-Archer Revised v0.1-dev establishes the standalone EET core. Manyshot, Sniper and the revised high-level abilities are being implemented as native Archer Revised resources rather than copied from another mod.~
+~
 
 @3000 = ~Rapid Shot~
 @3001 = ~Rapid Shot
@@ -44,3 +46,14 @@ For the next 10 seconds, every successful ranged attack applies the following no
 12th level: The target also loses 1 attack per round.
 16th level: Every successful hit also deals +2 missile damage.
 Repeated hits refresh these effects rather than stacking them.~
+
+
+@3300 = ~Greater Called Shot~
+@3301 = ~Greater Called Shot
+For the next 10 seconds, every successful ranged attack applies the complete Called Shot package at once: Dexterity is reduced to 50%, movement rate to 25%, and the target loses 1 attack per round for 1 turn. Each hit also deals +4 missile damage and stuns the target for 1 second. Repeated hits refresh the persistent debuffs rather than stacking them.~
+
+@3310 = ~Sure Shot~
+@3311 = ~Sure Shot
+For 2 rounds, the Archer gains +1 attack per round, a +4 bonus to hit with missile weapons, and every ranged attack is a critical hit. The concentration required roots the Archer in place for the duration. Called Shot, Rooting Shot, Power Shot and Explosive Shot cannot be used while Sure Shot is active.
+
+Requires: Critical Strike.~
