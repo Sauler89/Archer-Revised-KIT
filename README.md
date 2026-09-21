@@ -17,7 +17,7 @@ The result is intended to remain recognizably an Archer while staying useful thr
 
 ### Advantages
 
-- +1 to hit and damage with missile weapons at level 1, with another +1 every 4 levels thereafter.
+- +1 to hit and damage with missile weapons at level 1, and again at levels 4, 8, 12, 16, 20, and every 4 levels thereafter.
 - +1 AC vs. missile weapons every 6 levels.
 - +5% critical-hit chance at levels 13 and 18.
 - Grand Mastery with longbows, shortbows, and crossbows.
@@ -39,6 +39,7 @@ The result is intended to remain recognizably an Archer while staying useful thr
 - May only become Proficient with melee weapons.
 - May not gain proficiency in Two-Weapon Style.
 - May not use Charm Animal.
+- May not Set Traps; the inherited Ranger Set Spike Trap HLA is removed.
 - May not wear metal armor.
 
 The Improved Archer -1 Constitution penalty is intentionally removed because the d8 Hit Die already supplies the survivability trade-off.
