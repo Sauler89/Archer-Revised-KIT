@@ -45,6 +45,13 @@ BEGIN @1
     FAIL @102
   END
 
+  ACTION_IF MOD_IS_INSTALLED ~ArtisansKitpack_tweak.tp2~ ~20101~ BEGIN
+    FAIL @104
+  END
+  ACTION_IF MOD_IS_INSTALLED ~ArtisansKitpack_tweak/ArtisansKitpack_tweak.tp2~ ~20101~ BEGIN
+    FAIL @104
+  END
+
   INCLUDE ~%MOD_FOLDER%/lib/kit_archer.tph~
   INCLUDE ~%MOD_FOLDER%/lib/called_shot.tph~
   INCLUDE ~%MOD_FOLDER%/lib/special_shots.tph~
