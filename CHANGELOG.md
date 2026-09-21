@@ -5,24 +5,31 @@
 - Initialized the standalone Archer Revised project for BGEE/BG2EE/EET.
 - Imported only the EET-relevant Improved Archer technical resources under CC BY-SA 4.0.
 - Added explicit conflict checks for A7 Improved Archer and Artisan's Archer Overhaul.
+- English-only localization for the current development phase.
 - Removed the Improved Archer -1 Constitution penalty.
-- Restored vanilla Archer minimum requirements (DEX 13 / CON 14).
+- Restored vanilla Archer minimum requirements: DEX 13 / CON 14.
 - Added d8 Archer Hit Die progression.
 - Enabled Grand Mastery with longbows, shortbows, and crossbows.
 - Removed Two-Weapon Style proficiency.
-- Added the +3 melee THAC0 penalty.
+- Added a +3 melee THAC0 penalty.
 - Added Farsighted: +2 visual range, increasing to +4 while hidden/invisible.
-- Retained the A7-derived missile hit/damage progression, missile AC progression, critical progression, Rooting Shot, Power Shot, Explosive Shot, and Conjure Elemental Ammunition foundation.
-- Replaced separate shot uses with a shared Special Shot pool: Called Shot/Rooting at level 4, Power/Explosive at level 8, +1 shared use every 4 levels.
-- Reimplemented Called Shot natively with non-stacking/refreshed DEX, movement and APR debuffs and +2 missile damage at level 16.
-- Added native Rapid Shot: +1 APR with bows/crossbows; +4 ranged THAC0 penalty, improving to +2 at level 12.
-- Corrected the THAC0 modifier signs after auditing EE opcode 167/284 semantics.
-- Added compatibility-first Manyshot: +1/2 APR with bows/crossbows at levels 7, 13 and 20.
+- Added the Artisan-inspired level-1 accuracy bonus as +1 to ranged attack rolls only.
+- Retained the A7-derived +1 missile hit/damage progression beginning at level 4 and repeating every 4 levels thereafter.
+- Retained A7 missile AC progression and critical-hit progression.
+- Retained A7 Rooting Shot, Power Shot, Explosive Shot, and Conjure Elemental Ammunition as the technical foundation for those abilities.
+- Replaced separate shot-use pools with one shared Special Shot pool: Called Shot/Rooting at level 4, Power/Explosive at level 8, +1 shared use every 4 levels.
+- Reimplemented Called Shot with refreshed, non-stacking Dexterity, movement, and APR debuffs; level 16 also adds +2 missile damage per successful hit.
+- Made normal Special Shots mutually exclusive and blocked their selectors while another Special Shot is active, preventing stacking and wasted shared uses.
+- Added native Rapid Shot: +1 APR with bows/crossbows; -4 to ranged attack rolls, improving to -2 at level 12.
+- Corrected THAC0 modifier signs after auditing EE opcode 167/284 behavior.
+- Rejected the initial APR-based Manyshot implementation because of the normal 5-APR cap.
+- Reimplemented Manyshot as launcher-gated missile-damage scaling: +25% at level 7, +40% total at level 13, and +60% total at level 20.
 - Added native Sniper at level 16: guaranteed critical hits on ranged attacks while invisible or improved invisible.
-- Replaced the legacy A7 custom HLA additions with native Archer Revised HLAs:
-  - Greater Called Shot.
-  - Sure Shot Revised.
-- Removed Missile Trap from the Archer-specific HLA additions.
-- Removed the inherited Ranger Set Spike Trap HLA.
-- Added English and Italian installer strings and complete Revised kit/HLA descriptions.
+- Retained the normal Ranger HLA table, including Hardiness.
+- Replaced the legacy A7 custom HLA additions with two Archer Revised HLAs:
+  - Greater Called Shot: maximized base weapon damage for 10 seconds; successful ranged hits apply the full Called Shot package and stun for 3 seconds.
+  - Sure Shot Revised: 2 rounds of bow/crossbow-only +1 APR, +4 ranged attack bonus, guaranteed ranged critical hits, and zero movement.
+- Made Sure Shot mutually exclusive with Rapid Shot, normal Special Shots, and Greater Called Shot.
+- Removed unused legacy A7 Sure Shot / Missile Trap resources from installation.
+- Audited imported A7 resources by Git SHA: all unmodified imported gameplay resources remain byte-identical to the source.
 - Artisan-inspired mechanics are independently implemented; no Artisan binary resources are redistributed.
