@@ -70,6 +70,13 @@ BEGIN @2
   REQUIRE_PREDICATE GAME_IS ~bgee bg2ee eet~ @100
   REQUIRE_COMPONENT ~setup-ArcherRevised.tp2~ ~0~ @103
 
+  ACTION_IF MOD_IS_INSTALLED ~ArtisansKitpack_tweak.tp2~ ~20101~ BEGIN
+    FAIL @104
+  END
+  ACTION_IF MOD_IS_INSTALLED ~ArtisansKitpack_tweak/ArtisansKitpack_tweak.tp2~ ~20101~ BEGIN
+    FAIL @104
+  END
+
   // Install this after any content mods that add bows or crossbows.
-  // The patch is idempotent and safely refreshes Archer Revised effects.
-  INCLUDE ~%MOD_FOLDER%/lib/manyshot_items.tph~
+  // Rebuild the Manyshot resources as well as refreshing all launcher items.
+  INCLUDE ~%MOD_FOLDER%/lib/manyshot.tph~
