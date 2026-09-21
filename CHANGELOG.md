@@ -18,7 +18,7 @@
 - Retained A7 missile AC progression and critical-hit progression.
 - Retained A7 Rooting Shot, Power Shot, Explosive Shot, and Conjure Elemental Ammunition as the technical foundation for those abilities.
 - Replaced separate shot-use pools with one shared Special Shot pool: Called Shot/Rooting at level 4, Power/Explosive at level 8, +1 shared use every 4 levels.
-- Reimplemented Called Shot with refreshed, non-stacking Dexterity, movement, and APR debuffs; level 16 also adds +2 missile damage per successful hit.
+- Reimplemented Called Shot with refreshed, non-stacking Dexterity, movement, and APR debuffs. At level 16, +2 damage is now applied directly to MISSILE_DAMAGE_BONUS for the 10-second Called Shot window, allowing the bonus to participate in critical-hit multipliers.
 - Made normal Special Shots mutually exclusive and blocked their selectors while another Special Shot is active, preventing stacking and wasted shared uses.
 - Added native Rapid Shot: +1 APR with bows/crossbows; -4 to ranged attack rolls, improving to -2 at level 12.
 - Corrected THAC0 modifier signs after auditing EE opcode 167/284 behavior.
@@ -26,6 +26,9 @@
 - Verified the Called Shot on-hit EFF preserves the Archer's caster level when selecting the level-appropriate debuff header.
 - Rejected the initial APR-based Manyshot implementation because of the normal 5-APR cap.
 - Reimplemented Manyshot as launcher-gated missile-damage scaling: +25% at level 7, +40% total at level 13, and +60% total at level 20.
+- Replaced the CLAB/opcode-183 Manyshot prototype with an item-driven Manyshot implementation. Bow and crossbow items now carry Archer-filtered, level-gated Manyshot effects.
+- Added component 10, a late-install idempotent launcher refresh for bows/crossbows added by content mods after the Archer Revised core.
+- Explicitly blocked Artisan's Kitpack tweak component 20101; Archer Revised component 10 replaces its late-item-patching role without using Artisan resources.
 - Restricted Sure Shot's +1 APR to bows and crossbows so switching to a melee weapon cannot retain the firing-rate bonus.
 - Added native Sniper at level 16: guaranteed critical hits on ranged attacks while invisible or improved invisible.
 - Retained the normal Ranger HLA table, including Hardiness.
@@ -40,3 +43,5 @@
 - Normalized kit-symbol handling so relevant rule patches recognize both FERALAN and ARCHER where applicable.
 - Audited imported A7 resources by Git SHA: all unmodified imported gameplay resources remain byte-identical to the source.
 - Artisan-inspired mechanics are independently implemented; no Artisan binary resources are redistributed.
+
+- Integrated the gameplay logic of ZSTweaks component 2232 into Archer Revised's level-16 Called Shot; installing that ZSTweaks component is therefore unnecessary for this kit.
