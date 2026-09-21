@@ -40,8 +40,14 @@ BEGIN @1
   ACTION_IF MOD_IS_INSTALLED ~setup-A7#ImprovedArcher.tp2~ ~0~ BEGIN
     FAIL @101
   END
+  ACTION_IF MOD_IS_INSTALLED ~A7#ImprovedArcher/A7#ImprovedArcher.tp2~ ~0~ BEGIN
+    FAIL @101
+  END
 
   ACTION_IF MOD_IS_INSTALLED ~Setup-ArtisansKitpack.tp2~ ~2010~ BEGIN
+    FAIL @102
+  END
+  ACTION_IF MOD_IS_INSTALLED ~ArtisansKitpack/ArtisansKitpack.tp2~ ~2010~ BEGIN
     FAIL @102
   END
 
