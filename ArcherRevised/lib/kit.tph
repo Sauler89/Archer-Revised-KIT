@@ -131,7 +131,7 @@ ACTION_IF (IS_EE) BEGIN
       END
     END
 
-  ACTION_IF (icon_index > 82 && icon_indices < 4) BEGIN
+  ACTION_IF (icon_index > 82 && icon_indices < 3) BEGIN
     ACTION_PHP_EACH icon_defs AS ref => icn_name BEGIN
       ACTION_IF (NOT VARIABLE_IS_SET $icon_indices(~%icn_name%~)) BEGIN
         OUTER_SET icon_index += 1
@@ -146,11 +146,9 @@ ACTION_IF (IS_EE) BEGIN
       PRETTY_PRINT_2DA
     BUT_ONLY
   END
-
   COPY ~%MOD_FOLDER%/kit/ee/a7#in01d.bam~ ~override~
   COPY ~%MOD_FOLDER%/kit/ee/a7#in02d.bam~ ~override~
   COPY ~%MOD_FOLDER%/kit/ee/a7#in03d.bam~ ~override~
-  COPY ~%MOD_FOLDER%/kit/ee/a7#in0ad.bam~ ~override~
 END ELSE BEGIN
   OUTER_SET icon_index = 82
 END
