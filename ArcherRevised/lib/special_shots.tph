@@ -40,3 +40,16 @@ COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override/ARINSX.SPL~
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 172 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~ARIN4~ END
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 171 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~ARINS1~ END
 BUT_ONLY
+
+
+// Archer Revised mutual-exclusion layer.
+// A7 already makes Rooting/Power/Explosive mutually exclusive with each other.
+// Add the native Called Shot and our shared selectors to the same lockout so
+// users cannot stack techniques or waste a shared daily use while one is active.
+COPY_EXISTING ~A7#IN01.SPL~ ~override~
+              ~A7#IN02.SPL~ ~override~
+              ~A7#IN03.SPL~ ~override~
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 1 timing = 0 duration = 12 resist_dispel = 2 STR_VAR resource = ~ARIN4~ END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 1 timing = 0 duration = 12 resist_dispel = 2 STR_VAR resource = ~ARINS1~ END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 1 timing = 0 duration = 12 resist_dispel = 2 STR_VAR resource = ~ARCALLD~ END
+BUT_ONLY
