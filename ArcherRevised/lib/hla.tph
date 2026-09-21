@@ -114,8 +114,9 @@ COPY ~%MOD_FOLDER%/kit/a7#in0a.spl~ ~override/ARSURE.SPL~
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 timing = 0 duration = 12 resist_dispel = 2 STR_VAR resource = ~A7#IN03~ END
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 timing = 0 duration = 12 resist_dispel = 2 STR_VAR resource = ~ARGCALS~ END
 
-  // +1 APR.
-  LPF ADD_SPELL_EFFECT INT_VAR opcode = 1 target = 2 parameter1 = 1 parameter2 = 0 timing = 0 duration = 12 resist_dispel = 2 END
+  // +1 APR only while a bow or crossbow is equipped.
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 183 target = 2 parameter1 = 0 parameter2 = 15 timing = 0 duration = 12 resist_dispel = 2 STR_VAR resource = ~AR#APR1~ END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 183 target = 2 parameter1 = 0 parameter2 = 27 timing = 0 duration = 12 resist_dispel = 2 STR_VAR resource = ~AR#APR1~ END
 
   // +4 to hit with missile weapons means -4 THAC0.
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 167 target = 2 parameter1 = -4 parameter2 = 0 timing = 0 duration = 12 resist_dispel = 2 END
