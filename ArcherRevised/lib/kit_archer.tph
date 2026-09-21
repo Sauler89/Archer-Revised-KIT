@@ -144,6 +144,12 @@ OUTER_FOR (row = added; row < abbrev_rows; ++row) BEGIN
   OUTER_SET num_rows += 1
 END
 
+// Archer Revised: remove trap-setting HLA inherited from the Ranger table.
+COPY_EXISTING ~lu%luabbrev%.2da~ ~override~
+  REPLACE_TEXTUALLY CASE_INSENSITIVE ~GA_SPCL907~ ~*~
+  PRETTY_PRINT_2DA
+BUT_ONLY
+
 COPY_EXISTING ~lu%luabbrev%.2da~ ~override~ PRETTY_PRINT_2DA BUT_ONLY
 
 ACTION_IF (IS_EE) BEGIN
