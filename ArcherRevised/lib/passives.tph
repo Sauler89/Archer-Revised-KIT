@@ -24,6 +24,61 @@ COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override/ARMELE03.SPL~
       timing         = 9
       resist_dispel  = 2
   END
+
+  // Refresh the enhanced Farsighted bonus while hidden/invisible.
+  LPF ADD_SPELL_EFFECT
+    INT_VAR
+      opcode         = 232
+      target         = 2
+      parameter1     = 0
+      parameter2     = 20
+      timing         = 9
+      special        = 102
+      resist_dispel  = 2
+    STR_VAR
+      resource       = ~ARFARCLR~
+  END
+
+  LPF ADD_SPELL_EFFECT
+    INT_VAR
+      opcode         = 232
+      target         = 2
+      parameter1     = 0
+      parameter2     = 15
+      timing         = 9
+      special        = 0x00400010
+      resist_dispel  = 2
+    STR_VAR
+      resource       = ~ARFARON~
+  END
+BUT_ONLY
+
+// Additional +2 visual range while hidden or invisible, for +4 total.
+COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override/ARFARON.SPL~
+  LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = (0 - 1) END
+  LPF ADD_SPELL_EFFECT
+    INT_VAR
+      opcode         = 262
+      target         = 2
+      parameter1     = 2
+      parameter2     = 0
+      timing         = 0
+      duration       = 7
+      resist_dispel  = 2
+  END
+BUT_ONLY
+
+COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override/ARFARCLR.SPL~
+  LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = (0 - 1) END
+  LPF ADD_SPELL_EFFECT
+    INT_VAR
+      opcode         = 321
+      target         = 2
+      timing         = 1
+      resist_dispel  = 2
+    STR_VAR
+      resource       = ~ARFARON~
+  END
 BUT_ONLY
 
 // Level 12 migration: if Rapid Shot was active before levelling,
