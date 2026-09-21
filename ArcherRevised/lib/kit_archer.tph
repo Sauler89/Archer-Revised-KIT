@@ -144,21 +144,6 @@ OUTER_FOR (row = added; row < abbrev_rows; ++row) BEGIN
   OUTER_SET num_rows += 1
 END
 
-// Archer Revised: remove trap-setting HLA inherited from the Ranger table.
-COPY_EXISTING ~lu%luabbrev%.2da~ ~override~
-  COUNT_2DA_COLS ar_hla_cols
-  READ_2DA_ENTRIES_NOW ar_hla_rows ar_hla_cols
-  SET ar_hla_deleted = 0
-  FOR (ar_hla_i = 0; ar_hla_i < ar_hla_rows; ++ar_hla_i) BEGIN
-    READ_2DA_ENTRY_FORMER ar_hla_rows ar_hla_i 1 ar_hla_ability
-    PATCH_IF (~%ar_hla_ability%~ STRING_EQUAL_CASE ~GA_SPCL907~) BEGIN
-      REMOVE_2DA_ROW (ar_hla_i - ar_hla_deleted) ar_hla_cols
-      SET ar_hla_deleted += 1
-    END
-  END
-  PRETTY_PRINT_2DA
-BUT_ONLY
-
 COPY_EXISTING ~lu%luabbrev%.2da~ ~override~ PRETTY_PRINT_2DA BUT_ONLY
 
 ACTION_IF (IS_EE) BEGIN
