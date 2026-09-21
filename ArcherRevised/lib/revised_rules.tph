@@ -17,31 +17,3 @@ COPY_EXISTING ~hpclass.2da~ ~override~
   END
   PRETTY_PRINT_2DA
 BUT_ONLY
-
-// Explicitly enforce the Revised weapon-style rule even if another earlier
-// mod expanded the vanilla Archer's style progression.
-COPY_EXISTING ~weapprof.2da~ ~override~
-  COUNT_2DA_COLS numCols
-  COUNT_2DA_ROWS numCols numRows
-  SET kit_col = 36
-  FOR (col = 3; col < numCols - 1; ++col) BEGIN
-    READ_2DA_ENTRY 2 col 1 name
-    PATCH_IF (~%name%~ STR_EQ ~FERALAN~ || ~%name%~ STR_EQ ~ARCHER~) BEGIN
-      SET kit_col = col + 1
-      SET col = numCols
-    END
-  END
-  FOR (row = 0; row < numRows; ++row) BEGIN
-    READ_2DA_ENTRY row 0 numCols value
-    PATCH_MATCH ~%value%~ WITH
-      ~CROSSBOW~ ~LONGBOW~ ~SHORTBOW~ BEGIN
-        SET_2DA_ENTRY row kit_col numCols ~5~
-      END
-      ~2WEAPON~ BEGIN
-        SET_2DA_ENTRY row kit_col numCols ~0~
-      END
-      DEFAULT
-    END
-  END
-  PRETTY_PRINT_2DA
-BUT_ONLY
