@@ -1,31 +1,31 @@
-@1100 = ~ARCHER: The Archer is the epitome of skill with ranged weapons: an expert marksman able to make difficult shots while sacrificing durability, armor and melee versatility.
+@1100 = ~ARCHER: The Archer is the epitome of skill with ranged weapons: an expert marksman able to make difficult shots while sacrificing durability, armor, and melee versatility.
 
 Advantages:
-- +1 bonus to hit and damage rolls with missile weapons at level 1 and again at levels 4, 8, 12, 16, 20, and every 4 levels thereafter.
-- +1 bonus to Armor Class vs. missile weapons every 6 levels.
-- +5% chance to score a critical hit at levels 13 and 18.
-- May achieve Grand Mastery (5 slots) in longbows, shortbows and crossbows.
+- Gains a +1 bonus to ranged attack rolls at level 1.
+- Gains a +1 bonus to hit and damage with missile weapons at levels 4, 8, 12, 16, 20, and every 4 levels thereafter.
+- Gains a +1 bonus to Armor Class vs. missile weapons every 6 levels.
+- Gains a +5% chance to score a critical hit at levels 13 and 18.
+- May achieve Grand Mastery (5 slots) in longbows, shortbows, and crossbows.
 - Farsighted: +2 visual range, increasing to +4 while hidden or invisible.
-- May toggle Rapid Shot while a bow or crossbow is equipped: gains +1 attack per round while suffering a -4 penalty to hit with ranged attacks. From level 12 onward the penalty is reduced to -2.
-- Gains a shared Special Shot pool at level 4, with +1 use every 4 levels thereafter. At level 4 the Archer may choose Called Shot or Rooting Shot; at level 8 Power Shot and Explosive Shot are added to the same pool.
-- Manyshot: gains +1/2 attack per round with bows and crossbows at levels 7, 13 and 20, for a total of +1.5 attacks per round at level 20.
+- May toggle Rapid Shot while a bow or crossbow is equipped: gains +1 attack per round while suffering a -4 penalty to ranged attack rolls. From level 12 onward the penalty is reduced to -2.
+- Gains a shared Special Shot pool at level 4, with +1 use every 4 levels thereafter. At level 4 the Archer may choose Called Shot or Rooting Shot; at level 8 Power Shot and Explosive Shot are added to the same pool. Normal Special Shots are mutually exclusive.
+- Manyshot: while using a bow or crossbow, missile damage is increased by 25% at level 7, 40% total at level 13, and 60% total at level 20.
 - Sniper (level 16): ranged attacks made while invisible or improved invisible are guaranteed critical hits.
 - May use Conjure Elemental Ammunition once per day every 8 levels, starting at level 4.
-- High-level abilities: Greater Called Shot and Sure Shot Revised.
+- Retains the normal Ranger high-level abilities, including Hardiness, and gains Greater Called Shot and Sure Shot.
 
 Disadvantages:
 - Hit Die: d8.
 - May not wear metal armor.
-- Suffers a -3 THAC0 penalty when using melee weapons.
+- Suffers a +3 THAC0 penalty when using melee weapons.
 - May only become Proficient (one slot) with melee weapons.
 - May not gain proficiency in Two-Weapon Style.
 - May not use Charm Animal.
-- May not Set Traps, including the Ranger Set Spike Trap high-level ability.
 ~
 
 @3000 = ~Rapid Shot~
 @3001 = ~Rapid Shot
-Choose whether to activate or deactivate Rapid Shot. While active, the stance grants +1 attack per round only while a bow or crossbow is equipped, but imposes a -4 penalty to ranged THAC0. From level 12 onward the penalty is reduced to -2.~
+Choose whether to activate or deactivate Rapid Shot. While active, the stance grants +1 attack per round only while a bow or crossbow is equipped, but imposes a -4 penalty to ranged attack rolls. From level 12 onward the penalty is reduced to -2.~
 @3002 = ~Activate Rapid Shot~
 @3003 = ~Activate Rapid Shot
 Enters the Rapid Shot stance. The stance remains active until manually deactivated.~
@@ -35,9 +35,9 @@ Ends the Rapid Shot stance and removes its attack-rate and ranged accuracy modif
 
 @3100 = ~Special Shot~
 @3101 = ~Special Shot
-Select one shot technique. At this level the available techniques are Called Shot and Rooting Shot. All Special Shot techniques consume the same pool of daily uses.~
+Select one shot technique. At this level the available techniques are Called Shot and Rooting Shot. All Special Shot techniques consume the same pool of daily uses and cannot be stacked with one another.~
 @3102 = ~Special Shot
-Select one shot technique. Available techniques are Called Shot, Rooting Shot, Power Shot and Explosive Shot. All Special Shot techniques consume the same pool of daily uses.~
+Select one shot technique. Available techniques are Called Shot, Rooting Shot, Power Shot, and Explosive Shot. All Special Shot techniques consume the same pool of daily uses and cannot be stacked with one another.~
 
 @3200 = ~Called Shot~
 @3201 = ~Called Shot
@@ -48,13 +48,14 @@ For the next 10 seconds, every successful ranged attack applies the following no
 16th level: Every successful hit also deals +2 missile damage.
 Repeated hits refresh these effects rather than stacking them.~
 
-
 @3300 = ~Greater Called Shot~
 @3301 = ~Greater Called Shot
-For the next 10 seconds, every successful ranged attack applies the complete Called Shot package at once: Dexterity is reduced to 50%, movement rate to 25%, and the target loses 1 attack per round for 1 turn. Each hit also deals +4 missile damage and stuns the target for 1 second. Repeated hits refresh the persistent debuffs rather than stacking them.~
+For the next 10 seconds, the Archer's base weapon damage is maximized. Every successful ranged attack applies the complete Called Shot package to the target and stuns it for 3 seconds. The persistent Called Shot debuffs are refreshed by subsequent hits rather than stacked. Greater Called Shot supersedes and prevents normal Special Shots for its duration.~
 
 @3310 = ~Sure Shot~
 @3311 = ~Sure Shot
-For 2 rounds, the Archer gains +1 attack per round, a +4 bonus to hit with missile weapons, and every ranged attack is a critical hit. The concentration required roots the Archer in place for the duration. Called Shot, Rooting Shot, Power Shot and Explosive Shot cannot be used while Sure Shot is active.
+For 2 rounds, the Archer gains +1 attack per round while a bow or crossbow is equipped, a +4 bonus to ranged attack rolls, and every ranged attack is a critical hit. The concentration required prevents the Archer from moving for the duration.
+
+Activating Sure Shot ends Rapid Shot, normal Special Shots, and Greater Called Shot. These abilities cannot be activated again until Sure Shot ends.
 
 Requires: Critical Strike.~
