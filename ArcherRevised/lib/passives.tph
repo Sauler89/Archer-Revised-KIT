@@ -1,0 +1,42 @@
+// Archer Revised - native passive rules derived from the combined design.
+
+// Level 1 passive: Artisan-inspired melee trade-off plus Farsighted.
+// The implementation is native to Archer Revised.
+COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override/ARMELE03.SPL~
+  LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = (0 - 1) END
+  // -3 melee THAC0.
+  LPF ADD_SPELL_EFFECT
+    INT_VAR
+      opcode         = 284
+      target         = 2
+      parameter1     = -3
+      parameter2     = 0
+      timing         = 9
+      resist_dispel  = 2
+  END
+  // Farsighted: +2 visual range.
+  LPF ADD_SPELL_EFFECT
+    INT_VAR
+      opcode         = 262
+      target         = 2
+      parameter1     = 2
+      parameter2     = 0
+      timing         = 9
+      resist_dispel  = 2
+  END
+BUT_ONLY
+
+// Level 12 migration: if Rapid Shot was active before levelling,
+// remove the old stance so the player reactivates it with the improved -2 penalty.
+COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override/ARUPG12.SPL~
+  LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = (0 - 1) END
+  LPF ADD_SPELL_EFFECT
+    INT_VAR
+      opcode         = 321
+      target         = 2
+      timing         = 1
+      resist_dispel  = 2
+    STR_VAR
+      resource       = ~AR#RONA~
+  END
+BUT_ONLY
