@@ -2,9 +2,9 @@
 
 A standalone Archer overhaul for **Baldur's Gate: Enhanced Edition**, **Siege of Dragonspear**, **Baldur's Gate II: Enhanced Edition**, and **Enhanced Edition Trilogy (EET)**.
 
-> **Development status:** v0.1.0-dev — implementation is under active audit; real WeiDU installation and in-game testing are still required.
+> **Development status:** v0.1.0-dev — post-audit implementation; real WeiDU installation and in-game testing are still required.
 
-> **Language:** English only for now.
+> **Language:** English only.
 
 ## Goal
 
@@ -26,12 +26,12 @@ The result is intended to remain recognizably an Archer while staying useful thr
 - May achieve **Grand Mastery (5 slots)** with longbows, shortbows, and crossbows.
 - **Farsighted:** +2 visual range, increasing to +4 while hidden or invisible.
 - **Rapid Shot:** toggleable stance. While a bow or crossbow is equipped, grants +1 APR and imposes a -4 penalty to ranged attack rolls; from level 12 onward the penalty improves to -2.
-- **Shared Special Shot pool:** 1 use at level 4 and +1 use every 4 levels. Called Shot and Rooting Shot unlock at level 4; Power Shot and Explosive Shot join the same pool at level 8. Normal Special Shots are mutually exclusive.
+- **Shared Special Shot pool:** 1 use at level 4 and +1 use every 4 levels. Called Shot and Rooting Shot unlock at level 4; Power Shot and Explosive Shot join the same pool at level 8. Normal Special Shots are mutually exclusive, and their selector is locked while a shot is active so uses cannot be wasted.
 - **Called Shot:** for 10 seconds, successful ranged attacks apply level-dependent debuffs for 1 turn. Dexterity is reduced to 50% at level 4, movement to 25% at level 8, and APR by 1 at level 12; level 16 also adds +2 missile damage per hit. Repeated hits refresh rather than stack the persistent debuffs.
 - **Conjure Elemental Ammunition:** retained from the Improved Archer foundation.
-- **Manyshot — compatibility-first implementation:** while using a bow or crossbow, missile damage is increased by 25% at level 7, 40% total at level 13, and 60% total at level 20.
+- **Manyshot — compatibility-first implementation:** while using a bow or crossbow, missile damage dealt is increased by 25% at level 7, 40% total at level 13, and 60% total at level 20.
 - **Sniper (level 16):** ranged attacks made while invisible or improved invisible are guaranteed critical hits.
-- Retains the normal Ranger HLA selection, including **Hardiness**, and adds:
+- Retains the normal Ranger HLA selection, including **Hardiness**, and adds two Archer-specific HLAs:
   - **Greater Called Shot:** for 10 seconds, maximizes base weapon damage; every successful ranged hit applies the complete Called Shot package and stuns the target for 3 seconds.
   - **Sure Shot Revised:** for 2 rounds, grants +1 APR while a bow or crossbow is equipped, +4 to hit with missile weapons, guaranteed ranged critical hits, and prevents movement. Rapid Shot, normal Special Shots, and Greater Called Shot are mutually exclusive with Sure Shot.
 
@@ -81,3 +81,22 @@ Do not install Archer Revised together with the A7 Improved Archer component or 
 Because Archer Revised is derived from Improved Archer Kit, this project is distributed under **CC BY-SA 4.0**.
 
 See `LICENSE` and `CREDITS.md` for details.
+
+
+## Audit notes
+
+The current v0.1.0-dev implementation has undergone a full static pass over the WeiDU code, CLAB progression, HLA table, SPL/EFF resources, THAC0/APR signs, damage types, saving throws, ability durations, and A7-derived binary resources.
+
+Key corrections made during that audit include:
+
+- Corrected Called Shot header handling so its level 4/8/12/16 tiers are applied to the intended SPL headers.
+- Corrected ranged and melee THAC0 modifier signs.
+- Replaced the original APR-based Manyshot prototype because it conflicted with the normal 5-APR cap.
+- Restored **Hardiness** after identifying `SPCL907` correctly as Hardiness rather than Set Spike Trap.
+- Restricted Sure Shot's +1 APR to bows and crossbows.
+- Made Rapid Shot, Sure Shot, Greater Called Shot, and normal Special Shots mutually exclusive where appropriate.
+- Removed a redundant WEAPPROF patch that used an unsafe hard-coded fallback column.
+- Removed unused legacy A7 Sure Shot / Missile Trap installation resources.
+- Verified imported A7 gameplay resources against the upstream repository; all resources intended to remain unmodified are byte-identical.
+
+A real BG2EE/EET WeiDU installation and in-game progression test is still required before the first release.
