@@ -1,13 +1,15 @@
 // Archer Revised - native high-level abilities.
 
 // GREATER CALLED SHOT
-// For 10 seconds every successful ranged hit applies the complete Called Shot
-// package at once, plus +4 missile damage and a 1-second stun.
-// Repeated hits refresh the debuffs; they do not stack indefinitely.
+// Closely follows the Artisan design while using Archer Revised resources:
+// for 10 seconds every successful ranged hit applies the complete Called Shot
+// package and stuns for 3 seconds; base weapon damage is maximized.
 COPY ~%MOD_FOLDER%/kit/a7#in0a.spl~ ~override/ARGCALS.SPL~
   SAY NAME1 @3300
   SAY UNIDENTIFIED_DESC @3301
   LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = (0 - 1) END
+
+  // Stun every creature successfully hit by a ranged attack.
   LPF ADD_SPELL_EFFECT
     INT_VAR
       opcode         = 249
@@ -18,20 +20,46 @@ COPY ~%MOD_FOLDER%/kit/a7#in0a.spl~ ~override/ARGCALS.SPL~
     STR_VAR
       resource       = ~ARGCHIT~
   END
+
+  // Maximize base weapon damage for the duration (same opcode/value used
+  // by Artisan's Greater Called Shot).
+  LPF ADD_SPELL_EFFECT
+    INT_VAR
+      opcode         = 250
+      target         = 1
+      parameter1     = 20
+      parameter2     = 0
+      timing         = 0
+      duration       = 10
+      resist_dispel  = 2
+  END
+
+  // Apply Archer Revised Called Shot's full level-appropriate package.
+  LPF ADD_SPELL_EFFECT
+    INT_VAR
+      opcode         = 249
+      target         = 2
+      timing         = 0
+      duration       = 10
+      resist_dispel  = 2
+    STR_VAR
+      resource       = ~ARCALHIT~
+  END
 BUT_ONLY
 
+// Ranged-hit stun payload.
 COPY ~%MOD_FOLDER%/kit/a7#in11a.eff~ ~override/ARGCHIT.EFF~
-  WRITE_LONG  0x10 146
-  WRITE_LONG  0x14 2
+  WRITE_LONG  0x10 45       // Stun
+  WRITE_LONG  0x14 2        // Projectile target
   WRITE_LONG  0x18 0
   WRITE_LONG  0x1c 0
-  WRITE_LONG  0x20 1
-  WRITE_SHORT 0x24 1
+  WRITE_LONG  0x20 0
+  WRITE_SHORT 0x24 0        // Duration
   WRITE_SHORT 0x26 0
-  WRITE_LONG  0x28 0
+  WRITE_LONG  0x28 3        // 3 seconds
   WRITE_SHORT 0x2c 100
   WRITE_SHORT 0x2e 0
-  WRITE_ASCII 0x30 ~ARGCFX~ #8
+  WRITE_ASCII 0x30 ~~ #8
   WRITE_LONG  0x38 0
   WRITE_LONG  0x3c 0
   WRITE_LONG  0x40 0
@@ -41,23 +69,6 @@ COPY ~%MOD_FOLDER%/kit/a7#in11a.eff~ ~override/ARGCHIT.EFF~
   WRITE_LONG  0x5c 2
   WRITE_LONG  0x60 0
   WRITE_LONG  0x64 0
-BUT_ONLY
-
-COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override/ARGCFX.SPL~
-  SAY NAME1 @3300
-  LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = (0 - 1) END
-
-  // Refresh, rather than stack, the persistent debuffs from previous hits.
-  LPF ADD_SPELL_EFFECT INT_VAR opcode = 321 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~ARGCFX~ END
-
-  // Complete normal Called Shot package.
-  LPF ADD_SPELL_EFFECT INT_VAR opcode = 15  target = 2 parameter1 = 50 parameter2 = 2 timing = 0 duration = 60 resist_dispel = 2 END
-  LPF ADD_SPELL_EFFECT INT_VAR opcode = 176 target = 2 parameter1 = 25 parameter2 = 5 timing = 0 duration = 60 resist_dispel = 2 END
-  LPF ADD_SPELL_EFFECT INT_VAR opcode = 1   target = 2 parameter1 = -1 parameter2 = 0 timing = 0 duration = 60 resist_dispel = 2 END
-
-  // HLA rider: stronger unmitigated missile damage and a brief stagger.
-  LPF ADD_SPELL_EFFECT INT_VAR opcode = 12 target = 2 parameter1 = 4 parameter2 = 0x00800000 timing = 1 resist_dispel = 2 END
-  LPF ADD_SPELL_EFFECT INT_VAR opcode = 45 target = 2 timing = 0 duration = 1 resist_dispel = 2 END
 BUT_ONLY
 
 
