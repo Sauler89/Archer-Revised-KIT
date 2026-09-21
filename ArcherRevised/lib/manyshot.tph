@@ -1,23 +1,26 @@
 // Archer Revised - compatibility-first Manyshot progression.
 //
-// True Manyshot in Artisan uses custom combat-round animation resources to
-// create extra independently-rolled projectiles. A simple APR implementation
-// is not viable here because BG2EE/EET normally caps base APR at 5, which would
-// make high-level Manyshot and Rapid Shot overwrite/waste each other's benefit.
+// True Manyshot in Artisan creates extra independently-rolled projectiles and
+// therefore has to patch individual launchers. Archer Revised keeps the safer
+// compatibility-first model but now uses an item-driven implementation too,
+// so it can be refreshed after mods add new bows/crossbows.
 //
-// Archer Revised instead models the extra projectile throughput as additive
-// missile-damage scaling while a bow or crossbow is equipped:
+// While an Archer has a patched bow or crossbow equipped:
 //   level 7  : +25% total missile damage
 //   level 13 : +40% total (+15% additional)
 //   level 20 : +60% total (+20% additional)
-// This keeps Rapid Shot useful and approximates 1/2/3 extra projectiles when
-// Rapid Shot is active, without patching every bow/crossbow in the game.
-
+//
 // Opcode 332: Specific Damage Modifier, type 10 = Missile.
+// The EFF minimum-level fields phase each bonus in automatically.
+
 COPY ~%MOD_FOLDER%/spells/AR#APR1.EFF~ ~override/ARMSH07.EFF~
   WRITE_LONG 0x10 332
   WRITE_LONG 0x1c 25
   WRITE_LONG 0x20 10
+  WRITE_LONG 0x54 7
+  WRITE_LONG 0x58 0
+  WRITE_LONG 0x5c 2
+  WRITE_LONG 0x90 0
   WRITE_ASCII 0x94 ~ARMSH07~ #8
 BUT_ONLY
 
@@ -25,6 +28,10 @@ COPY ~%MOD_FOLDER%/spells/AR#APR1.EFF~ ~override/ARMSH13.EFF~
   WRITE_LONG 0x10 332
   WRITE_LONG 0x1c 15
   WRITE_LONG 0x20 10
+  WRITE_LONG 0x54 13
+  WRITE_LONG 0x58 0
+  WRITE_LONG 0x5c 2
+  WRITE_LONG 0x90 0
   WRITE_ASCII 0x94 ~ARMSH13~ #8
 BUT_ONLY
 
@@ -32,37 +39,13 @@ COPY ~%MOD_FOLDER%/spells/AR#APR1.EFF~ ~override/ARMSH20.EFF~
   WRITE_LONG 0x10 332
   WRITE_LONG 0x1c 20
   WRITE_LONG 0x20 10
+  WRITE_LONG 0x54 20
+  WRITE_LONG 0x58 0
+  WRITE_LONG 0x5c 2
+  WRITE_LONG 0x90 0
   WRITE_ASCII 0x94 ~ARMSH20~ #8
 BUT_ONLY
 
-ACTION_FOR_EACH ms_level IN 07 13 20 BEGIN
-  COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override/ARMSH%ms_level%.SPL~
-    LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = (0 - 1) END
-
-    // Bow
-    LPF ADD_SPELL_EFFECT
-      INT_VAR
-        opcode         = 183
-        target         = 2
-        parameter1     = 0
-        parameter2     = 15
-        timing         = 9
-        resist_dispel  = 2
-      STR_VAR
-        resource       = ~ARMSH%ms_level%~
-    END
-
-    // Crossbow
-    LPF ADD_SPELL_EFFECT
-      INT_VAR
-        opcode         = 183
-        target         = 2
-        parameter1     = 0
-        parameter2     = 27
-        timing         = 9
-        resist_dispel  = 2
-      STR_VAR
-        resource       = ~ARMSH%ms_level%~
-    END
-  BUT_ONLY
-END
+// Patch every bow/crossbow currently present. Component 10 can repeat this
+// later after content mods have added more launchers.
+INCLUDE ~%MOD_FOLDER%/lib/manyshot_items.tph~
