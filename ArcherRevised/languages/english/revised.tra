@@ -5,6 +5,7 @@ Advantages:
 - +1 bonus to Armor Class vs. missile weapons every 6 levels.
 - +5% chance to score a critical hit at levels 13 and 18.
 - May achieve Grand Mastery (5 slots) in longbows, shortbows and crossbows.
+- May toggle Rapid Shot: gains +1 attack per round while suffering a -4 penalty to hit with ranged attacks. From level 12 onward the ranged penalty is reduced to -2. Using a melee weapon while the stance is active incurs an additional -6 melee THAC0 penalty.
 - May use Rooting Shot once per day every 4 levels, starting at level 4.
 - May use Power Shot once per day every 4 levels, starting at level 8.
 - May use Explosive Shot once per day every 4 levels, starting at level 8.
@@ -13,8 +14,19 @@ Advantages:
 Disadvantages:
 - Hit Die: d8.
 - May not wear metal armor.
+- Suffers a -3 THAC0 penalty when using melee weapons.
 - May only become Proficient (one slot) with melee weapons.
 - May not gain proficiency in Two-Weapon Style.
 - May not use Charm Animal.
 
-Archer Revised v0.1-dev establishes the standalone EET core. Rapid Shot, Manyshot, Sniper and the revised high-level abilities are being implemented as native Archer Revised resources rather than copied from another mod.~
+Archer Revised v0.1-dev establishes the standalone EET core. Manyshot, Sniper and the revised high-level abilities are being implemented as native Archer Revised resources rather than copied from another mod.~
+
+@3000 = ~Rapid Shot~
+@3001 = ~Rapid Shot
+The Archer enters a rapid-firing stance, gaining +1 attack per round while suffering a -4 penalty to hit with ranged attacks. Melee attacks suffer an additional -6 THAC0 penalty while the stance is active. Rapid Shot remains active until manually deactivated.~
+@3002 = ~Deactivate Rapid Shot~
+@3003 = ~Deactivate Rapid Shot
+Ends the Rapid Shot stance and removes its attack-rate and accuracy modifiers.~
+@3004 = ~Rapid Shot
+The Archer enters an improved rapid-firing stance, gaining +1 attack per round while suffering a -2 penalty to hit with ranged attacks. Melee attacks suffer an additional -6 THAC0 penalty while the stance is active. Rapid Shot remains active until manually deactivated.~
+@3005 = ~Improved Rapid Shot~

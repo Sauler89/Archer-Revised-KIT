@@ -1,0 +1,84 @@
+// Archer Revised - native Rapid Shot implementation.
+//
+// Design reference: the Rapid Shot concept from The Artisan's Kitpack.
+// No Artisan resources are redistributed here. These SPL resources are generated
+// from the CC BY-SA A7 shot-selector shell and rebuilt with WeiDU effects.
+
+DEFINE_PATCH_FUNCTION ar_clear_spell_effects BEGIN
+  LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = (0 - 1) END
+END
+
+// Permanent Archer Revised melee accuracy drawback.
+// Opcode 284 modifies melee THAC0 only, so ranged accuracy is unaffected.
+COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override/ARMELE03.SPL~
+  LPF ar_clear_spell_effects END
+  LPF ADD_SPELL_EFFECT
+    INT_VAR
+      opcode         = 284
+      target         = 2
+      parameter1     = -3
+      parameter2     = 0
+      timing         = 9
+      resist_dispel  = 2
+  END
+BUT_ONLY
+
+// Rapid Shot (levels 1-11): +1 APR, -4 ranged THAC0.
+// A strong melee-only penalty prevents the stance from becoming a melee APR exploit.
+COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override/ARRAPID.SPL~
+  SAY NAME1 @3000
+  SAY UNIDENTIFIED_DESC @3001
+  LPF ar_clear_spell_effects END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 321 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~ARRAPID~ END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 1   target = 2 parameter1 = 1  parameter2 = 0 timing = 9 resist_dispel = 2 END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 167 target = 2 parameter1 = -4 parameter2 = 0 timing = 9 resist_dispel = 2 END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 284 target = 2 parameter1 = -6 parameter2 = 0 timing = 9 resist_dispel = 2 END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 171 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~ARROFF01~ END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 172 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~ARRAPID~ END
+BUT_ONLY
+
+// Deactivate Rapid Shot (levels 1-11).
+COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override/ARROFF01.SPL~
+  SAY NAME1 @3002
+  SAY UNIDENTIFIED_DESC @3003
+  LPF ar_clear_spell_effects END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 321 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~ARRAPID~ END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 171 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~ARRAPID~ END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 172 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~ARROFF01~ END
+BUT_ONLY
+
+// Improved Rapid Shot (level 12+): +1 APR, -2 ranged THAC0.
+COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override/ARRAPI12.SPL~
+  SAY NAME1 @3000
+  SAY UNIDENTIFIED_DESC @3004
+  LPF ar_clear_spell_effects END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 321 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~ARRAPI12~ END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 1   target = 2 parameter1 = 1  parameter2 = 0 timing = 9 resist_dispel = 2 END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 167 target = 2 parameter1 = -2 parameter2 = 0 timing = 9 resist_dispel = 2 END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 284 target = 2 parameter1 = -6 parameter2 = 0 timing = 9 resist_dispel = 2 END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 171 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~ARROFF12~ END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 172 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~ARRAPI12~ END
+BUT_ONLY
+
+// Deactivate Improved Rapid Shot.
+COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override/ARROFF12.SPL~
+  SAY NAME1 @3002
+  SAY UNIDENTIFIED_DESC @3003
+  LPF ar_clear_spell_effects END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 321 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~ARRAPI12~ END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 171 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~ARRAPI12~ END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 172 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~ARROFF12~ END
+BUT_ONLY
+
+// Level-12 migration. If the old stance is active it is cleanly removed, and the
+// level-1 toggle is replaced by the improved toggle.
+COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override/ARUPG12.SPL~
+  SAY NAME1 @3005
+  LPF ar_clear_spell_effects END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 321 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~ARRAPID~ END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 321 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~ARRAPI12~ END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 172 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~ARRAPID~ END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 172 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~ARROFF01~ END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 172 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~ARROFF12~ END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 171 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~ARRAPI12~ END
+BUT_ONLY

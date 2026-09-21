@@ -5,6 +5,7 @@ Vantaggi:
 - Bonus pari a +1 alla Classe Armatura contro le armi a distanza ogni 6 livelli.
 - Ottiene il 5% di possibilità di infliggere un colpo critico al 13° e al 18° livello.
 - Può raggiungere la Gran Maestria (5 punti) con arco lungo, arco corto e balestra.
+- Può attivare Tiro Rapido: ottiene +1 attacco per round subendo una penalità di -4 ai tiri per colpire con gli attacchi a distanza. Dal 12° livello la penalità a distanza si riduce a -2. Se utilizza un'arma da mischia mentre la postura è attiva, subisce un'ulteriore penalità di -6 al THAC0 in mischia.
 - Può utilizzare Colpo della Radice una volta al giorno ogni 4 livelli, a partire dal 4° livello.
 - Può utilizzare Colpo Potente una volta al giorno ogni 4 livelli, a partire dall'8° livello.
 - Può utilizzare Colpo Esplosivo una volta al giorno ogni 4 livelli, a partire dall'8° livello.
@@ -13,8 +14,19 @@ Vantaggi:
 Svantaggi:
 - Dado Vita: d8.
 - Non può indossare armature di metallo.
+- Subisce una penalità di -3 al THAC0 quando utilizza armi da mischia.
 - Può diventare soltanto Competente (un punto) con le armi da mischia.
 - Non può acquisire competenza nello stile Combattere con Due Armi.
 - Non può utilizzare l'abilità Ammalia Animali.
 
-Arciere Rivisitato v0.1-dev costituisce il nucleo standalone per EET. Tiro Rapido, Tiro Multiplo, Cecchino e le abilità di alto livello rivisitate vengono implementate con risorse native di Archer Revised anziché essere copiate da un altro mod.~
+Arciere Rivisitato v0.1-dev costituisce il nucleo standalone per EET. Tiro Multiplo, Cecchino e le abilità di alto livello rivisitate vengono implementate con risorse native di Archer Revised anziché essere copiate da un altro mod.~
+
+@3000 = ~Tiro Rapido~
+@3001 = ~Tiro Rapido
+L'Arciere assume una postura di tiro rapido, ottenendo +1 attacco per round ma subendo una penalità di -4 ai tiri per colpire con gli attacchi a distanza. Gli attacchi in mischia subiscono un'ulteriore penalità di -6 al THAC0 mentre la postura è attiva. Tiro Rapido rimane attivo finché non viene disattivato manualmente.~
+@3002 = ~Disattiva Tiro Rapido~
+@3003 = ~Disattiva Tiro Rapido
+Termina la postura Tiro Rapido e rimuove i modificatori alla frequenza degli attacchi e alla precisione.~
+@3004 = ~Tiro Rapido
+L'Arciere assume una postura di tiro rapido migliorata, ottenendo +1 attacco per round ma subendo una penalità di -2 ai tiri per colpire con gli attacchi a distanza. Gli attacchi in mischia subiscono un'ulteriore penalità di -6 al THAC0 mentre la postura è attiva. Tiro Rapido rimane attivo finché non viene disattivato manualmente.~
+@3005 = ~Tiro Rapido Migliorato~

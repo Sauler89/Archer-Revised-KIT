@@ -22,7 +22,7 @@ The result is intended to stay recognizably an Archer while remaining useful thr
 - +1 AC vs. missile weapons every 6 levels.
 - Expanded critical-hit range at levels 13 and 18.
 - Grand Mastery with longbows, shortbows, and crossbows.
-- Rapid Shot stance.
+- Rapid Shot stance (**implemented**): +1 APR; -4 ranged THAC0, improving to -2 at level 12. Melee attacks receive an additional -6 THAC0 while the stance is active.
 - Special Shot system based around Called Shot, Rooting Shot, Power Shot, and Explosive Shot.
 - Conjure Elemental Ammunition.
 - Manyshot progression.
@@ -39,6 +39,10 @@ The result is intended to stay recognizably an Archer while remaining useful thr
 - May not wear metal armor.
 
 The previous Improved Archer -1 Constitution penalty is intentionally not part of Archer Revised because the d8 Hit Die already fills the survivability trade-off.
+
+## Current implementation status
+
+The current v0.1-dev core includes the A7-derived Special Shot / Elemental Ammunition foundation, d8 Hit Die, revised proficiencies, the -3 melee THAC0 drawback, and a native Rapid Shot toggle. Manyshot, Sniper, the unified Special Shot pool, and native revised HLAs are still under development.
 
 ## Compatibility target
 
