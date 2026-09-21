@@ -79,17 +79,26 @@ COPY ~%MOD_FOLDER%/kit/a7#in0a.spl~ ~override/ARSURE.SPL~
   SAY UNIDENTIFIED_DESC @3311
   LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = (0 - 1) END
 
-  // End any currently active Special Shot effects before entering the stance.
+  // Sure Shot is an exclusive firing stance. End Rapid Shot and any active
+  // Special/Greater Called Shot effect before entering it.
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 321 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~AR#RONA~ END
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 321 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~ARCALLD~ END
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 321 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~A7#IN02~ END
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 321 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~A7#IN01~ END
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 321 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~A7#IN03~ END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 321 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~ARGCALS~ END
 
-  // Block the four Special Shot resources while Sure Shot is active.
+  // Block Rapid Shot, the Special Shot selectors/subspells and Greater Called
+  // Shot for the full duration. Blocking the selector prevents wasting uses.
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 timing = 0 duration = 12 resist_dispel = 2 STR_VAR resource = ~AR#RAPI~ END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 timing = 0 duration = 12 resist_dispel = 2 STR_VAR resource = ~AR#RONA~ END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 timing = 0 duration = 12 resist_dispel = 2 STR_VAR resource = ~ARIN4~ END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 timing = 0 duration = 12 resist_dispel = 2 STR_VAR resource = ~ARINS1~ END
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 timing = 0 duration = 12 resist_dispel = 2 STR_VAR resource = ~ARCALLD~ END
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 timing = 0 duration = 12 resist_dispel = 2 STR_VAR resource = ~A7#IN02~ END
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 timing = 0 duration = 12 resist_dispel = 2 STR_VAR resource = ~A7#IN01~ END
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 timing = 0 duration = 12 resist_dispel = 2 STR_VAR resource = ~A7#IN03~ END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 timing = 0 duration = 12 resist_dispel = 2 STR_VAR resource = ~ARGCALS~ END
 
   // +1 APR.
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 1 target = 2 parameter1 = 1 parameter2 = 0 timing = 0 duration = 12 resist_dispel = 2 END
