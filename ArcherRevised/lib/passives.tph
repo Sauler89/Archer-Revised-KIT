@@ -9,7 +9,7 @@ COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override/ARMELE03.SPL~
     INT_VAR
       opcode         = 284
       target         = 2
-      parameter1     = -3
+      parameter1     = 3
       parameter2     = 0
       timing         = 9
       resist_dispel  = 2
