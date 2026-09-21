@@ -5,3 +5,4 @@
 @102 = ~Archer Revised replaces the same Archer kit as Artisan's Kitpack: Archer Overhaul. Uninstall component 2010 before installing Archer Revised.~
 
 @103 = ~The late-install Manyshot item patch requires the Archer Revised core component.~
+@104 = ~Artisan's Kitpack Manyshot item tweak (component 20101) is specific to Artisan's Archer implementation and is not compatible with Archer Revised. Use Archer Revised component 10 instead.~
