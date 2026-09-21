@@ -1,4 +1,7 @@
 @1 = ~Archer Revised - Combined Archer Overhaul~
+@2 = ~Archer Revised - Patch mod-added bows and crossbows for Manyshot (install after item/content mods)~
 @100 = ~Archer Revised requires Baldur's Gate: Enhanced Edition, Baldur's Gate II: Enhanced Edition, or Enhanced Edition Trilogy (EET).~
 @101 = ~Archer Revised replaces the same Archer resources as A7 Improved Archer. Uninstall the Improved Archer component before installing Archer Revised.~
 @102 = ~Archer Revised replaces the same Archer kit as Artisan's Kitpack: Archer Overhaul. Uninstall component 2010 before installing Archer Revised.~
+
+@103 = ~The late-install Manyshot item patch requires the Archer Revised core component.~
