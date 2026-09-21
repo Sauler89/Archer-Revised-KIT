@@ -17,8 +17,7 @@ The result is intended to stay recognizably an Archer while remaining useful thr
 
 ### Advantages
 
-- +1 to hit with missile weapons at level 1.
-- +1 to hit and damage with missile weapons every 4 levels thereafter.
+- +1 to hit and damage with missile weapons at level 1, with an additional +1 every 4 levels thereafter.
 - +1 AC vs. missile weapons every 6 levels.
 - Expanded critical-hit range at levels 13 and 18.
 - Grand Mastery with longbows, shortbows, and crossbows.
