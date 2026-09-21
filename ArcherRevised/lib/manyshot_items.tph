@@ -26,9 +26,6 @@ COPY_EXISTING ~splprot.2da~ ~override~
   END
 BUT_ONLY
 
-OUTER_SET archer_kit = IDS_OF_SYMBOL (~KIT~ ~FERALAN~)
-OUTER_SET ranger_class = IDS_OF_SYMBOL (~CLASS~ ~RANGER~)
-
 COPY_EXISTING_REGEXP GLOB ~.*\.itm~ ~override~
   PATCH_IF (SOURCE_SIZE > 0x71) BEGIN
     READ_SHORT 0x1c item_type
@@ -50,7 +47,7 @@ COPY_EXISTING_REGEXP GLOB ~.*\.itm~ ~override~
           silent         = 1
           opcode         = 318
           target         = 1
-          parameter1     = archer_kit
+          parameter1     = IDS_OF_SYMBOL (~KIT~ ~FERALAN~)
           parameter2     = AR_KIT_NOT
           timing         = 2
         STR_VAR
@@ -61,7 +58,7 @@ COPY_EXISTING_REGEXP GLOB ~.*\.itm~ ~override~
           silent         = 1
           opcode         = 318
           target         = 1
-          parameter1     = archer_kit
+          parameter1     = IDS_OF_SYMBOL (~KIT~ ~FERALAN~)
           parameter2     = AR_KIT_NOT
           timing         = 2
         STR_VAR
@@ -72,7 +69,7 @@ COPY_EXISTING_REGEXP GLOB ~.*\.itm~ ~override~
           silent         = 1
           opcode         = 318
           target         = 1
-          parameter1     = archer_kit
+          parameter1     = IDS_OF_SYMBOL (~KIT~ ~FERALAN~)
           parameter2     = AR_KIT_NOT
           timing         = 2
         STR_VAR
@@ -86,7 +83,7 @@ COPY_EXISTING_REGEXP GLOB ~.*\.itm~ ~override~
           silent         = 1
           opcode         = 177
           target         = 1
-          parameter1     = ranger_class
+          parameter1     = IDS_OF_SYMBOL (~CLASS~ ~RANGER~)
           parameter2     = 5
           timing         = 2
         STR_VAR
@@ -97,7 +94,7 @@ COPY_EXISTING_REGEXP GLOB ~.*\.itm~ ~override~
           silent         = 1
           opcode         = 177
           target         = 1
-          parameter1     = ranger_class
+          parameter1     = IDS_OF_SYMBOL (~CLASS~ ~RANGER~)
           parameter2     = 5
           timing         = 2
         STR_VAR
@@ -108,7 +105,7 @@ COPY_EXISTING_REGEXP GLOB ~.*\.itm~ ~override~
           silent         = 1
           opcode         = 177
           target         = 1
-          parameter1     = ranger_class
+          parameter1     = IDS_OF_SYMBOL (~CLASS~ ~RANGER~)
           parameter2     = 5
           timing         = 2
         STR_VAR
