@@ -16,3 +16,5 @@
 - Added a -3 melee THAC0 Archer drawback and an extra melee penalty while Rapid Shot is active to prevent melee APR abuse.
 - Rapid Shot activation/deactivation and the level-12 upgrade are generated entirely by Archer Revised; no Artisan resources are redistributed.
 - Added the Revised level-1 ranged hit/damage bonus; further bonuses continue every 4 levels.
+- Replaced separate shot progression with a shared Special Shot pool: Called Shot/Rooting at level 4; Power/Explosive unlock at level 8; +1 shared use every 4 levels.
+- Added native Archer Revised selector resources (ARIN4/ARINS1/ARINSX); Called Shot currently invokes the base-game SPCL121 effect pending its final Revised reimplementation.

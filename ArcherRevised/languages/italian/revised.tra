@@ -6,9 +6,7 @@ Vantaggi:
 - Ottiene il 5% di possibilità di infliggere un colpo critico al 13° e al 18° livello.
 - Può raggiungere la Gran Maestria (5 punti) con arco lungo, arco corto e balestra.
 - Può attivare Tiro Rapido: ottiene +1 attacco per round subendo una penalità di -4 ai tiri per colpire con gli attacchi a distanza. Dal 12° livello la penalità a distanza si riduce a -2. Se utilizza un'arma da mischia mentre la postura è attiva, subisce un'ulteriore penalità di -6 al THAC0 in mischia.
-- Può utilizzare Colpo della Radice una volta al giorno ogni 4 livelli, a partire dal 4° livello.
-- Può utilizzare Colpo Potente una volta al giorno ogni 4 livelli, a partire dall'8° livello.
-- Può utilizzare Colpo Esplosivo una volta al giorno ogni 4 livelli, a partire dall'8° livello.
+- Ottiene una riserva condivisa di Colpi Speciali al 4° livello, con +1 utilizzo ogni 4 livelli successivi. Al 4° livello può scegliere Colpo Mirato o Colpo della Radice; all'8° livello si aggiungono Colpo Potente e Colpo Esplosivo, utilizzando la stessa riserva.
 - Può utilizzare Evoca Munizioni Elementali una volta al giorno ogni 8 livelli, a partire dal 4° livello.
 
 Svantaggi:
@@ -30,3 +28,9 @@ Termina la postura Tiro Rapido e rimuove i modificatori alla frequenza degli att
 @3004 = ~Tiro Rapido
 L'Arciere assume una postura di tiro rapido migliorata, ottenendo +1 attacco per round ma subendo una penalità di -2 ai tiri per colpire con gli attacchi a distanza. Gli attacchi in mischia subiscono un'ulteriore penalità di -6 al THAC0 mentre la postura è attiva. Tiro Rapido rimane attivo finché non viene disattivato manualmente.~
 @3005 = ~Tiro Rapido Migliorato~
+
+@3100 = ~Colpo Speciale~
+@3101 = ~Colpo Speciale
+Seleziona una tecnica di tiro. A questo livello sono disponibili Colpo Mirato e Colpo della Radice. Tutte le tecniche di Colpo Speciale consumano la stessa riserva di utilizzi giornalieri.~
+@3102 = ~Colpo Speciale
+Seleziona una tecnica di tiro. Sono disponibili Colpo Mirato, Colpo della Radice, Colpo Potente e Colpo Esplosivo. Tutte le tecniche di Colpo Speciale consumano la stessa riserva di utilizzi giornalieri.~

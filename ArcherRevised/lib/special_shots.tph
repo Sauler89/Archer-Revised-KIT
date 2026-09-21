@@ -1,0 +1,42 @@
+// Archer Revised - shared Special Shot pool.
+//
+// Uses A7's CC BY-SA shot-selector shell but defines Archer Revised selection
+// tables and progression. Called Shot itself currently uses the base-game
+// SPCL121 resource; the other shots use the A7-derived resources already
+// shipped with Archer Revised.
+
+COPY ~%MOD_FOLDER%/2da/ARIN4.2da~ ~override/ARIN4.2da~
+COPY ~%MOD_FOLDER%/2da/ARINS1.2da~ ~override/ARINS1.2da~
+
+// Levels 4-7: Called Shot + Rooting Shot.
+COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override/ARIN4.SPL~
+  SAY NAME1 @3100
+  SAY UNIDENTIFIED_DESC @3101
+  LPF ALTER_EFFECT
+    INT_VAR
+      match_opcode = 214
+    STR_VAR
+      resource = ~ARIN4~
+  END
+BUT_ONLY
+
+// Level 8+: Called Shot + Rooting + Power + Explosive Shot.
+COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override/ARINS1.SPL~
+  SAY NAME1 @3100
+  SAY UNIDENTIFIED_DESC @3102
+  LPF ALTER_EFFECT
+    INT_VAR
+      match_opcode = 214
+    STR_VAR
+      resource = ~ARINS1~
+  END
+BUT_ONLY
+
+// Level-8 migration from the two-choice selector to the full selector.
+// The migration grants one use of ARINS1; the CLAB grants the second use at
+// the same level, preserving the intended 1/2/3/... shared-use progression.
+COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override/ARINSX.SPL~
+  LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = (0 - 1) END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 172 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~ARIN4~ END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 171 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~ARINS1~ END
+BUT_ONLY

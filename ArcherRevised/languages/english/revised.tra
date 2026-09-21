@@ -6,9 +6,7 @@ Advantages:
 - +5% chance to score a critical hit at levels 13 and 18.
 - May achieve Grand Mastery (5 slots) in longbows, shortbows and crossbows.
 - May toggle Rapid Shot: gains +1 attack per round while suffering a -4 penalty to hit with ranged attacks. From level 12 onward the ranged penalty is reduced to -2. Using a melee weapon while the stance is active incurs an additional -6 melee THAC0 penalty.
-- May use Rooting Shot once per day every 4 levels, starting at level 4.
-- May use Power Shot once per day every 4 levels, starting at level 8.
-- May use Explosive Shot once per day every 4 levels, starting at level 8.
+- Gains a shared Special Shot pool at level 4, with +1 use every 4 levels thereafter. At level 4 the Archer may choose Called Shot or Rooting Shot; at level 8 Power Shot and Explosive Shot are added to the same pool.
 - May use Conjure Elemental Ammunition once per day every 8 levels, starting at level 4.
 
 Disadvantages:
@@ -30,3 +28,9 @@ Ends the Rapid Shot stance and removes its attack-rate and accuracy modifiers.~
 @3004 = ~Rapid Shot
 The Archer enters an improved rapid-firing stance, gaining +1 attack per round while suffering a -2 penalty to hit with ranged attacks. Melee attacks suffer an additional -6 THAC0 penalty while the stance is active. Rapid Shot remains active until manually deactivated.~
 @3005 = ~Improved Rapid Shot~
+
+@3100 = ~Special Shot~
+@3101 = ~Special Shot
+Select one shot technique. At this level the available techniques are Called Shot and Rooting Shot. All Special Shot techniques consume the same pool of daily uses.~
+@3102 = ~Special Shot
+Select one shot technique. Available techniques are Called Shot, Rooting Shot, Power Shot and Explosive Shot. All Special Shot techniques consume the same pool of daily uses.~

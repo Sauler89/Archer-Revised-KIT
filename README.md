@@ -22,7 +22,7 @@ The result is intended to stay recognizably an Archer while remaining useful thr
 - Expanded critical-hit range at levels 13 and 18.
 - Grand Mastery with longbows, shortbows, and crossbows.
 - Rapid Shot stance (**implemented**): +1 APR; -4 ranged THAC0, improving to -2 at level 12. Melee attacks receive an additional -6 THAC0 while the stance is active.
-- Special Shot system based around Called Shot, Rooting Shot, Power Shot, and Explosive Shot.
+- Shared Special Shot pool (**implemented**): 1 use at level 4, +1 use every 4 levels; Called Shot + Rooting Shot at level 4, adding Power Shot + Explosive Shot at level 8.
 - Conjure Elemental Ammunition.
 - Manyshot progression.
 - Sniper at high level.
@@ -41,7 +41,7 @@ The previous Improved Archer -1 Constitution penalty is intentionally not part o
 
 ## Current implementation status
 
-The current v0.1-dev core includes the A7-derived Special Shot / Elemental Ammunition foundation, d8 Hit Die, revised proficiencies, the -3 melee THAC0 drawback, and a native Rapid Shot toggle. Manyshot, Sniper, the unified Special Shot pool, and native revised HLAs are still under development.
+The current v0.1-dev core includes the A7-derived shot effects / Elemental Ammunition foundation, a unified Special Shot pool, d8 Hit Die, revised proficiencies, the -3 melee THAC0 drawback, and a native Rapid Shot toggle. Called Shot currently uses the base-game effect while its final Revised mechanics are still being rebuilt. Manyshot, Sniper, and native revised HLAs are still under development.
 
 ## Compatibility target
 
