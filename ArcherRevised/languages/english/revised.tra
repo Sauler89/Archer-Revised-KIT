@@ -45,12 +45,12 @@ For the next 10 seconds, every successful ranged attack applies the following no
 4th level: Dexterity is reduced to 50%.
 8th level: Movement rate is also reduced to 25%.
 12th level: The target also loses 1 attack per round.
-16th level: Every successful hit also deals +2 missile damage.
+16th level: While Called Shot is active, the Archer gains +2 missile weapon damage. This directly increases ranged weapon damage and therefore benefits from critical-hit multipliers.
 Repeated hits refresh these effects rather than stacking them.~
 
 @3300 = ~Greater Called Shot~
 @3301 = ~Greater Called Shot
-For the next 10 seconds, the Archer's base weapon damage is maximized. Every successful ranged attack applies the complete Called Shot package to the target and stuns it for 3 seconds. The persistent Called Shot debuffs are refreshed by subsequent hits rather than stacked. Greater Called Shot supersedes and prevents normal Special Shots for its duration.~
+For the next 10 seconds, the Archer's base weapon damage is maximized and the Archer gains +2 missile weapon damage. Every successful ranged attack applies the complete Called Shot debuff package to the target and stuns it for 3 seconds. The persistent Called Shot debuffs are refreshed by subsequent hits rather than stacked. Greater Called Shot supersedes and prevents normal Special Shots for its duration.~
 
 @3310 = ~Sure Shot~
 @3311 = ~Sure Shot
