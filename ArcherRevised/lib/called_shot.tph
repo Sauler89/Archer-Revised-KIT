@@ -9,8 +9,20 @@ COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override/ARCALLD.SPL~
   SAY NAME1 @3200
   SAY UNIDENTIFIED_DESC @3201
   LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = (0 - 1) END
+
+  // Four activation headers let the level-16 damage bonus apply to the
+  // Archer at activation time rather than as a separate damage tick on hit.
+  LPF CLONE_HEADER INT_VAR header = 0 level = 8 END
+  LPF CLONE_HEADER INT_VAR header = 0 level = 12 END
+  LPF CLONE_HEADER INT_VAR header = 0 level = 16 END
+
+  READ_LONG 0x64 ar_hdr
+  WRITE_SHORT (ar_hdr + (0 * 0x28) + 0x10) 4
+
+  // Every tier applies the same 10-second ranged on-hit controller.
   LPF ADD_SPELL_EFFECT
     INT_VAR
+      header         = 0
       opcode         = 249
       target         = 2
       timing         = 0
@@ -22,12 +34,27 @@ COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override/ARCALLD.SPL~
 
   // A Special Shot is exclusive for its full 10-second window. Blocking the
   // selectors prevents consuming another shared daily use while one is active.
-  LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 1 timing = 0 duration = 10 resist_dispel = 2 STR_VAR resource = ~ARIN4~ END
-  LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 1 timing = 0 duration = 10 resist_dispel = 2 STR_VAR resource = ~ARINS1~ END
-  LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 1 timing = 0 duration = 10 resist_dispel = 2 STR_VAR resource = ~ARCALLD~ END
-  LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 1 timing = 0 duration = 10 resist_dispel = 2 STR_VAR resource = ~A7#IN01~ END
-  LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 1 timing = 0 duration = 10 resist_dispel = 2 STR_VAR resource = ~A7#IN02~ END
-  LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 1 timing = 0 duration = 10 resist_dispel = 2 STR_VAR resource = ~A7#IN03~ END
+  LPF ADD_SPELL_EFFECT INT_VAR header = 0 opcode = 206 target = 1 timing = 0 duration = 10 resist_dispel = 2 STR_VAR resource = ~ARIN4~ END
+  LPF ADD_SPELL_EFFECT INT_VAR header = 0 opcode = 206 target = 1 timing = 0 duration = 10 resist_dispel = 2 STR_VAR resource = ~ARINS1~ END
+  LPF ADD_SPELL_EFFECT INT_VAR header = 0 opcode = 206 target = 1 timing = 0 duration = 10 resist_dispel = 2 STR_VAR resource = ~ARCALLD~ END
+  LPF ADD_SPELL_EFFECT INT_VAR header = 0 opcode = 206 target = 1 timing = 0 duration = 10 resist_dispel = 2 STR_VAR resource = ~A7#IN01~ END
+  LPF ADD_SPELL_EFFECT INT_VAR header = 0 opcode = 206 target = 1 timing = 0 duration = 10 resist_dispel = 2 STR_VAR resource = ~A7#IN02~ END
+  LPF ADD_SPELL_EFFECT INT_VAR header = 0 opcode = 206 target = 1 timing = 0 duration = 10 resist_dispel = 2 STR_VAR resource = ~A7#IN03~ END
+
+  // Level 16+: directly increase MISSILE_DAMAGE_BONUS by +2 for the window.
+  // Unlike a separate opcode-12 damage tick, this becomes part of the ranged
+  // weapon's damage and therefore participates in critical-hit multipliers.
+  LPF ADD_SPELL_EFFECT
+    INT_VAR
+      header         = 4
+      opcode         = 286
+      target         = 1
+      parameter1     = 2
+      parameter2     = 0
+      timing         = 0
+      duration       = 10
+      resist_dispel  = 2
+  END
 BUT_ONLY
 
 // External effect called by opcode 249.
@@ -86,10 +113,10 @@ COPY ~%MOD_FOLDER%/kit/a7#in01.spl~ ~override/ARCALFX.SPL~
   LPF ADD_SPELL_EFFECT INT_VAR header = 3 opcode = 176 target = 2 parameter1 = 25 parameter2 = 5 timing = 0 duration = 60 resist_dispel = 2 END
   LPF ADD_SPELL_EFFECT INT_VAR header = 3 opcode = 1   target = 2 parameter1 = -1 parameter2 = 0 timing = 0 duration = 60 resist_dispel = 2 END
 
-  // Level 16+: also deal +2 missile damage on every successful hit.
+  // Level 16+: the target debuff package is unchanged. The +2 ranged weapon
+  // damage bonus is applied to the Archer by ARCALLD itself for 10 seconds.
   LPF ADD_SPELL_EFFECT INT_VAR header = 4 opcode = 321 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~ARCALFX~ END
   LPF ADD_SPELL_EFFECT INT_VAR header = 4 opcode = 15  target = 2 parameter1 = 50 parameter2 = 2 timing = 0 duration = 60 resist_dispel = 2 END
   LPF ADD_SPELL_EFFECT INT_VAR header = 4 opcode = 176 target = 2 parameter1 = 25 parameter2 = 5 timing = 0 duration = 60 resist_dispel = 2 END
   LPF ADD_SPELL_EFFECT INT_VAR header = 4 opcode = 1   target = 2 parameter1 = -1 parameter2 = 0 timing = 0 duration = 60 resist_dispel = 2 END
-  LPF ADD_SPELL_EFFECT INT_VAR header = 4 opcode = 12  target = 2 parameter1 = 2 parameter2 = 0x00800000 timing = 1 resist_dispel = 2 END
 BUT_ONLY
