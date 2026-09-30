@@ -28,7 +28,7 @@ COPY_EXISTING ~weapprof.2da~ ~override~
   COUNT_2DA_COLS numCols
   COUNT_2DA_ROWS numCols numRows
 
-  SET kit_col = -1
+  SET kit_col = (0 - 1)
   FOR (col = 3; col < numCols - 1; ++col) BEGIN
     // With a one-column row count, row 2 is the WEAPPROF header row.
     READ_2DA_ENTRY 2 col 1 name
