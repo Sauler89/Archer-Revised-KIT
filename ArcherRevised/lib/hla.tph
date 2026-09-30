@@ -23,6 +23,10 @@ COPY ~%MOD_FOLDER%/kit/a7#in0a.spl~ ~override/ARGCALS.SPL~
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 timing = 0 duration = 10 resist_dispel = 2 STR_VAR resource = ~A7#IN01~ END
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 timing = 0 duration = 10 resist_dispel = 2 STR_VAR resource = ~A7#IN03~ END
 
+  // Greater Called Shot may be selected multiple times as an HLA, but a second
+  // activation during the same 10-second window must not stack its effects.
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 timing = 0 duration = 10 resist_dispel = 2 STR_VAR resource = ~ARGCALS~ END
+
   // Stun every creature successfully hit by a ranged attack.
   LPF ADD_SPELL_EFFECT
     INT_VAR
