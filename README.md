@@ -388,15 +388,14 @@ It rebuilds Archer Revised's Manyshot resources and refreshes the Archer Revised
 
 A release package should be extracted into the game directory so that the game folder contains at least:
 
-- `ArcherRevised/`
-- `setup-ArcherRevised.tp2`
+- `ArcherRevised/` (including `ArcherRevised/setup-ArcherRevised.tp2`)
 - a WeiDU installer executable named `setup-ArcherRevised.exe`
 
 Run `setup-ArcherRevised.exe` and select the desired components.
 
 ### Installing from the source repository
 
-The GitHub source repository contains the mod files and TP2 but may not include a WeiDU executable. To install directly from source, provide a compatible WeiDU executable as `setup-ArcherRevised.exe` in the game directory.
+The GitHub source repository keeps the TP2 inside the mod folder at `ArcherRevised/setup-ArcherRevised.tp2` and may not include a WeiDU executable. To install directly from source, provide a compatible WeiDU executable as `setup-ArcherRevised.exe` in the game directory.
 
 ## Recommended install order
 
