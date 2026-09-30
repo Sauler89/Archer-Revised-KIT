@@ -1,9 +1,9 @@
 // Archer Revised - shared Special Shot pool.
 //
 // Uses A7's CC BY-SA shot-selector shell but defines Archer Revised selection
-// tables and progression. Called Shot itself currently uses the base-game
-// SPCL121 resource; the other shots use the A7-derived resources already
-// shipped with Archer Revised.
+// tables and progression. Called Shot uses Archer Revised's native ARCALLD
+// resource; the other shots use the A7-derived resources already shipped
+// with Archer Revised.
 
 COPY ~%MOD_FOLDER%/2da/ARIN4.2da~ ~override/ARIN4.2da~
 COPY ~%MOD_FOLDER%/2da/ARINS1.2da~ ~override/ARINS1.2da~
