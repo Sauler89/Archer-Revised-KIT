@@ -37,6 +37,7 @@
   - Greater Called Shot: maximized base weapon damage for 10 seconds; successful ranged hits apply the full Called Shot package and stun for 3 seconds.
   - Sure Shot Revised: 2 rounds of bow/crossbow-only +1 APR, +4 ranged attack bonus, guaranteed ranged critical hits, and zero movement.
 - Made Sure Shot mutually exclusive with Rapid Shot, normal Special Shots, and Greater Called Shot.
+- Prevented Greater Called Shot from being reactivated during its own 10-second window, avoiding stacked HLA effects while preserving multiple HLA selections.
 - Removed unused legacy A7 Sure Shot / Missile Trap resources from installation.
 - Removed a redundant WEAPPROF patch with an unsafe hard-coded fallback column.
 - Fixed the EE custom-status-icon count after removing the legacy A7 Sure Shot icon.
