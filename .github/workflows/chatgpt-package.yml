@@ -1,0 +1,17 @@
+name: ChatGPT Package Snapshot
+on:
+  push:
+    paths:
+      - '.github/workflows/chatgpt-package.yml'
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build source snapshot
+        run: zip -r ArcherRevised-source.zip ArcherRevised setup-ArcherRevised.tp2
+      - uses: actions/upload-artifact@v4
+        with:
+          name: archer-revised-source
+          path: ArcherRevised-source.zip
+          compression-level: 0
