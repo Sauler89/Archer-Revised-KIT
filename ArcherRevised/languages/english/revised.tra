@@ -1,26 +1,27 @@
-@1100 = ~ARCHER: The Archer is the epitome of skill with ranged weapons: an expert marksman able to make difficult shots while sacrificing durability, armor, and melee versatility.
+@1100 = ~ARCHER: The Archer is the epitome of skill with the bow - the ultimate marksman, able to make almost any shot, no matter how difficult. To become so skilled with the bow, the Archer has had to sacrifice some of his proficiency with melee weapons and armor.
 
 Advantages:
-- Gains a +1 bonus to ranged attack rolls at level 1.
-- Gains a +1 bonus to hit and damage with missile weapons at levels 4, 8, 12, 16, 20, and every 4 levels thereafter.
-- Gains a +1 bonus to Armor Class vs. missile weapons every 6 levels.
-- Gains a +5% chance to score a critical hit at levels 13 and 18.
+- +1 bonus to hit with missile weapons at level 1.
+- +1 bonus to hit and damage rolls with any missile weapon at levels 4, 8, 12, 16, 20, and every 4 levels thereafter.
+- +1 bonus to Armor Class vs. missile weapons every 6 levels.
+- +5% chance to score a critical hit at levels 13 and 18.
 - May achieve Grand Mastery (5 slots) in longbows, shortbows, and crossbows.
 - Farsighted: +2 visual range, increasing to +4 while hidden or invisible.
-- May toggle Rapid Shot while a bow or crossbow is equipped: gains +1 attack per round while suffering a -4 penalty to ranged attack rolls. From level 12 onward the penalty is reduced to -2.
-- Gains a shared Special Shot pool at level 4, with +1 use every 4 levels thereafter. At level 4 the Archer may choose Called Shot or Rooting Shot; at level 8 Power Shot and Explosive Shot are added to the same pool. Normal Special Shots are mutually exclusive.
-- Manyshot: while using a bow or crossbow, missile damage is increased by 25% at level 7, 40% total at level 13, and 60% total at level 20.
-- Sniper (level 16): ranged attacks made while invisible or improved invisible are guaranteed critical hits.
-- May use Conjure Elemental Ammunition once per day every 8 levels, starting at level 4.
-- Retains the normal Ranger high-level abilities, including Hardiness, and gains Greater Called Shot and Sure Shot.
+- Rapid Shot: While using a bow or crossbow, gains +1 attack per round and suffers a -4 penalty to hit with missile weapons. From level 12 onward, the penalty is reduced to -2.
+- Gains one use of Special Shot at level 4 and one additional use every 4 levels thereafter. At level 4, Special Shot may be used to select Called Shot or Rooting Shot. At level 8, Power Shot and Explosive Shot become available as additional choices. Only one Special Shot may be active at a time.
+- Called Shot: For the next 10 seconds, every successful ranged attack reduces the target's Dexterity to 50% for 1 turn. At level 8, the target's movement rate is also reduced to 25%. At level 12, the target also loses 1 attack per round. At level 16, the Archer gains +2 missile weapon damage while Called Shot is active. Repeated hits refresh these effects rather than stacking them.
+- Manyshot: While using a bow or crossbow, missile damage is increased by 25% at level 7, 40% at level 13, and 60% at level 20.
+- Sniper: From level 16 onward, ranged attacks made while invisible or improved invisible are guaranteed critical hits.
+- May use the Conjure Elemental Ammunition ability once per day every 8 levels, starting at level 4.
+- High-Level Abilities include Greater Called Shot and Sure Shot in addition to the standard Ranger abilities.
 
 Disadvantages:
 - Hit Die: d8.
-- May not wear metal armor.
-- Suffers a +3 THAC0 penalty when using melee weapons.
+- May not wear any metal armor.
+- Suffers a -3 penalty to hit with melee weapons.
 - May only become Proficient (one slot) with melee weapons.
-- May not gain proficiency in Two-Weapon Style.
-- May not use Charm Animal.
+- May not place proficiency slots in Two-Weapon Style.
+- May not use the Charm Animal ability.
 ~
 
 @3000 = ~Rapid Shot~
