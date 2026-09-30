@@ -6,6 +6,8 @@
 - Imported only the EET-relevant Improved Archer technical resources under CC BY-SA 4.0.
 - Added explicit conflict checks for A7 Improved Archer and Artisan's Archer Overhaul.
 - English-only localization.
+- Updated the in-game Archer kit description to match the current Archer Revised ruleset using standard Baldur's Gate/WeiDU terminology and exact ability names.
+- Moved `setup-ArcherRevised.tp2` into `ArcherRevised/` and updated component 10's `REQUIRE_COMPONENT` path accordingly.
 - Removed the Improved Archer -1 Constitution penalty.
 - Restored vanilla Archer minimum requirements: DEX 13 / CON 14.
 - Added d8 Archer Hit Die progression.
