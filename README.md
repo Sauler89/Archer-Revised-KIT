@@ -318,6 +318,8 @@ While active:
 
 Repeated hits refresh the persistent Called Shot debuffs rather than stacking them.
 
+Greater Called Shot may be selected multiple times as an HLA, but it cannot be reactivated during its own 10-second firing window, preventing duplicate instances from stacking.
+
 Activating Greater Called Shot supersedes active normal Special Shots and prevents normal Special Shots for its duration.
 
 ### Sure Shot
