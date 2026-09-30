@@ -40,6 +40,7 @@
 - Prevented Greater Called Shot from being reactivated during its own 10-second window, avoiding stacked HLA effects while preserving multiple HLA selections.
 - Removed unused legacy A7 Sure Shot / Missile Trap resources from installation.
 - Removed a redundant WEAPPROF patch with an unsafe hard-coded fallback column.
+- Fixed a WeiDU 249 parse error in the dynamic WEAPPROF Archer-column sentinel initialization.
 - Fixed the EE custom-status-icon count after removing the legacy A7 Sure Shot icon.
 - Normalized kit-symbol handling so relevant rule patches recognize both FERALAN and ARCHER where applicable.
 - Audited imported A7 resources by Git SHA: all unmodified imported gameplay resources remain byte-identical to the source.
