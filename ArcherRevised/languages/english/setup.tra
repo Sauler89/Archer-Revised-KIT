@@ -1,9 +1,12 @@
 @1 = ~Archer Revised - Combined Archer Overhaul~
 @2 = ~Archer Revised - Patch mod-added bows and crossbows for Manyshot (install after item/content mods)~
-@100 = ~Archer Revised requires Baldur's Gate: Enhanced Edition, Baldur's Gate II: Enhanced Edition, or Enhanced Edition Trilogy (EET).~
+@100 = ~Archer Revised requires Baldur's Gate: Enhanced Edition, Baldur's Gate II: Enhanced Edition, Enhanced Edition Trilogy (EET), or Icewind Dale: Enhanced Edition.~
 @101 = ~Archer Revised replaces the same Archer resources as A7 Improved Archer. Uninstall the Improved Archer component before installing Archer Revised.~
 @102 = ~Archer Revised replaces the same Archer kit as Artisan's Kitpack: Archer Overhaul. Uninstall component 2010 before installing Archer Revised.~
 
 @103 = ~The late-install Manyshot item patch requires the Archer Revised core component.~
 @104 = ~Artisan's Kitpack Manyshot item tweak (component 20101) is specific to Artisan's Archer implementation and is not compatible with Archer Revised. Use Archer Revised component 10 instead.~
 @105 = ~Archer Revised could not locate the Archer proficiency column in WEAPPROF.2DA. Installation has been aborted rather than risk modifying another kit.~
+@106 = ~Archer Revised could not identify the vanilla Archer kit and its ability table in KITLIST.2DA.~
+@107 = ~No usable Archer/Ranger HLA table was found. The kit will be installed without changing HLA progression. Archer Revised does not enable HLAs in Icewind Dale: Enhanced Edition by itself.~
+@108 = ~The current HLA table does not offer Critical Strike. Sure Shot will not be added because its prerequisite would be unavailable.~

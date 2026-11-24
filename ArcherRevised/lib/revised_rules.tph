@@ -8,12 +8,22 @@ COPY ~%MOD_FOLDER%/2da/HPARCH.2da~ ~override/HPARCH.2da~
 COPY_EXISTING ~hpclass.2da~ ~override~
   COUNT_2DA_COLS cols
   READ_2DA_ENTRIES_NOW rows cols
+  SET ar_hp_found = 0
   FOR (row = 0; row < rows; ++row) BEGIN
     READ_2DA_ENTRY_FORMER rows row 0 ~kit_name~
     PATCH_IF (~%kit_name%~ STRING_EQUAL_CASE ~FERALAN~ ||
               ~%kit_name%~ STRING_EQUAL_CASE ~ARCHER~) BEGIN
       SET_2DA_ENTRY row 1 cols ~HPARCH~
+      SET ar_hp_found = 1
     END
+  END
+  PATCH_IF (NOT ar_hp_found) BEGIN
+    // Some IWDEE tables have only a class-wide Ranger entry.
+    TEXT_SPRINT ar_hp_row ~%kit_symbol% HPARCH~
+    FOR (ar_col = 2; ar_col < cols; ++ar_col) BEGIN
+      TEXT_SPRINT ar_hp_row ~%ar_hp_row% *~
+    END
+    INSERT_2DA_ROW rows cols ~%ar_hp_row%~
   END
   PRETTY_PRINT_2DA
 BUT_ONLY

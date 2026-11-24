@@ -41,7 +41,6 @@ COPY ~%MOD_FOLDER%/kit/a7#in01.spl~ ~override/ARCALLD.SPL~
   // selectors prevents consuming another shared daily use while one is active.
   LPF ADD_SPELL_EFFECT INT_VAR header = 0 opcode = 206 target = 1 timing = 0 duration = 10 resist_dispel = 2 STR_VAR resource = ~ARIN4~ END
   LPF ADD_SPELL_EFFECT INT_VAR header = 0 opcode = 206 target = 1 timing = 0 duration = 10 resist_dispel = 2 STR_VAR resource = ~ARINS1~ END
-  LPF ADD_SPELL_EFFECT INT_VAR header = 0 opcode = 206 target = 1 timing = 0 duration = 10 resist_dispel = 2 STR_VAR resource = ~ARCALLD~ END
   LPF ADD_SPELL_EFFECT INT_VAR header = 0 opcode = 206 target = 1 timing = 0 duration = 10 resist_dispel = 2 STR_VAR resource = ~A7#IN01~ END
   LPF ADD_SPELL_EFFECT INT_VAR header = 0 opcode = 206 target = 1 timing = 0 duration = 10 resist_dispel = 2 STR_VAR resource = ~A7#IN02~ END
   LPF ADD_SPELL_EFFECT INT_VAR header = 0 opcode = 206 target = 1 timing = 0 duration = 10 resist_dispel = 2 STR_VAR resource = ~A7#IN03~ END
@@ -60,11 +59,15 @@ COPY ~%MOD_FOLDER%/kit/a7#in01.spl~ ~override/ARCALLD.SPL~
       duration       = 10
       resist_dispel  = 2
   END
+  // Install self-immunity last so it cannot interfere with this activation.
+  LPF ADD_SPELL_EFFECT INT_VAR header = 0 opcode = 206 target = 1 timing = 0 duration = 10 resist_dispel = 2 STR_VAR resource = ~ARCALLD~ END
 BUT_ONLY
 
 // External effect called by opcode 249.
 // Start from an existing CC BY-SA EFF shell and fully define the fields used.
 COPY ~%MOD_FOLDER%/kit/a7#in11a.eff~ ~override/ARCALHIT.EFF~
+  DELETE_BYTES 0x10 (SOURCE_SIZE - 0x10)
+  INSERT_BYTES 0x10 0x100
   WRITE_LONG  0x10 146      // Cast spell at creature
   WRITE_LONG  0x14 2        // Projectile target
   WRITE_LONG  0x18 0        // Power
@@ -116,12 +119,12 @@ COPY ~%MOD_FOLDER%/kit/a7#in01.spl~ ~override/ARCALFX.SPL~
   LPF ADD_SPELL_EFFECT INT_VAR header = 3 opcode = 321 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~ARCALFX~ END
   LPF ADD_SPELL_EFFECT INT_VAR header = 3 opcode = 15  target = 2 parameter1 = 50 parameter2 = 2 timing = 0 duration = 60 resist_dispel = 2 END
   LPF ADD_SPELL_EFFECT INT_VAR header = 3 opcode = 176 target = 2 parameter1 = 25 parameter2 = 5 timing = 0 duration = 60 resist_dispel = 2 END
-  LPF ADD_SPELL_EFFECT INT_VAR header = 3 opcode = 1   target = 2 parameter1 = -1 parameter2 = 0 timing = 0 duration = 60 resist_dispel = 2 END
+  LPF ADD_SPELL_EFFECT INT_VAR header = 3 opcode = 1   target = 2 parameter1 = (0 - 1) parameter2 = 0 timing = 0 duration = 60 resist_dispel = 2 END
 
   // Level 16+: the target debuff package is unchanged. The +2 ranged weapon
   // damage bonus is applied to the Archer by ARCALLD itself for 10 seconds.
   LPF ADD_SPELL_EFFECT INT_VAR header = 4 opcode = 321 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = ~ARCALFX~ END
   LPF ADD_SPELL_EFFECT INT_VAR header = 4 opcode = 15  target = 2 parameter1 = 50 parameter2 = 2 timing = 0 duration = 60 resist_dispel = 2 END
   LPF ADD_SPELL_EFFECT INT_VAR header = 4 opcode = 176 target = 2 parameter1 = 25 parameter2 = 5 timing = 0 duration = 60 resist_dispel = 2 END
-  LPF ADD_SPELL_EFFECT INT_VAR header = 4 opcode = 1   target = 2 parameter1 = -1 parameter2 = 0 timing = 0 duration = 60 resist_dispel = 2 END
+  LPF ADD_SPELL_EFFECT INT_VAR header = 4 opcode = 1   target = 2 parameter1 = (0 - 1) parameter2 = 0 timing = 0 duration = 60 resist_dispel = 2 END
 BUT_ONLY

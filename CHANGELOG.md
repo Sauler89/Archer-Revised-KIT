@@ -1,5 +1,22 @@
 # Changelog
 
+## v0.2.0-beta1 — 2026-11-24
+
+- Added IWDEE support to both components, including its SPCL124 progression, native Tracking, and game-specific elemental-ammunition projectile selection.
+- Fixed four negative INT_VAR expressions in Called Shot, the level-1 ranged accuracy passive, and Sure Shot that failed to parse in WeiDU 249/251.
+- Isolated kit progression in ARCLAB.2DA and expanded shorter source tables through level 50 without modifying tables used by other kits.
+- Derived a private LUARREV.2DA HLA table from the current kit/Ranger table, including custom shared tables; retained existing choices and extra columns.
+- Made missing HLA tables optional instead of aborting installation; Archer Revised does not enable IWDEE HLAs by itself.
+- Removed redundant Tracking from the private IWDEE Archer HLA table and skipped Sure Shot when its Critical Strike prerequisite is unavailable.
+- Added the missing Archer HPCLASS row when needed; broadened safe WEAPPROF/KIT.IDS alias resolution without hard-coded kit IDs or proficiency columns.
+- Replaced six-second invisibility polling and seven-second lingering bonuses with nominal one-second native polling and explicit cleanup for Farsighted/Sniper. Slow/Haste can alter the cadence; engine testing is still required.
+- Silenced state-check spells and reset external effect shells before generating on-hit/tick payloads.
+- Moved self-lockouts after active-ability benefits and added Sure Shot self-lockout.
+- Fixed custom shot-icon registration when the highest existing icon index is 82 and recognized existing icon BAM names case-insensitively.
+- Hardened the idempotent Manyshot item refresh with ITM signature validation and FERALAN/ARCHER symbol resolution.
+- Added automated tests using real WeiDU 249/251 on synthetic BGEE/BG2EE/EET/IWDEE fixtures, including generated resources, shared tables, late items, rollback, uninstall and reinstall.
+- Updated support, install order and validation documentation. This remains a beta; the tests do not run an Infinity Engine game.
+
 ## v0.1.0-dev
 
 - Initialized the standalone Archer Revised project for BGEE/BG2EE/EET.

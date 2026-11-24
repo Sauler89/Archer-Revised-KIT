@@ -5,14 +5,24 @@
 // bows/crossbows added by later mods receive the same effects.
 //
 // Effects are deliberately idempotent: Archer Revised effects are removed
-// before being re-added. Opcode 177 filters directly for KIT.IDS = FERALAN,
+// before being re-added. Opcode 177 filters for the vanilla Archer KIT.IDS value,
 // so no custom SPLPROT row or auxiliary immunity effects are required.
+
+OUTER_SET ar_manyshot_kit = IDS_OF_SYMBOL (~KIT~ ~FERALAN~)
+ACTION_IF (ar_manyshot_kit < 0) BEGIN
+  OUTER_SET ar_manyshot_kit = IDS_OF_SYMBOL (~KIT~ ~ARCHER~)
+END
+ACTION_IF (ar_manyshot_kit < 0) BEGIN
+  FAIL @106
+END
 
 COPY_EXISTING_REGEXP GLOB ~.*\.itm~ ~override~
   PATCH_IF (SOURCE_SIZE > 0x71) BEGIN
+    READ_ASCII 0 ar_signature (8)
     READ_SHORT 0x1c item_type
 
-    PATCH_IF (item_type = 15 OR item_type = 27) BEGIN
+    PATCH_IF (~%ar_signature%~ STRING_EQUAL ~ITM V1  ~ &&
+              (item_type = 15 OR item_type = 27)) BEGIN
       // Remove only effects owned by Archer Revised. Also remove the obsolete
       // opcode-318 effects used by an earlier development implementation.
       LPF DELETE_EFFECT INT_VAR match_opcode = 177 STR_VAR match_resource = ~ARMSH07~ END
@@ -22,7 +32,7 @@ COPY_EXISTING_REGEXP GLOB ~.*\.itm~ ~override~
       LPF DELETE_EFFECT INT_VAR match_opcode = 318 STR_VAR match_resource = ~ARMSH13~ END
       LPF DELETE_EFFECT INT_VAR match_opcode = 318 STR_VAR match_resource = ~ARMSH20~ END
 
-      // Apply each EFF only to the vanilla Archer kit (FERALAN).
+      // Apply each EFF only to the resolved vanilla Archer kit.
       // Opcode 177 parameter2 = 9 uses KIT.IDS for the parameter1 selector.
       // The EFF itself carries the minimum affected level (7 / 13 / 20).
       LPF ADD_ITEM_EQEFFECT
@@ -30,7 +40,7 @@ COPY_EXISTING_REGEXP GLOB ~.*\.itm~ ~override~
           silent         = 1
           opcode         = 177
           target         = 1
-          parameter1     = IDS_OF_SYMBOL (~KIT~ ~FERALAN~)
+          parameter1     = ar_manyshot_kit
           parameter2     = 9
           timing         = 2
         STR_VAR
@@ -41,7 +51,7 @@ COPY_EXISTING_REGEXP GLOB ~.*\.itm~ ~override~
           silent         = 1
           opcode         = 177
           target         = 1
-          parameter1     = IDS_OF_SYMBOL (~KIT~ ~FERALAN~)
+          parameter1     = ar_manyshot_kit
           parameter2     = 9
           timing         = 2
         STR_VAR
@@ -52,7 +62,7 @@ COPY_EXISTING_REGEXP GLOB ~.*\.itm~ ~override~
           silent         = 1
           opcode         = 177
           target         = 1
-          parameter1     = IDS_OF_SYMBOL (~KIT~ ~FERALAN~)
+          parameter1     = ar_manyshot_kit
           parameter2     = 9
           timing         = 2
         STR_VAR

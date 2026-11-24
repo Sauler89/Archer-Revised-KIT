@@ -1,0 +1,83 @@
+// Native EE state polling. Register by content, never by a hard-coded
+// SPLPROT row number (other mods append their own rows).
+OUTER_SET ar_hidden_rule = (0 - 1)
+COPY_EXISTING ~splprot.2da~ ~override~
+  COUNT_2DA_COLS ar_cols
+  COUNT_2DA_ROWS ar_cols ar_rows
+  FOR (ar_row = 0; ar_row < ar_rows; ++ar_row) BEGIN
+    READ_2DA_ENTRY ar_row 1 ar_cols ar_stat
+    READ_2DA_ENTRY ar_row 2 ar_cols ar_value
+    READ_2DA_ENTRY ar_row 3 ar_cols ar_relation
+    PATCH_IF (IS_AN_INT ~%ar_stat%~ && IS_AN_INT ~%ar_value%~ &&
+              IS_AN_INT ~%ar_relation%~) BEGIN
+      PATCH_IF (ar_stat = 0x111 && ar_value = 0x00400010 && ar_relation = 8) BEGIN
+        SET ar_hidden_rule = ar_row
+      END
+    END
+  END
+BUT_ONLY
+ACTION_IF (ar_hidden_rule < 0) BEGIN
+  OUTER_SET ar_hidden_rule = ar_rows
+  APPEND ~splprot.2da~ ~AR_HIDDEN_%ar_rows% 0x111 0x00400010 8~
+END
+
+// Each tick clears the previous bonus before evaluating the CURRENT state.
+// This removes the old seven-second tail after invisibility is broken.
+// Nominal polling is one second; Slow/Haste can alter opcode 272's cadence.
+DEFINE_ACTION_FUNCTION AR_STATE_TICK
+  INT_VAR
+    bonus_opcode = 0
+    bonus_value = 0
+    bonus_special = 0
+  STR_VAR
+    tick_spell = ~~
+    tick_eff = ~~
+    bonus_spell = ~~
+BEGIN
+  COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override/%tick_spell%.SPL~
+    LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = (0 - 1) END
+    WRITE_LONG 0x08 (0 - 1)
+    WRITE_LONG 0x0c (0 - 1)
+    WRITE_ASCII 0x10 ~~ #8
+    WRITE_SHORT 0x22 0xffff
+    LPF ADD_SPELL_EFFECT
+      INT_VAR opcode = 321 target = 2 timing = 1 resist_dispel = 2
+      STR_VAR resource = EVAL ~%bonus_spell%~
+    END
+    LPF ADD_SPELL_EFFECT
+      INT_VAR opcode = 326 target = 2 parameter2 = ar_hidden_rule timing = 1 resist_dispel = 2
+      STR_VAR resource = EVAL ~%bonus_spell%~
+    END
+
+  COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override/%bonus_spell%.SPL~
+    LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = (0 - 1) END
+    WRITE_LONG 0x08 (0 - 1)
+    WRITE_LONG 0x0c (0 - 1)
+    WRITE_ASCII 0x10 ~~ #8
+    WRITE_SHORT 0x22 0xffff
+    LPF ADD_SPELL_EFFECT
+      INT_VAR opcode = bonus_opcode target = 2 parameter1 = bonus_value
+              special = bonus_special timing = 0 duration = 3 resist_dispel = 2
+    END
+
+  COPY ~%MOD_FOLDER%/spells/AR#APR1.EFF~ ~override/%tick_eff%.EFF~
+    // Retain the EFF signature and reset every field inherited from the shell.
+    DELETE_BYTES 0x10 (SOURCE_SIZE - 0x10)
+    INSERT_BYTES 0x10 0x100
+    WRITE_LONG 0x10 146
+    WRITE_LONG 0x14 2
+    WRITE_LONG 0x20 1
+    WRITE_SHORT 0x24 1
+    WRITE_SHORT 0x2c 100
+    WRITE_ASCIIE 0x30 ~%tick_spell%~ #8
+    WRITE_LONG 0x5c 2
+END
+
+LAF AR_STATE_TICK
+  INT_VAR bonus_opcode = 262 bonus_value = 2
+  STR_VAR tick_spell = ~ARFARCH~ tick_eff = ~ARFAREFF~ bonus_spell = ~ARFARON~
+END
+LAF AR_STATE_TICK
+  INT_VAR bonus_opcode = 301 bonus_value = 20 bonus_special = 2
+  STR_VAR tick_spell = ~ARSNCHK~ tick_eff = ~ARSNEFF~ bonus_spell = ~ARSNON~
+END

@@ -1,0 +1,101 @@
+// Derive a private HLA table, including when a prior mod shares its table
+// between kits. Never append Archer abilities to another class's table.
+OUTER_TEXT_SPRINT ar_hla_source ~~
+OUTER_SET ar_hla_row = (0 - 1)
+OUTER_SET ar_hla_fallback = (0 - 1)
+OUTER_SET ar_hla_alias = (0 - 1)
+ACTION_IF FILE_EXISTS_IN_GAME ~luabbr.2da~ BEGIN
+  COPY_EXISTING ~luabbr.2da~ ~override~
+    COUNT_2DA_COLS ar_cols
+    COUNT_2DA_ROWS ar_cols ar_rows
+    FOR (ar_row = 0; ar_row < ar_rows; ++ar_row) BEGIN
+      READ_2DA_ENTRY ar_row 0 ar_cols ar_name
+      PATCH_IF (~%ar_name%~ STRING_EQUAL_CASE ~%kit_symbol%~) BEGIN
+        SET ar_hla_row = ar_row
+        READ_2DA_ENTRY ar_row 1 ar_cols ar_hla_source
+      END ELSE PATCH_IF (~%ar_name%~ STRING_EQUAL_CASE ~FERALAN~ ||
+                         ~%ar_name%~ STRING_EQUAL_CASE ~ARCHER~) BEGIN
+        SET ar_hla_alias = ar_row
+      END ELSE PATCH_IF (~%ar_name%~ STRING_EQUAL_CASE ~RANGER~) BEGIN
+        SET ar_hla_fallback = ar_row
+      END
+    END
+    PATCH_IF (ar_hla_row < 0 && ar_hla_alias >= 0) BEGIN
+      SET ar_hla_row = ar_hla_alias
+      READ_2DA_ENTRY ar_hla_alias 1 ar_cols ar_hla_source
+    END
+    PATCH_IF (ar_hla_row < 0 && ar_hla_fallback >= 0) BEGIN
+      READ_2DA_ENTRY ar_hla_fallback 1 ar_cols ar_hla_source
+    END
+  BUT_ONLY
+END
+
+ACTION_IF (NOT ~%ar_hla_source%~ STRING_EQUAL ~~ &&
+           NOT ~%ar_hla_source%~ STRING_EQUAL ~*~ &&
+           FILE_EXISTS_IN_GAME ~lu%ar_hla_source%.2da~) BEGIN
+  COPY_EXISTING ~lu%ar_hla_source%.2da~ ~override/LUARREV.2DA~
+    COUNT_2DA_COLS ar_hla_cols
+    COUNT_2DA_ROWS ar_hla_cols ar_hla_rows
+    READ_2DA_ENTRY 1 0 1 ar_hla_default
+    SET ar_hla_max = (0 - 1)
+    SET ar_has_gcs = 0
+    SET ar_has_sure = 0
+    SET ar_has_critical = 0
+    FOR (ar_row = 0; ar_row < ar_hla_rows; ++ar_row) BEGIN
+      READ_2DA_ENTRY ar_row 0 ar_hla_cols ar_label
+      PATCH_IF IS_AN_INT ~%ar_label%~ BEGIN
+        PATCH_IF (ar_label > ar_hla_max) BEGIN
+          SET ar_hla_max = ar_label
+        END
+      END
+      READ_2DA_ENTRY ar_row 1 ar_hla_cols ar_ability
+      PATCH_IF (~%ar_ability%~ STRING_EQUAL_CASE ~GA_ARGCALS~) BEGIN
+        SET ar_has_gcs = 1
+      END
+      PATCH_IF (~%ar_ability%~ STRING_EQUAL_CASE ~GA_ARSURE~) BEGIN
+        SET ar_has_sure = 1
+      END
+      PATCH_IF (~%ar_ability%~ STRING_EQUAL_CASE ~GA_SPCL905~) BEGIN
+        SET ar_has_critical = 1
+      END
+      // IWDEE already grants Tracking through the Ranger CLAB.
+      PATCH_IF (IS_IWDEE && ~%ar_ability%~ STRING_EQUAL_CASE ~GA_SPCL922~) BEGIN
+        SET_2DA_ENTRY ar_row 1 ar_hla_cols ~%ar_hla_default%~
+      END
+    END
+  ACTION_IF (ar_hla_cols >= 10) BEGIN
+    ACTION_IF (NOT ar_has_gcs) BEGIN
+      OUTER_SET ar_hla_max += 1
+      OUTER_TEXT_SPRINT ar_hla_line ~%ar_hla_max% GA_ARGCALS * * 1 99 20 * * *~
+      OUTER_FOR (ar_col = 10; ar_col < ar_hla_cols; ++ar_col) BEGIN
+        OUTER_TEXT_SPRINT ar_hla_line ~%ar_hla_line% %ar_hla_default%~
+      END
+      APPEND ~LUARREV.2DA~ ~%ar_hla_line%~
+    END
+    ACTION_IF (NOT ar_has_sure && ar_has_critical) BEGIN
+      OUTER_SET ar_hla_max += 1
+      OUTER_TEXT_SPRINT ar_hla_line ~%ar_hla_max% GA_ARSURE * * 1 99 1 GA_SPCL905 GA_ARSURE *~
+      OUTER_FOR (ar_col = 10; ar_col < ar_hla_cols; ++ar_col) BEGIN
+        OUTER_TEXT_SPRINT ar_hla_line ~%ar_hla_line% %ar_hla_default%~
+      END
+      APPEND ~LUARREV.2DA~ ~%ar_hla_line%~
+    END ELSE ACTION_IF (NOT ar_has_sure) BEGIN
+      PRINT @108
+    END
+
+    ACTION_IF (ar_hla_row >= 0) BEGIN
+      COPY_EXISTING ~luabbr.2da~ ~override~
+        COUNT_2DA_COLS ar_cols
+        SET_2DA_ENTRY ar_hla_row 1 ar_cols ~ARREV~
+      BUT_ONLY
+    END ELSE BEGIN
+      APPEND ~luabbr.2da~ ~%kit_symbol% ARREV~
+    END
+    COPY_EXISTING ~LUARREV.2DA~ ~override~ PRETTY_PRINT_2DA BUT_ONLY
+  END ELSE BEGIN
+    PRINT @107
+  END
+END ELSE BEGIN
+  // Missing/dormant HLA data must not prevent an IWDEE/BGEE installation.
+  PRINT @107
+END

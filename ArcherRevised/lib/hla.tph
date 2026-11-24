@@ -23,10 +23,6 @@ COPY ~%MOD_FOLDER%/kit/a7#in0a.spl~ ~override/ARGCALS.SPL~
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 timing = 0 duration = 10 resist_dispel = 2 STR_VAR resource = ~A7#IN01~ END
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 timing = 0 duration = 10 resist_dispel = 2 STR_VAR resource = ~A7#IN03~ END
 
-  // Greater Called Shot may be selected multiple times as an HLA, but a second
-  // activation during the same 10-second window must not stack its effects.
-  LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 timing = 0 duration = 10 resist_dispel = 2 STR_VAR resource = ~ARGCALS~ END
-
   // Stun every creature successfully hit by a ranged attack.
   LPF ADD_SPELL_EFFECT
     INT_VAR
@@ -76,10 +72,14 @@ COPY ~%MOD_FOLDER%/kit/a7#in0a.spl~ ~override/ARGCALS.SPL~
     STR_VAR
       resource       = ~ARCALHIT~
   END
+  // Self-lockout follows all benefits of the current activation.
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 timing = 0 duration = 10 resist_dispel = 2 STR_VAR resource = ~ARGCALS~ END
 BUT_ONLY
 
 // Ranged-hit stun payload.
 COPY ~%MOD_FOLDER%/kit/a7#in11a.eff~ ~override/ARGCHIT.EFF~
+  DELETE_BYTES 0x10 (SOURCE_SIZE - 0x10)
+  INSERT_BYTES 0x10 0x100
   WRITE_LONG  0x10 45       // Stun
   WRITE_LONG  0x14 2        // Projectile target
   WRITE_LONG  0x18 0
@@ -136,11 +136,12 @@ COPY ~%MOD_FOLDER%/kit/a7#in0a.spl~ ~override/ARSURE.SPL~
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 183 target = 2 parameter1 = 0 parameter2 = 27 timing = 0 duration = 12 resist_dispel = 2 STR_VAR resource = ~AR#APR1~ END
 
   // +4 to hit with missile weapons means -4 THAC0.
-  LPF ADD_SPELL_EFFECT INT_VAR opcode = 167 target = 2 parameter1 = -4 parameter2 = 0 timing = 0 duration = 12 resist_dispel = 2 END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 167 target = 2 parameter1 = (0 - 4) parameter2 = 0 timing = 0 duration = 12 resist_dispel = 2 END
 
   // Every ranged attack is a critical hit.
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 301 target = 2 parameter1 = 20 parameter2 = 0 timing = 0 duration = 12 special = 2 resist_dispel = 2 END
 
   // Root the Archer in place for the full two rounds.
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 176 target = 2 parameter1 = 0 parameter2 = 1 timing = 0 duration = 12 resist_dispel = 2 END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 timing = 0 duration = 12 resist_dispel = 2 STR_VAR resource = ~ARSURE~ END
 BUT_ONLY

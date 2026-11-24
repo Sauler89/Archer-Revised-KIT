@@ -1,50 +1,10 @@
-// Archer Revised - native Sniper passive.
-//
-// At level 16 the Archer gains guaranteed critical hits on ranged attacks
-// while invisible or improved invisible. The short-duration modifier is
-// refreshed once per round only while STATE_NOT_VISIBLE is true.
-
-// Controller installed by the CLAB.
+// Native Sniper controller. ARSNCHK evaluates the current state and clears
+// any previous critical bonus before conditionally applying a fresh one.
 COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override/ARSNIP.SPL~
   LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = (0 - 1) END
-
-  // StateCheck(Myself, STATE_NOT_VISIBLE), checked once per round.
   LPF ADD_SPELL_EFFECT
-    INT_VAR
-      opcode         = 232
-      target         = 2
-      parameter1     = 0
-      parameter2     = 15
-      timing         = 9
-      special        = 0x00400010
-      resist_dispel  = 2
-    STR_VAR
-      resource       = ~ARSNON~
-  END
-BUT_ONLY
-
-// Guaranteed ranged critical hits.
-// Remove the previous refresh before applying the new 7-second instance.
-COPY ~%MOD_FOLDER%/kit/a7#ins1.spl~ ~override/ARSNON.SPL~
-  LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = (0 - 1) END
-  LPF ADD_SPELL_EFFECT
-    INT_VAR
-      opcode         = 321
-      target         = 2
-      timing         = 1
-      resist_dispel  = 2
-    STR_VAR
-      resource       = ~ARSNON~
-  END
-  LPF ADD_SPELL_EFFECT
-    INT_VAR
-      opcode         = 301
-      target         = 2
-      parameter1     = 20
-      parameter2     = 0
-      timing         = 0
-      duration       = 7
-      special        = 2
-      resist_dispel  = 2
+    INT_VAR opcode = 272 target = 2 parameter1 = 1 parameter2 = 0
+            timing = 9 resist_dispel = 2
+    STR_VAR resource = ~ARSNEFF~
   END
 BUT_ONLY

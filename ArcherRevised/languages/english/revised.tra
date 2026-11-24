@@ -13,7 +13,7 @@ Advantages:
 - Manyshot: While using a bow or crossbow, missile damage is increased by 25% at level 7, 40% at level 13, and 60% at level 20.
 - Sniper: From level 16 onward, ranged attacks made while invisible or improved invisible are guaranteed critical hits.
 - May use the Conjure Elemental Ammunition ability once per day every 8 levels, starting at level 4.
-- High-Level Abilities include Greater Called Shot and Sure Shot in addition to the standard Ranger abilities.
+- Where High-Level Abilities are enabled, gains Greater Called Shot in addition to the current Ranger abilities. Sure Shot is also available if Critical Strike is offered as a prerequisite.
 
 Disadvantages:
 - Hit Die: d8.
@@ -29,7 +29,7 @@ Disadvantages:
 Choose whether to activate or deactivate Rapid Shot. While active, the stance grants +1 attack per round only while a bow or crossbow is equipped, but imposes a -4 penalty to ranged attack rolls. From level 12 onward the penalty is reduced to -2.~
 @3002 = ~Activate Rapid Shot~
 @3003 = ~Activate Rapid Shot
-Enters the Rapid Shot stance. The stance remains active until manually deactivated.~
+Enters the Rapid Shot stance. The stance remains active until deactivated, superseded by Sure Shot, or reset by the level-12 upgrade.~
 @3004 = ~Deactivate Rapid Shot~
 @3005 = ~Deactivate Rapid Shot
 Ends the Rapid Shot stance and removes its attack-rate and ranged accuracy modifiers.~

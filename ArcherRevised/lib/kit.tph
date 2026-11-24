@@ -100,8 +100,10 @@ ACTION_IF (IS_EE) BEGIN
   COPY_EXISTING ~statdesc.2da~ ~override~
     SET icon_index = 82
     SET icon_indices = 0
+    SET ar_custom_icons = 0
     COUNT_2DA_COLS numCols
     PATCH_IF (numCols > 2) BEGIN
+      SET ar_custom_icons = 1
       DEFINE_ASSOCIATIVE_ARRAY icon_defs BEGIN 
         1000 => ~A7#IN01D~
         1001 => ~A7#IN02D~
@@ -114,7 +116,7 @@ ACTION_IF (IS_EE) BEGIN
           READ_2DA_ENTRY_FORMER ~tbl_items~ row 2 cur_resref
           SET match = 0
           PHP_EACH icon_defs AS ref => icn_name BEGIN
-            PATCH_IF (NOT match && ~%cur_resref%~ STR_EQ ~%icn_name%~) BEGIN
+            PATCH_IF (NOT match && ~%cur_resref%~ STRING_EQUAL_CASE ~%icn_name%~) BEGIN
               SET $icon_indices(~%icn_name%~) = cur_idx
               SET icon_indices += 1
               SET match = 1
@@ -127,7 +129,7 @@ ACTION_IF (IS_EE) BEGIN
       END
     END
 
-  ACTION_IF (icon_index > 82 && icon_indices < 3) BEGIN
+  ACTION_IF (ar_custom_icons && icon_indices < 3) BEGIN
     ACTION_PHP_EACH icon_defs AS ref => icn_name BEGIN
       ACTION_IF (NOT VARIABLE_IS_SET $icon_indices(~%icn_name%~)) BEGIN
         OUTER_SET icon_index += 1

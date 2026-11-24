@@ -1,8 +1,8 @@
 # Archer Revised KIT
 
-A standalone overhaul of the vanilla **Archer** ranger kit for **Baldur's Gate: Enhanced Edition**, **Siege of Dragonspear**, **Baldur's Gate II: Enhanced Edition**, and **Enhanced Edition Trilogy (EET)**.
+A standalone overhaul of the vanilla **Archer** ranger kit for **Baldur's Gate: Enhanced Edition**, **Siege of Dragonspear**, **Baldur's Gate II: Enhanced Edition**, **Enhanced Edition Trilogy (EET)**, and **Icewind Dale: Enhanced Edition**.
 
-> **Current status:** `v0.1.0-dev` — the implementation has undergone a detailed static audit, but a clean WeiDU installation and full in-game progression test are still required before the first public release.
+> **Current status:** `v0.2.0-beta1` — native IWDEE support and installer fixes. Real WeiDU 249/251 installation, generated-resource and rollback tests pass on synthetic EE fixtures; full in-game validation is still required. See [testing](tests/README.md).
 
 > **Language:** English only.
 
@@ -43,12 +43,23 @@ The installer currently accepts:
 - **Siege of Dragonspear** as part of BGEE
 - **Baldur's Gate II: Enhanced Edition**
 - **Enhanced Edition Trilogy (EET)**
+- **Icewind Dale: Enhanced Edition**, including Heart of Winter and Trials of the Luremaster
 
-Primary development targets are **BG2EE 2.7.x** and **EET**.
+Use an up-to-date Enhanced Edition installation. BG2EE/EET and IWDEE are supported installation targets; the project remains a beta pending real engine testing.
 
 The mod uses WeiDU and does **not** require EEex. Infinity UI++ is intended to be compatible.
 
-**Icewind Dale: Enhanced Edition is not currently supported by Archer Revised**, even though part of the technical foundation originates from a mod that supports IWDEE.
+### Icewind Dale: Enhanced Edition
+
+Core component 0 and the late Manyshot refresh component 10 both support IWDEE.
+
+- Uses IWDEE's `SPCL124` missile progression and its arrow/bolt projectile IDs.
+- Preserves native **Tracking** exactly once in the kit's CLAB; does not add it again as an Archer HLA.
+- Adds an Archer-specific d8 HP table mapping when IWDEE's HPCLASS has only a general Ranger mapping.
+- Works without usable HLA tables. Archer Revised does **not** enable HLA progression, change the UI, or require an HLA mod.
+- If usable HLA tables are present, derives a private Archer table while preserving the source choices, including Hardiness where present. Sure Shot is added only when that table offers its Critical Strike prerequisite.
+
+For IWDEE setups using **Skills and Abilities** or **IWDEE-Tweaks-and-Fixes** HLA components, install those components and their prerequisites **before Archer Revised component 0**. This lets Archer Revised derive its HLA table from their final Ranger/Archer table. This ordering and the shared-table behavior are tested with synthetic table fixtures; a complete installation of either third-party mod has not been certified in-game.
 
 ## Complete ruleset
 
@@ -118,7 +129,7 @@ The **-1 Constitution penalty** used by Improved Archer is intentionally removed
 | 20 | +1 missile hit/damage; 5 Special Shot uses; Manyshot increases to +60% total; third Conjure Elemental Ammunition use |
 | 24+ | Missile hit/damage continues every 4 levels; missile AC continues every 6 levels; Special Shot uses continue every 4 levels; Elemental Ammunition uses continue every 8 levels |
 
-The CLAB is defined through level 50 so these repeating progressions continue in high-XP installations.
+The CLAB is defined through level 50. Shorter existing tables are extended before merging, so these repeating progressions continue in high-XP installations. Changes are isolated in `ARCLAB.2DA`, preserving unrelated earlier CLAB entries and leaving the source table available to other kits.
 
 ## Special Shot system
 
@@ -281,7 +292,7 @@ Every bow and crossbow present when Archer Revised is installed is patched with 
 
 The effects:
 
-- apply only to the vanilla Archer kit identifier, `FERALAN`;
+- apply only to the vanilla Archer kit identifier, `FERALAN` (or the `ARCHER` alias if that is the available KIT.IDS symbol);
 - activate at their own minimum levels;
 - do not affect other kits;
 - are removed and reapplied safely when Archer Revised performs its own refresh.
@@ -403,7 +414,7 @@ For a normal installation:
 
 1. Install the game / EET normally.
 2. Install prerequisite framework and UI mods as appropriate for your setup.
-3. Install other class/kit overhauls that do **not** replace the Archer.
+3. Install other class/kit overhauls that do **not** replace the Archer, and any components that supply or change HLA tables (including IWDEE HLA support).
 4. Install **Archer Revised component 0**.
 5. Install content and item mods, including mods that add bows or crossbows.
 6. Near the end of the item/content section, install **Archer Revised component 10**.
@@ -496,7 +507,7 @@ Archer Revised replaces the vanilla Archer and recognizes the relevant kit row a
 
 where appropriate.
 
-Manyshot item effects filter directly for `KIT.IDS = FERALAN`, which is the vanilla Archer kit identifier used by the game.
+Manyshot item effects filter directly for the Archer kit value in `KIT.IDS`, resolving `FERALAN` first and falling back to `ARCHER`. No hard-coded kit number is assumed.
 
 ### Rapid Shot
 
@@ -512,15 +523,17 @@ The debuff spell removes its own previous application before applying the curren
 
 ### Sniper and Farsighted
 
-Both abilities use periodic state checks rather than EEex.
+Both abilities use native EE effects without EEex. A registered/reused `SPLPROT.2DA` rule matches either normal or improved invisibility.
 
-Farsighted checks the hidden/invisible state and applies the enhanced short-duration visual-range bonus while that state is true.
+The new controllers check state once per second at normal speed, explicitly remove the previous bonus, and apply a fresh short-duration bonus only if the Archer is still invisible. This replaces the old once-per-round refresh with its seven-second residual bonus. Child spells have no name, completion sound or casting animation.
 
-Sniper checks the not-visible state and refreshes a short-duration ranged critical-hit modifier while the Archer remains hidden or invisible.
+State transitions remain polling-based, not instantaneous. Opcode 272 timing can change with Slow/Haste; the short-duration fallback also prevents a bonus from persisting indefinitely if its controller disappears. These transitions still require real in-game verification.
 
-### HLA table
+### CLAB and HLA tables
 
-If the Archer is still using the default Ranger HLA table, Archer Revised creates its own derived table and adds the two custom Archer HLAs while preserving normal Ranger choices such as Hardiness.
+Archer Revised always isolates its progression in `ARCLAB.2DA` and its HLA choices in `LUARREV.2DA`. This includes custom tables shared by multiple kits: the source table is not modified for other classes.
+
+If the kit has no HLA mapping, the installer can derive one from the Ranger mapping. Missing HLA resources do not block installation or silently enable progression. All source HLA choices are preserved except redundant Tracking in the IWDEE Archer table. Greater Called Shot is added when there is a usable table; Sure Shot also requires Critical Strike to be offered by that table.
 
 ### Resource provenance
 
@@ -530,66 +543,28 @@ Archer Revised-specific resources are generated or patched by WeiDU under the `A
 
 ## Development and testing status
 
-The current `v0.1.0-dev` implementation has undergone a detailed static audit covering:
+`v0.2.0-beta1` fixes four negative-argument expressions that prevented WeiDU from parsing Called Shot, the level-1 ranged passive and Sure Shot. The old `v0.1.0-dev` static-audit statement was insufficient: the baseline could not complete installation.
 
-- WeiDU TP2/TPH structure;
-- CLAB progression through level 50;
-- HLA table construction;
-- SPL and EFF structure;
-- THAC0 modifier signs;
-- APR behavior;
-- missile-damage modifiers;
-- saving throws;
-- ability durations;
-- shared Special Shot progression;
-- Archer proficiency-table targeting;
-- component conflict checks;
-- TRA references;
-- local file/resource references;
-- imported A7 resource integrity;
-- Manyshot compatibility with late-added launchers;
-- interaction with Artisan's late Manyshot tweak;
-- interaction with ZSTweaks 2232.
+The automated suite runs the **real WeiDU installer** against small synthetic, redistributable fixtures for BGEE, BG2EE, EET and IWDEE. It checks:
 
-Important corrections already made during development include:
+- parsing every TP2/TPH file;
+- both components on all four game targets;
+- fifty-level CLAB progression, HP tables, requirements and proficiency caps;
+- private CLAB/HLA tables, shared custom HLA tables and kit aliases;
+- IWDEE with missing HLA tables, missing HP kit rows, and native Tracking;
+- Called Shot tiers, HLA lockouts and prerequisite handling;
+- generated SPL/EFF/item structure and local gameplay-resource references;
+- Manyshot refresh, late-added launchers and repeat installation without stacking;
+- reused SPLPROT conditions and silent state-check spells;
+- conflict rejection, failure rollback, uninstall and reinstall.
 
-- corrected Called Shot header handling for the intended level 4/8/12/16 tiers;
-- corrected ranged and melee THAC0 modifier signs;
-- removed the abandoned APR-based Manyshot prototype;
-- restored Hardiness after correcting the earlier `SPCL907` identification error;
-- restricted Sure Shot's APR bonus to bows/crossbows;
-- made Sure Shot, Greater Called Shot, Rapid Shot, and normal Special Shots mutually exclusive where required;
-- removed unsafe hard-coded WEAPPROF fallback behavior;
-- removed unused legacy A7 Sure Shot / Missile Trap installation resources;
-- added the idempotent late-item Manyshot refresh component;
-- integrated the useful behavior of ZSTweaks 2232 directly into Archer Revised Called Shot.
+The suite passes with **WeiDU 24900 and 25100**. See [tests/README.md](tests/README.md) for commands, coverage and a manual engine checklist.
 
-### Still requiring real in-game verification
+Synthetic fixtures are not complete games. No Infinity Engine executable is bundled or run by these tests. Damage rolls, actual visual range, invisibility transitions, saved-game migration, and complete third-party mod combinations remain subject to real in-game testing. The project therefore remains **beta**.
 
-Static inspection cannot completely replace Infinity Engine runtime testing.
+### Existing saves and upgrading
 
-Before the first release, the following should be tested in BG2EE/EET:
-
-- clean WeiDU installation and uninstall/reinstall;
-- character creation requirements and proficiency caps;
-- HP gains from level 1 onward;
-- ranged and melee THAC0 values;
-- Rapid Shot at levels 1 and 12;
-- shared Special Shot uses at levels 4/8/12/16/20;
-- every Called Shot tier;
-- Rooting, Power, and Explosive Shot saving throws and durations;
-- Elemental Ammunition at each breakpoint;
-- Manyshot damage at levels 7/13/20;
-- component 10 on mod-added bows/crossbows;
-- Farsighted visual-range behavior;
-- Sniper when entering and breaking invisibility;
-- critical-hit progression at levels 13 and 18;
-- Greater Called Shot repeated activation behavior;
-- Sure Shot and its mutual exclusions;
-- HLA availability, including Hardiness and the Critical Strike prerequisite;
-- save/load persistence of modal/passive effects.
-
-Until those tests are complete, the project remains **development status** rather than a final release.
+A new character/game is the reliable validation target. Installing a revised CLAB does not automatically rebuild every permanent bonus already stored in an existing character. An old development-version character may require a full kit/level rebuild; this installer does not edit saved characters.
 
 ## Credits and provenance
 
