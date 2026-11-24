@@ -2,9 +2,11 @@
 
 A standalone overhaul of the vanilla **Archer** ranger kit for **Baldur's Gate: Enhanced Edition**, **Siege of Dragonspear**, **Baldur's Gate II: Enhanced Edition**, **Enhanced Edition Trilogy (EET)**, and **Icewind Dale: Enhanced Edition**.
 
-> **Current status:** `v0.2.0-beta1` — native IWDEE support and installer fixes. Real WeiDU 249/251 installation, generated-resource and rollback tests pass on synthetic EE fixtures; full in-game validation is still required. See [testing](tests/README.md).
+> **Current status:** `v0.2.0-beta2` — native IWDEE support and installer fixes. Real WeiDU 249/251 installation, generated-resource and rollback tests pass on synthetic EE fixtures; full in-game validation is still required. See [testing](tests/README.md).
 
 > **Language:** English only.
+
+> **Install order:** kit component **0 before S&A/IWDEE-Tweaks**; late HLA compatibility component **20 afterward**.
 
 ## Contents
 
@@ -59,7 +61,11 @@ Core component 0 and the late Manyshot refresh component 10 both support IWDEE.
 - Works without usable HLA tables. Archer Revised does **not** enable HLA progression, change the UI, or require an HLA mod.
 - If usable HLA tables are present, derives a private Archer table while preserving the source choices, including Hardiness where present. Sure Shot is added only when that table offers its Critical Strike prerequisite.
 
-For IWDEE setups using **Skills and Abilities** or **IWDEE-Tweaks-and-Fixes** HLA components, install those components and their prerequisites **before Archer Revised component 0**. This lets Archer Revised derive its HLA table from their final Ranger/Archer table. This ordering and the shared-table behavior are tested with synthetic table fixtures; a complete installation of either third-party mod has not been certified in-game.
+Install **Archer Revised component 0 before Skills and Abilities and IWDEE-Tweaks-and-Fixes**. S&A must see the installed kit when it applies proficiency/skill rules and builds its catalogs.
+
+After those rule/HLA components, run **Archer Revised component 20** to reconcile only the Archer HLA table and any installed S&A feat HLA catalog. It preserves later changes to proficiencies, HP and CLAB entries. Component 10 remains a separate late refresh for item mods. Do not reinstall the core after S&A to achieve this reconciliation.
+
+The regression suite covers this order using synthetic tables and, when supplied, the actual S&A HLA exporter and IWDEE-Tweaks catalog-refresh code. This tests those installation stages, not complete third-party mod installations or gameplay.
 
 ## Complete ruleset
 
@@ -129,7 +135,7 @@ The **-1 Constitution penalty** used by Improved Archer is intentionally removed
 | 20 | +1 missile hit/damage; 5 Special Shot uses; Manyshot increases to +60% total; third Conjure Elemental Ammunition use |
 | 24+ | Missile hit/damage continues every 4 levels; missile AC continues every 6 levels; Special Shot uses continue every 4 levels; Elemental Ammunition uses continue every 8 levels |
 
-The CLAB is defined through level 50. Shorter existing tables are extended before merging, so these repeating progressions continue in high-XP installations. Changes are isolated in `ARCLAB.2DA`, preserving unrelated earlier CLAB entries and leaving the source table available to other kits.
+The CLAB is defined through level 50. Shorter existing tables are extended before merging, so these repeating progressions continue in high-XP installations. Changes are isolated in `CLABAR.2DA`, preserving unrelated earlier CLAB entries and leaving the source table available to other kits.
 
 ## Special Shot system
 
@@ -364,7 +370,7 @@ Archer Revised deliberately retains `SPCL907` in the Ranger HLA table. An earlie
 
 ## Installation and components
 
-Archer Revised currently contains two WeiDU components.
+Archer Revised currently contains three WeiDU components.
 
 ### Component 0 — Archer Revised - Combined Archer Overhaul
 
@@ -395,6 +401,14 @@ Install it near the end of a large mod order, after mods that add or replace lau
 
 It rebuilds Archer Revised's Manyshot resources and refreshes the Archer Revised effects on all current bow/crossbow items.
 
+### Component 20 — Finalize HLA compatibility
+
+Requires component 0. Install **after Skills and Abilities and IWDEE-Tweaks-and-Fixes** (or other mods changing HLA tables).
+
+It derives the Archer HLA choices from the current table, compacts empty rows so active choices remain reachable, preserves other classes, and updates only the Archer binding/policies in S&A's installed feat HLA catalog if that catalog exists. It does not reapply the core kit, proficiency caps, HP table or CLAB progression. Unsupported catalog formats cause a rollback instead of leaving inconsistent data.
+
+This component also handles HLA support added after core installation. It is optional in an installation without later HLA changes.
+
 ### Installing from a packaged release
 
 A release package should be extracted into the game directory so that the game folder contains at least:
@@ -410,17 +424,16 @@ The GitHub source repository keeps the TP2 inside the mod folder at `ArcherRevis
 
 ## Recommended install order
 
-For a normal installation:
+For an installation using Skills and Abilities / IWDEE-Tweaks:
 
-1. Install the game / EET normally.
-2. Install prerequisite framework and UI mods as appropriate for your setup.
-3. Install other class/kit overhauls that do **not** replace the Archer, and any components that supply or change HLA tables (including IWDEE HLA support).
-4. Install **Archer Revised component 0**.
-5. Install content and item mods, including mods that add bows or crossbows.
-6. Near the end of the item/content section, install **Archer Revised component 10**.
-7. Continue with later tweaks that do not replace the Archer or overwrite its resources.
+1. Install the game / EET, framework and UI prerequisites in their normal places.
+2. Install kit mods, including **Archer Revised component 0**. Skip 10/20 at this stage.
+3. Install **Skills and Abilities**, then the applicable **IWDEE-Tweaks-and-Fixes** components.
+4. Install item/content mods and remaining general tweaks in their appropriate sections.
+5. Install **Archer Revised component 10** after mods adding or replacing bows/crossbows.
+6. Install **Archer Revised component 20** after the final HLA-changing components.
 
-For a large EET setup, component 10 is specifically intended to solve the common problem of bows/crossbows being introduced after the core kit component.
+Components 10/20 are late compatibility passes. The main kit remains before the broader rule overhauls. Their relative order is independent: 10 updates launcher items; 20 reconciles HLA tables/catalogs.
 
 ## Compatibility
 
@@ -531,9 +544,9 @@ State transitions remain polling-based, not instantaneous. Opcode 272 timing can
 
 ### CLAB and HLA tables
 
-Archer Revised always isolates its progression in `ARCLAB.2DA` and its HLA choices in `LUARREV.2DA`. This includes custom tables shared by multiple kits: the source table is not modified for other classes.
+Archer Revised isolates its progression in `CLABAR.2DA` (retaining the standard CLAB prefix so later mod scanners see it) and its HLA choices in `LUARREV.2DA`. This includes custom tables shared by multiple kits: the source table is not modified for other classes.
 
-If the kit has no HLA mapping, the installer can derive one from the Ranger mapping. Missing HLA resources do not block installation or silently enable progression. All source HLA choices are preserved except redundant Tracking in the IWDEE Archer table. Greater Called Shot is added when there is a usable table; Sure Shot also requires Critical Strike to be offered by that table.
+If the kit has no HLA mapping, the installer can derive one from the Ranger mapping. Missing HLA resources do not block installation or silently enable progression. All active source HLA choices are preserved except redundant Tracking in the IWDEE Archer table. Empty rows are removed before appending choices, preventing the engine or S&A from stopping before the added abilities. Greater Called Shot is added when there is a usable table; Sure Shot also requires Critical Strike to be offered by that table.
 
 ### Resource provenance
 
@@ -548,7 +561,7 @@ Archer Revised-specific resources are generated or patched by WeiDU under the `A
 The automated suite runs the **real WeiDU installer** against small synthetic, redistributable fixtures for BGEE, BG2EE, EET and IWDEE. It checks:
 
 - parsing every TP2/TPH file;
-- both components on all four game targets;
+- all three components on all four game targets;
 - fifty-level CLAB progression, HP tables, requirements and proficiency caps;
 - private CLAB/HLA tables, shared custom HLA tables and kit aliases;
 - IWDEE with missing HLA tables, missing HP kit rows, and native Tracking;
@@ -556,7 +569,9 @@ The automated suite runs the **real WeiDU installer** against small synthetic, r
 - generated SPL/EFF/item structure and local gameplay-resource references;
 - Manyshot refresh, late-added launchers and repeat installation without stacking;
 - reused SPLPROT conditions and silent state-check spells;
-- conflict rejection, failure rollback, uninstall and reinstall.
+- conflict rejection, failure rollback, uninstall and reinstall;
+- kit-before-S&A ordering, late HLA support, final reconciliation without resetting later rules, and executable Lua catalog preservation;
+- supplied S&A/IWDEE-Tweaks HLA export/refresh stages (optional source-backed integration test).
 
 The suite passes with **WeiDU 24900 and 25100**. See [tests/README.md](tests/README.md) for commands, coverage and a manual engine checklist.
 

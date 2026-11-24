@@ -187,3 +187,24 @@ BEGIN
     BUT_ONLY IF_EXISTS
   END
 END
+
+
+// Read kit identity without reapplying any kit rules in late components.
+DEFINE_ACTION_FUNCTION AR_FIND_ARCHER
+  RET kit_symbol
+BEGIN
+  OUTER_TEXT_SPRINT kit_symbol ~~
+  COPY_EXISTING ~kitlist.2da~ ~override~
+    COUNT_2DA_COLS ar_find_cols
+    COUNT_2DA_ROWS ar_find_cols ar_find_rows
+    FOR (ar_find_row = 0; ar_find_row < ar_find_rows; ++ar_find_row) BEGIN
+      READ_2DA_ENTRY ar_find_row 1 ar_find_cols ar_find_symbol
+      PATCH_IF (~%ar_find_symbol%~ STRING_EQUAL_CASE ~FERALAN~ ||
+                (~%kit_symbol%~ STRING_EQUAL ~~ &&
+                 ~%ar_find_symbol%~ STRING_EQUAL_CASE ~ARCHER~)) BEGIN
+        TEXT_SPRINT kit_symbol ~%ar_find_symbol%~
+      END
+    END
+  BUT_ONLY
+  ACTION_IF (~%kit_symbol%~ STRING_EQUAL ~~) BEGIN FAIL @106 END
+END

@@ -29,9 +29,9 @@ END
 
 // A prior mod may share this CLAB with other kits. Isolate our changes.
 ACTION_IF FILE_EXISTS_IN_GAME ~%src_clab_resref%.2da~ BEGIN
-  COPY_EXISTING ~%src_clab_resref%.2da~ ~override/ARCLAB.2DA~
+  COPY_EXISTING ~%src_clab_resref%.2da~ ~override/CLABAR.2DA~
 END
-OUTER_TEXT_SPRINT src_clab_resref ~ARCLAB~
+OUTER_TEXT_SPRINT src_clab_resref ~CLABAR~
 COPY_EXISTING ~kitlist.2da~ ~override~
   COUNT_2DA_COLS ar_cols
   COUNT_2DA_ROWS ar_cols ar_rows
@@ -39,7 +39,7 @@ COPY_EXISTING ~kitlist.2da~ ~override~
     READ_2DA_ENTRY ar_row 1 ar_cols ar_name
     PATCH_IF (~%ar_name%~ STRING_EQUAL_CASE ~%kit_symbol%~) BEGIN
       SET_2DA_ENTRY ar_row 4 ar_cols ~%help_strref%~
-      SET_2DA_ENTRY ar_row 5 ar_cols ~ARCLAB~
+      SET_2DA_ENTRY ar_row 5 ar_cols ~CLABAR~
     END
   END
 BUT_ONLY

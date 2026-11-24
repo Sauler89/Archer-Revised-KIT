@@ -5,6 +5,8 @@ They do not run the Infinity Engine or certify in-game behavior.
 Set WEIDU to an absolute WeiDU executable path before running unittest.
 """
 import os
+import ctypes
+import ctypes.util
 from pathlib import Path
 import shutil
 import struct
@@ -16,6 +18,34 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 WEIDU = os.environ.get("WEIDU") or shutil.which("weidu")
 TP2 = "archerrevised/setup-archerrevised.tp2"
+HLA_HEADER = "ABILITY ICON STRREF MIN_LEV MAX_LEVEL NUM_ALLOWED PREREQUISITE EXCLUDED_BY ALIGNMENT_RESTRICT"
+SA_SOURCE = os.environ.get("ARCHER_SA_SOURCE")
+IWTF_SOURCE = os.environ.get("ARCHER_IWTF_SOURCE")
+
+
+def run_lua(source):
+    library = ctypes.util.find_library("lua5.4") or ctypes.util.find_library("lua5.3")
+    if not library:
+        raise unittest.SkipTest("Lua 5.3/5.4 shared library is not installed")
+    lua = ctypes.CDLL(library)
+    lua.luaL_newstate.restype = ctypes.c_void_p
+    lua.luaL_openlibs.argtypes = [ctypes.c_void_p]
+    lua.luaL_loadstring.argtypes = [ctypes.c_void_p, ctypes.c_char_p]
+    lua.lua_pcallk.argtypes = [ctypes.c_void_p, ctypes.c_int, ctypes.c_int,
+                             ctypes.c_int, ctypes.c_longlong, ctypes.c_void_p]
+    lua.lua_tolstring.argtypes = [ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p]
+    lua.lua_tolstring.restype = ctypes.c_char_p
+    lua.lua_close.argtypes = [ctypes.c_void_p]
+    state = lua.luaL_newstate()
+    try:
+        lua.luaL_openlibs(state)
+        status = lua.luaL_loadstring(state, source.encode())
+        if not status:
+            status = lua.lua_pcallk(state, 0, 0, 0, 0, None)
+        if status:
+            raise AssertionError(lua.lua_tolstring(state, -1, None).decode())
+    finally:
+        lua.lua_close(state)
 
 
 class ResourceDirectory(type(Path())):
@@ -176,8 +206,8 @@ class Game:
     def put(self, name, content):
         (self.override / name.lower()).write_bytes(content if isinstance(content, bytes) else content.encode())
 
-    def run(self, *args, success=True):
-        result = subprocess.run([WEIDU, TP2, *args, "--no-exit-pause", "--use-lang",
+    def run(self, *args, success=True, tp2=TP2):
+        result = subprocess.run([WEIDU, tp2, *args, "--no-exit-pause", "--use-lang",
                                  "en_us", "--language", "0"], cwd=self.path,
                                 input="", text=True, stdout=subprocess.PIPE,
                                 stderr=subprocess.STDOUT, timeout=40)
@@ -198,6 +228,10 @@ class Game:
 
     def close(self):
         self.temp.cleanup()
+
+    def catalog(self):
+        scripts = ResourceDirectory(self.path) / "eeex_scripts"
+        return ResourceDirectory(scripts) / "mof_installedhla.lua"
 
 
 @unittest.skipUnless(WEIDU, "Set WEIDU to a real WeiDU executable")
@@ -223,15 +257,16 @@ class InstallationTests(unittest.TestCase):
         for name in ("bgee", "bg2ee", "eet", "iwdee"):
             with self.subTest(game=name):
                 g = self.game(name)
-                g.install(0, 10)
+                g.install(0)
+                g.install(10, 20)
                 self.check_rules(g)
                 self.check_abilities(g)
 
     def check_rules(self, g):
         ov = g.override
         kit = next(r for r in rows(ov / "kitlist.2da") if r[1] == g.symbol)
-        self.assertEqual(kit[5].upper(), "ARCLAB")
-        clab = rows(ov / "arclab.2da")
+        self.assertEqual(kit[5].upper(), "CLABAR")
+        clab = rows(ov / "clabar.2da")
         self.assertTrue(all(len(r) >= 51 for r in clab))
         level_entries = lambda n: [r[n].upper() for r in clab]
         missile = "AP_SPCL124" if g.game == "iwdee" else "AP_SPCL122"
@@ -329,8 +364,8 @@ class InstallationTests(unittest.TestCase):
         self.assertIn("without changing HLA progression", out)
         self.assertFalse((g.override / "luabbr.2da").exists())
         self.assertIn(["FERALAN", "HPARCH"], rows(g.override / "hpclass.2da"))
-        self.assertIn("GA_SPCL922", (g.override / "arclab.2da").read_text())
-        self.assertNotIn("AP_SPCL122", (g.override / "arclab.2da").read_text())
+        self.assertIn("GA_SPCL922", (g.override / "clabar.2da").read_text())
+        self.assertNotIn("AP_SPCL122", (g.override / "clabar.2da").read_text())
 
     def test_custom_shared_hla_table_and_archer_alias(self):
         g = self.game("iwdee", symbol="ARCHER", mixed_alias=True,
@@ -361,7 +396,7 @@ class InstallationTests(unittest.TestCase):
         g.run("--force-uninstall-list", "10", "0")
         for name, data in g.before.items():
             self.assertEqual((g.override / name).read_bytes(), data, name)
-        self.assertFalse((g.override / "arclab.2da").exists())
+        self.assertFalse((g.override / "clabar.2da").exists())
         self.assertFalse((g.override / "luarrev.2da").exists())
         g.install(0, 10)
         self.check_rules(g)
@@ -383,7 +418,7 @@ class InstallationTests(unittest.TestCase):
         g.put("weapprof.2da", table("ID FIGHTER RANGER OTHER", ["LONGBOW 100 5 2 4"]))
         out = g.install(0, success=False)
         self.assertIn("could not locate the Archer proficiency column", out)
-        self.assertFalse((g.override / "arclab.2da").exists())
+        self.assertFalse((g.override / "clabar.2da").exists())
         self.assertEqual((g.override / "kitlist.2da").read_bytes(), g.before["kitlist.2da"])
 
     def test_generated_resource_references(self):
@@ -430,7 +465,7 @@ class InstallationTests(unittest.TestCase):
         g.put("luabbr.2da", table("VALUE", ["RANGER Ra0", "OTHER Ra0"]))
         g.install(0)
         self.assertIn(["FERALAN", "ARREV"], rows(g.override / "luabbr.2da"))
-        self.assertIn("GA_SPCL922", (g.override / "arclab.2da").read_text())
+        self.assertIn("GA_SPCL922", (g.override / "clabar.2da").read_text())
         self.assertNotIn("GA_SPCL922", [r[1] for r in rows(g.override / "luarrev.2da")])
 
     def test_exact_kit_symbol_takes_priority_over_alias(self):
@@ -454,6 +489,156 @@ class InstallationTests(unittest.TestCase):
         self.assertEqual(routes["ARCHER"], "CUSTOM")
         foreign = rows(g.override / "kitlist.2da")[0]
         self.assertEqual(foreign[4:6], ["777", "CLABOTHER"])
+
+    def test_hla_entries_are_reachable_before_skills_snapshot(self):
+        g = self.game("iwdee")
+        g.put("lura0.2da", table(HLA_HEADER, [
+            "0 GA_SPCL907 * * 1 99 20 * * *",
+            "1 * * * * * * * * *",
+            "2 GA_SPCL922 * * 1 99 1 * * *",
+            "3 GA_SPCL905 * * 1 99 1 * * *",
+            "4 * * * * * * * * *"]))
+        g.install(0)
+        actions = [r[1] for r in rows(g.override / "luarrev.2da")]
+        self.assertNotIn("*", actions)
+        self.assertIn("GA_SPCL905", actions)
+        self.assertIn("GA_ARSURE", actions)
+        self.assertEqual(rows(g.override / "kitlist.2da")[0][5], "CLABAR")
+
+    def prepare_late_mods(self, g, catalog=True):
+        # Model later S&A proficiency/HP changes and an IWDEE HLA reroute.
+        g.put("weapprof.2da", table("ID FIGHTER RANGER FERALAN OTHER", [
+            "LONGBOW 100 5 2 4 4", "LONGSWORD 101 5 2 2 4"]))
+        g.put("hpclass.2da", table("TABLE", ["RANGER HPRANG", "FERALAN SACUSTOM"]))
+        clab = (g.override / "clabar.2da").read_text()
+        g.put("clabar.2da", clab + "SA_RULE " + " ".join(
+            "AP_SARULE" if n == 2 else "****" for n in range(1, 51)) + "\n")
+        g.put("luabbr.2da", table("VALUE", ["FERALAN POST", "OTHER Ra0", "RANGER Ra0"]))
+        g.put("lupost.2da", table(HLA_HEADER, [
+            "0 GA_SPCL907 * * 1 99 20 * * *",
+            "1 GA_LATER * * 24 99 3 * * *",
+            "2 * * * * * * * * *",
+            "3 GA_SPCL922 * * 1 99 1 * * *",
+            "4 GA_SPCL905 * * 1 99 1 * * *"]))
+        shell = (ROOT / "ArcherRevised/kit/a7#ins1.spl").read_bytes()
+        for name in ("SPCL907", "SPCL905", "SPCL922", "CUSTOM", "LATER"):
+            g.put(name + ".spl", shell)
+        if catalog:
+            directory = g.path / "eeex_scripts"
+            directory.mkdir(exist_ok=True)
+            (directory / "mof_installedhla.lua").write_text(
+                "SAF_InstalledHLA={bindings={FERALAN='LUPOST.2DA',OTHER='LURA0.2DA'},"
+                "tables={['LURA0.2DA']={entries={{action='FOREIGN'}}}},"
+                "abilities={FOREIGN={keep=42}},classSymbols={[12]='RANGER'},"
+                "kitSymbols={[16396]='FERALAN'}}\n")
+        return {n: (g.override / n).read_bytes() for n in
+                ("weapprof.2da", "hpclass.2da", "kitlist.2da", "clabar.2da", "lupost.2da")}
+
+    def test_late_hla_patch_preserves_later_rules_and_catalog(self):
+        g = self.game("iwdee")
+        g.install(0)
+        before = self.prepare_late_mods(g)
+        catalog = g.catalog
+        old_catalog = catalog().read_bytes()
+        old_routes = (g.override / "luabbr.2da").read_bytes()
+        g.install(20)
+        for name, data in before.items():
+            self.assertEqual((g.override / name).read_bytes(), data, name)
+        actions = [r[1] for r in rows(g.override / "luarrev.2da")]
+        self.assertNotIn("*", actions)
+        self.assertNotIn("GA_SPCL922", actions)
+        for ability in ("GA_LATER", "GA_SPCL905", "GA_ARGCALS", "GA_ARSURE"):
+            self.assertEqual(actions.count(ability), 1)
+        run_lua(catalog().read_text() + """
+assert(SAF_InstalledHLA.bindings.FERALAN=='LUARREV.2DA')
+assert(SAF_InstalledHLA.bindings.OTHER=='LURA0.2DA')
+assert(SAF_InstalledHLA.tables['LURA0.2DA'].entries[1].action=='FOREIGN')
+assert(SAF_InstalledHLA.abilities.FOREIGN.keep==42)
+assert(SAF_InstalledHLA.classSymbols[12]=='RANGER')
+assert(SAF_InstalledHLA.kitSymbols[16396]=='FERALAN')
+local found={}
+for _,e in ipairs(SAF_InstalledHLA.tables['LUARREV.2DA'].entries) do found[e.action]=e end
+assert(found.GA_LATER.minimum==24 and found.GA_LATER.limit==3)
+assert(found.GA_ARSURE.requires=='GA_SPCL905')
+assert(found.GA_ARGCALS and not found.GA_SPCL922)
+assert(SAF_InstalledHLA.abilities.GA_ARSURE.resource=='ARSURE')
+""")
+        final_catalog = catalog().read_bytes()
+        final_table = (g.override / "luarrev.2da").read_bytes()
+        g.install(20)
+        self.assertEqual(catalog().read_bytes(), final_catalog)
+        self.assertEqual((g.override / "luarrev.2da").read_bytes(), final_table)
+        g.run("--force-uninstall-list", "20")
+        self.assertEqual(catalog().read_bytes(), old_catalog)
+        self.assertEqual((g.override / "luabbr.2da").read_bytes(), old_routes)
+
+    def test_hla_support_can_be_added_after_core(self):
+        g = self.game("iwdee", hla=False)
+        g.install(0)
+        self.prepare_late_mods(g, catalog=False)
+        g.install(20)
+        self.assertEqual(dict(rows(g.override / "luabbr.2da"))["FERALAN"], "ARREV")
+        self.assertIn("GA_ARGCALS", [r[1] for r in rows(g.override / "luarrev.2da")])
+
+    def test_late_patch_requires_core(self):
+        g = self.game("iwdee")
+        out = g.run("--force-install-list", "20")
+        self.assertIn("requires the Archer Revised core", out)
+        for name, data in g.before.items():
+            self.assertEqual((g.override / name).read_bytes(), data)
+
+    def test_unsupported_catalog_rolls_back_hla_changes(self):
+        g = self.game("iwdee")
+        g.install(0)
+        self.prepare_late_mods(g)
+        catalog = g.catalog()
+        catalog.write_text("return {}\n")
+        old_routes = (g.override / "luabbr.2da").read_bytes()
+        old_table = (g.override / "luarrev.2da").read_bytes()
+        g.install(20, success=False)
+        self.assertEqual((g.override / "luabbr.2da").read_bytes(), old_routes)
+        self.assertEqual((g.override / "luarrev.2da").read_bytes(), old_table)
+        self.assertEqual(catalog.read_text(), "return {}\n")
+
+    @unittest.skipUnless(SA_SOURCE and IWTF_SOURCE, "Set ARCHER_SA_SOURCE and ARCHER_IWTF_SOURCE")
+    def test_actual_sa_exporter_then_iwtf_refresh_then_final_patch(self):
+        # Run supplied third-party export stages, not full mod installations.
+        g = self.game("iwdee")
+        g.install(0)
+        shell = (ROOT / "ArcherRevised/kit/a7#ins1.spl").read_bytes()
+        for name in ("SPCL907", "SPCL905", "SPCL922", "CUSTOM"):
+            g.put(name + ".spl", shell)
+        g.put("class.ids", "IDS V1.0\n12 RANGER\n2 FIGHTER\n")
+        sa = g.path / "skills-and-abilities"
+        (sa / "components/feats").mkdir(parents=True)
+        for name in ("hla.tpa", "hla-data.lua"):
+            shutil.copy(Path(SA_SOURCE) / "components/feats" / name, sa / "components/feats" / name)
+        (sa / "skills-and-abilities.tp2").write_text(
+            'BACKUP ~sa-test-backup~\nAUTHOR ~test~\nBEGIN ~S&A HLA exporter stage~\n'
+            'DESIGNATED 600\nINCLUDE ~skills-and-abilities/components/feats/hla.tpa~\n')
+        g.run("--force-install-list", "600", tp2="skills-and-abilities/skills-and-abilities.tp2")
+        self.prepare_late_mods(g, catalog=False)
+        # Model the table compaction performed by the supplied IWDEE tweaks.
+        data = (g.override / "lupost.2da").read_text()
+        g.put("lupost.2da", "\n".join(line for line in data.splitlines()
+                                     if not line.startswith("2 *")) + "\n")
+        fixture = g.path / "iwtf_order_fixture"
+        fixture.mkdir()
+        shutil.copy(Path(IWTF_SOURCE) / "lib/hla_compat.tpa", fixture / "hla_compat.tpa")
+        (fixture / "iwtf_order_fixture.tp2").write_text(
+            'BACKUP ~iwtf-test-backup~\nAUTHOR ~test~\nBEGIN ~IWDEE HLA catalog refresh stage~\n'
+            'INCLUDE ~iwtf_order_fixture/hla_compat.tpa~\nLAF IWTF_REFRESH_FEAT_HLAS END\n')
+        g.run("--force-install-list", "0", tp2="iwtf_order_fixture/iwtf_order_fixture.tp2")
+        g.install(20)
+        catalog = g.catalog()
+        run_lua(catalog.read_text() + """
+assert(SAF_InstalledHLA.bindings.FERALAN=='LUARREV.2DA')
+assert(SAF_InstalledHLA.classSymbols[12]=='RANGER')
+local found={}
+for _,e in ipairs(SAF_InstalledHLA.tables['LUARREV.2DA'].entries) do found[e.action]=true end
+assert(found.GA_LATER and found.GA_ARGCALS and found.GA_ARSURE)
+assert(not found.GA_SPCL922)
+""")
 
 
 if __name__ == "__main__":

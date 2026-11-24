@@ -22,9 +22,18 @@ level 50, prerequisite availability, private versus shared CLAB/HLA tables,
 missing optional tables, preserved foreign entries, late Manyshot items,
 idempotent refresh, conflict failure, rollback, uninstall and reinstall.
 
-The fixture HLA variations model table shapes used by other mods; they do not
-install Skills and Abilities or IWDEE-Tweaks-and-Fixes themselves. A green test
-run does not certify arbitrary complete mod installations.
+The suite models **core 0 → S&A/IWDEE rule changes → late 10/20**, preserving the later proficiency/HP/CLAB changes. It executes generated HLA catalog Lua using a system Lua 5.3/5.4 shared library where available.
+
+An optional integration test runs the supplied S&A HLA exporter, followed by the supplied IWDEE-Tweaks HLA-catalog refresh function, followed by component 20:
+
+```sh
+WEIDU=/absolute/path/to/weidu \
+ARCHER_SA_SOURCE=/path/to/skills-and-abilities \
+ARCHER_IWTF_SOURCE=/path/to/IWDEE-Tweaks-and-Fixes \
+python -m unittest discover -s tests -v
+```
+
+The source directories must contain `components/feats/hla.tpa` / `hla-data.lua` and `lib/hla_compat.tpa`, respectively. No third-party code is bundled in this repository. These fixtures exercise actual export/refresh stages, not full third-party installations or gameplay.
 
 ## Required manual engine checks
 
@@ -44,8 +53,7 @@ run does not certify arbitrary complete mod installations.
   orders; test repeated uses, movement restrictions, critical immunity,
   successful hits and misses, and save/load during active effects.
 - In IWDEE verify native Tracking once, no redundant Tracking HLA, and no HLA
-  progression enabled by this mod alone. With HLA support installed before
-  the kit, verify Archer-only additions, Hardiness where present and the
+  progression enabled by this mod alone. Install the kit before S&A/IWDEE-Tweaks and component 20 afterward; verify Archer-only additions, Hardiness where present and the
   Critical Strike prerequisite for Sure Shot.
 - Test any existing development-version characters separately. The installer
   does not rebuild permanent bonuses already saved in a character file.

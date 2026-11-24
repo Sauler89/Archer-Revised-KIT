@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.2.0-beta2 — 2026-11-24
+
+- Corrected the install order: Archer Revised core goes before Skills and Abilities and IWDEE-Tweaks-and-Fixes.
+- Added optional component 20 for final HLA reconciliation after broader rule/HLA mods. It does not reapply kit rules over later proficiency, HP or CLAB changes.
+- Added a targeted refresh for the Archer binding, policies and spell metadata in S&A's existing feat HLA catalog, preserving other classes and symbol maps. Unsupported formats roll back safely.
+- Renamed the private CLAB to CLABAR.2DA so later scanners using the standard CLAB prefix can discover it.
+- Fixed HLA gaps left by Tracking removal or earlier mods: active choices now precede any implicit end marker, so the engine and S&A can reach the added abilities.
+- Added ordered installation, catalog execution/preservation, late HLA support, repeat reconciliation and rollback regressions. Optional integration executes supplied S&A/IWDEE-Tweaks HLA export stages using real WeiDU.
+
+
 ## v0.2.0-beta1 — 2026-11-24
 
 - Added IWDEE support to both components, including its SPCL124 progression, native Tracking, and game-specific elemental-ammunition projectile selection.

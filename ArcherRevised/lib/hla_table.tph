@@ -1,6 +1,7 @@
 // Derive a private HLA table, including when a prior mod shares its table
 // between kits. Never append Archer abilities to another class's table.
 OUTER_TEXT_SPRINT ar_hla_source ~~
+OUTER_SET ar_hla_ready = 0
 OUTER_SET ar_hla_row = (0 - 1)
 OUTER_SET ar_hla_fallback = (0 - 1)
 OUTER_SET ar_hla_alias = (0 - 1)
@@ -63,6 +64,15 @@ ACTION_IF (NOT ~%ar_hla_source%~ STRING_EQUAL ~~ &&
         SET_2DA_ENTRY ar_row 1 ar_hla_cols ~%ar_hla_default%~
       END
     END
+    // The engine and S&A's snapshot stop at the first empty ABILITY.
+    // Remove all gaps before adding abilities, retaining every active row.
+    FOR (ar_row = ar_hla_rows - 1; ar_row >= 0; --ar_row) BEGIN
+      READ_2DA_ENTRY ar_row 1 ar_hla_cols ar_ability
+      PATCH_IF (~%ar_ability%~ STRING_EQUAL ~%ar_hla_default%~) BEGIN
+        REMOVE_2DA_ROW ar_row ar_hla_cols
+      END
+    END
+
   ACTION_IF (ar_hla_cols >= 10) BEGIN
     ACTION_IF (NOT ar_has_gcs) BEGIN
       OUTER_SET ar_hla_max += 1
@@ -87,11 +97,14 @@ ACTION_IF (NOT ~%ar_hla_source%~ STRING_EQUAL ~~ &&
       COPY_EXISTING ~luabbr.2da~ ~override~
         COUNT_2DA_COLS ar_cols
         SET_2DA_ENTRY ar_hla_row 1 ar_cols ~ARREV~
+        READ_2DA_ENTRY ar_hla_row 0 ar_cols ar_hla_binding
       BUT_ONLY
     END ELSE BEGIN
       APPEND ~luabbr.2da~ ~%kit_symbol% ARREV~
+      OUTER_TEXT_SPRINT ar_hla_binding ~%kit_symbol%~
     END
     COPY_EXISTING ~LUARREV.2DA~ ~override~ PRETTY_PRINT_2DA BUT_ONLY
+    OUTER_SET ar_hla_ready = 1
   END ELSE BEGIN
     PRINT @107
   END

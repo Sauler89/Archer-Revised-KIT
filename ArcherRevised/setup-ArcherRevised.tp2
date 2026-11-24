@@ -1,6 +1,6 @@
 BACKUP ~weidu_external/backup/ArcherRevised~
 SUPPORT ~https://github.com/Sauler89/Archer-Revised-KIT/issues~
-VERSION ~v0.2.0-beta1~
+VERSION ~v0.2.0-beta2~
 
 ASK_EVERY_COMPONENT
 
@@ -84,3 +84,17 @@ BEGIN @2
   // Install this after any content mods that add bows or crossbows.
   // Rebuild the Manyshot resources as well as refreshing all launcher items.
   INCLUDE ~%MOD_FOLDER%/lib/manyshot.tph~
+
+
+BEGIN @3
+  DESIGNATED 20
+  LABEL ~ARCHER-REVISED-HLA-COMPAT~
+
+  REQUIRE_PREDICATE GAME_IS ~bgee bg2ee eet iwdee~ @100
+  REQUIRE_COMPONENT ~ArcherRevised/setup-ArcherRevised.tp2~ ~0~ @109
+
+  // Install only this HLA reconciliation after Skills and Abilities /
+  // IWDEE-Tweaks. Do not reinstall kit rules over their proficiency changes.
+  LAF AR_FIND_ARCHER RET kit_symbol END
+  INCLUDE ~%MOD_FOLDER%/lib/hla_table.tph~
+  INCLUDE ~%MOD_FOLDER%/lib/hla_snapshot.tph~

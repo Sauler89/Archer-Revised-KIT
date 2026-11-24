@@ -1,0 +1,71 @@
+// S&A's feat system records HLA policies at installation time. Update only
+// the Archer's binding/table after component 20, preserving every other
+// class, kit, ability and symbol map. No S&A source files are required.
+ACTION_IF (ar_hla_ready && FILE_EXISTS ~EEex_scripts/MOF_InstalledHLA.lua~) BEGIN
+  ACTION_IF NOT (FILE_CONTAINS ~EEex_scripts/MOF_InstalledHLA.lua~ ~SAF_InstalledHLA.*bindings~ &&
+                 FILE_CONTAINS ~EEex_scripts/MOF_InstalledHLA.lua~ ~SAF_InstalledHLA.*tables~ &&
+                 FILE_CONTAINS ~EEex_scripts/MOF_InstalledHLA.lua~ ~SAF_InstalledHLA.*abilities~) BEGIN
+    FAIL @110
+  END
+  OUTER_TEXT_SPRINT ar_snapshot_binding ~%ar_hla_binding%~
+  ACTION_TO_UPPER ar_snapshot_binding
+  ACTION_IF (~%ar_snapshot_binding%~ STRING_MATCHES_REGEXP "^[A-Z0-9_#!~-]+$" != 0) BEGIN
+    FAIL @110
+  END
+  APPEND_OUTER ~EEex_scripts/MOF_InstalledHLA.lua~ ~
+-- Archer Revised: reconcile the final Archer HLA policies.
+SAF_InstalledHLA.bindings['%ar_snapshot_binding%']='LUARREV.2DA'
+SAF_InstalledHLA.tables['LUARREV.2DA']={entries={}}
+~
+  ACTION_CLEAR_ARRAY ar_snapshot_seen
+  COPY_EXISTING ~LUARREV.2DA~ ~override~
+    COUNT_2DA_COLS ar_snapshot_cols
+    COUNT_2DA_ROWS ar_snapshot_cols ar_snapshot_rows
+    FOR (ar_i = 0; ar_i < ar_snapshot_rows; ++ar_i) BEGIN
+      READ_2DA_ENTRY ar_i 1 ar_snapshot_cols ar_action
+      TO_UPPER ar_action
+      PATCH_IF NOT (~%ar_action%~ STRING_EQUAL ~*~) BEGIN
+        PATCH_IF (VARIABLE_IS_SET $ar_snapshot_seen(~%ar_action%~)) BEGIN
+          PATCH_FAIL @110
+        END
+        SET $ar_snapshot_seen(~%ar_action%~) = 1
+        READ_2DA_ENTRY ar_i 4 ar_snapshot_cols ar_min
+        READ_2DA_ENTRY ar_i 5 ar_snapshot_cols ar_max
+        READ_2DA_ENTRY ar_i 6 ar_snapshot_cols ar_limit
+        READ_2DA_ENTRY ar_i 7 ar_snapshot_cols ar_req
+        READ_2DA_ENTRY ar_i 8 ar_snapshot_cols ar_exclude
+        READ_2DA_ENTRY ar_i 9 ar_snapshot_cols ar_align
+        TO_UPPER ar_req
+        TO_UPPER ar_exclude
+        TO_UPPER ar_align
+        PATCH_FOR_EACH ar_number IN ~%ar_min%~ ~%ar_max%~ ~%ar_limit%~ BEGIN
+          PATCH_IF (~%ar_number%~ STRING_MATCHES_REGEXP ~^[0-9]+$~ != 0) BEGIN
+            PATCH_FAIL @110
+          END
+        END
+        PATCH_IF (ar_max < ar_min || ar_limit < 1) BEGIN PATCH_FAIL @110 END
+        PATCH_FOR_EACH ar_field IN ~%ar_action%~ ~%ar_req%~ ~%ar_exclude%~ ~%ar_align%~ BEGIN
+          PATCH_IF (~%ar_field%~ STRING_MATCHES_REGEXP "^[A-Z0-9_#!*~-]+$" != 0) BEGIN
+            PATCH_FAIL @110
+          END
+        END
+        PATCH_IF (~%ar_action%~ STRING_MATCHES_REGEXP ~^\(GA_\|AP_\)~ != 0) BEGIN
+          PATCH_FAIL @110
+        END
+        INNER_PATCH_SAVE ar_resource ~%ar_action%~ BEGIN DELETE_BYTES 0 3 END
+        PATCH_IF (STRING_LENGTH ~%ar_resource%~ > 8) BEGIN PATCH_FAIL @110 END
+        INNER_ACTION BEGIN
+          APPEND_OUTER ~EEex_scripts/MOF_InstalledHLA.lua~ ~do local rows=SAF_InstalledHLA.tables['LUARREV.2DA'].entries;rows[#rows+1]={action='%ar_action%',minimum=%ar_min%,maximum=%ar_max%,limit=%ar_limit%,requires='%ar_req%',excluded_by='%ar_exclude%',alignment='%ar_align%'} end~
+          COPY_EXISTING ~%ar_resource%.SPL~ ~override~
+            READ_LONG 0x08 ar_name
+            READ_LONG 0x50 ar_description
+            INNER_ACTION BEGIN
+              APPEND_OUTER ~EEex_scripts/MOF_InstalledHLA.lua~ ~SAF_InstalledHLA.abilities['%ar_action%']={resource='%ar_resource%',spell_available=true,name_strref=%ar_name%,description_strref=%ar_description%}~
+            END
+          BUT_ONLY
+        END
+      END
+    END
+  BUT_ONLY
+  PRINT @111
+END

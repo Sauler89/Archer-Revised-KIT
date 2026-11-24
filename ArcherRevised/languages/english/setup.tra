@@ -10,3 +10,8 @@
 @106 = ~Archer Revised could not identify the vanilla Archer kit and its ability table in KITLIST.2DA.~
 @107 = ~No usable Archer/Ranger HLA table was found. The kit will be installed without changing HLA progression. Archer Revised does not enable HLAs in Icewind Dale: Enhanced Edition by itself.~
 @108 = ~The current HLA table does not offer Critical Strike. Sure Shot will not be added because its prerequisite would be unavailable.~
+
+@3 = ~Archer Revised - Finalize HLA compatibility (after Skills and Abilities / HLA tweaks)~
+@109 = ~The final HLA compatibility patch requires the Archer Revised core component.~
+@110 = ~The installed Skills and Abilities HLA catalog has an unsupported format. The compatibility patch was rolled back; no catalog changes were kept.~
+@111 = ~Updated the Archer HLA binding and policies in the installed Skills and Abilities catalog.~
